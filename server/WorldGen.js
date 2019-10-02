@@ -5,7 +5,7 @@ var map = [width][height];
 var trueChance = 0.45;
 
 for(var x = 0; x<width; x++){
-    for(var y = 0; x<height; y++){
+    for(var y = 0; y<height; y++){
         if((Math.random) < trueChance){
             map[x][y] = true;
         }
