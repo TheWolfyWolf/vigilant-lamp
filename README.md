@@ -2,4 +2,12 @@
 Web Programming Project
 
 
-# Test Edit
+// Todo // 
+
+-Server side/Client side
+-menu pages
+-chat
+-Top layer world gen
+-gravity and collisions  
+-Players
+
