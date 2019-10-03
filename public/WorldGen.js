@@ -1,4 +1,4 @@
-var width = 200;
+var width = 350;
 var height = 50;
 
 var trueChance = 0.4;
@@ -8,25 +8,10 @@ var deathLimit = 4;
 
 var seed = 12;
 
-function showInTable(map) {
-  for (var x = 0; x<map.length; x++) {
-    var innerMap = map[x];
-    for (var y = 0; y<innerMap.length; y++) {
-      $("#" + x + "" + y).removeClass('black').removeClass('red');
-      var idx = String('0000' + x).slice(-4);
-      var idy = String('0000' + y).slice(-4);
-      var id = "#" + idx + idy;
-      if (id == "#00000000") {
-        console.log(innerMap[y]);
-      }
-      if (innerMap[y]) {
-        $(id).addClass('black');
-      } else {
-        $(id).addClass('red');
-      }
-    }
-  }
-}
+$(document).ready(function() {
+  var mapp = generateMap();
+  const player = createPlayer(50,51);
+})
 
 function doStep(map) {
   var newMap = [];
@@ -36,18 +21,18 @@ function doStep(map) {
       var nbs = trueNeighbours(map,x,y);
       if (map[x][y]) {
         if (nbs < deathLimit) {
-          innerMap[y] = false;
+          innerMap[y] = 0;
           //console.log("1");
         } else {
-          innerMap[y] = true;
+          innerMap[y] = 1;
           //console.log("2");
         }
       } else {
         if (nbs > birthLimit) {
-          innerMap[y] = true;
+          innerMap[y] = 1;
           //console.log("3");
         } else {
-          innerMap[y] = false;
+          innerMap[y] = 0;
           //console.log("5");
         }
       }
@@ -76,15 +61,15 @@ function trueNeighbours(map,x, y){
   //console.log(`Count is ${count}`);
 }
 
-function initialiseMap() {
+function initialiseMap(w,h) {
   var map = [];
-  for(var x = 0; x<width; x++){
+  for(var x = 0; x<w; x++){
     innerMap = []
-      for(var y = 0; y<height; y++){
+      for(var y = 0; y<h; y++){
           if ((Math.random()) < trueChance) {
-              innerMap[y] = true;
+              innerMap[y] = 1;
           } else {
-            innerMap[y] = false;
+            innerMap[y] = 0;
           }
       }
       map[x] = innerMap;
@@ -93,16 +78,66 @@ function initialiseMap() {
 }
 
 function generateMap() {
-  var map = initialiseMap();
+  /* Cave Area */
+  var map = initialiseMap(width, height*.8);
   for (var i = 0; i < numSteps; i++) {
     map = doStep(map);
-    //console.log("wagwan");
   }
-  buildWorld(map);
-  createPlayer(50,51);
+
+
+  /* Top Ground */
+  var top = generateTop(width,height*.2);
+  var world = [];
+  for (var i = 0; i < width; i++) {
+    world[i] = map[i].concat(top[i]);
+  }
+  /* Build World */
+  buildWorld(world);
   return map;
 }
 
-var mapp = generateMap();
-//console.log(mapp);
-//showInTable(mapp);
+function generateTop(w,h) {
+  var top = [];
+  for (var x = 0; x < w; x++) {
+    var topHeight = parseInt(getNoise(x,15));
+    var innerTop = [];
+    for (var y = 0; y < topHeight; y++) {
+      innerTop[y] = 2;
+    }
+    top[x] = innerTop;
+  }
+  return top;
+}
+
+
+/* TEST */
+var seed = 42069;
+
+function getNoise(x,range) {
+    var selectionSize = 16  * 16;
+    var noise = 0;
+
+    range /= 2;
+    while (selectionSize > 0) {
+
+        var selectionIndex = x / selectionSize;
+
+        var distanceToIndex = (x % selectionSize) / parseFloat(selectionSize);
+
+        var leftRandom = random(selectionIndex, range); 
+        var rightRandom = random(selectionIndex + 1, range);
+
+        noise += (1 - distanceToIndex) * leftRandom + distanceToIndex * rightRandom;
+
+        selectionSize /= 2;
+        range /= 2;
+
+        range = Math.max(1, range);
+    }
+
+    return Math.round(noise * (noise < 0 ? -1 : 1));
+}
+
+function random(x, range) {
+    return parseInt(((x + seed) ^ 10) % range);
+}

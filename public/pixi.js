@@ -1,10 +1,25 @@
-const app = new PIXI.Application({ backgroundColor: 0x1099bb, resizeTo: document.getElementById("container") });
-document.getElementById("container").appendChild(app.view);
+var blockSize;
+var app;
 
-const blockSize = parseInt(app.screen.height/50);
+const blocks = {
+    1: "stone.jpg",
+    2: "stoneBackground.jpg"
+}
 
-function createStone(x,y) {
-    const newBlock = PIXI.Sprite.from('images/stone.jpg');
+$(document).ready(function() {
+    app = new PIXI.Application({ backgroundColor: 0x1099bb, resizeTo: document.getElementById("container") });
+    document.getElementById("container").appendChild(app.view);
+
+    blockSize = parseInt(app.screen.height/50);
+});
+
+function getPos(sprite) {
+    return {"x":sprite.x/blockSize,"y":(app.screen.height - sprite.y)/blockSize};
+}
+
+function createBlock(x,y,block) {
+    if (block == 0) return;
+    const newBlock = PIXI.Sprite.from(`images/${blocks[block]}`);
     
     newBlock.x = x * blockSize;
     newBlock.y = app.screen.height- (y * blockSize);
@@ -16,25 +31,24 @@ function createStone(x,y) {
 }
 
 function createPlayer(x,y) {
-    const player = PIXI.Sprite.from('images/stoneBackground.jpg');
+    const newPlayer = PIXI.Sprite.from('images/stoneBackground.jpg');
     
-    player.x = x * blockSize;
-    player.y = app.screen.height- (y * blockSize);
+    newPlayer.x = x * blockSize;
+    newPlayer.y = app.screen.height- (y * blockSize);
     
-    player.width = blockSize;
-    player.height = 2* blockSize;
+    newPlayer.width = blockSize;
+    newPlayer.height = 2* blockSize;
     
-    app.stage.addChild(player);
+    app.stage.addChild(newPlayer);
+
+    return newPlayer;
 }
 
 function buildWorld(map) {
     for (var x = 0; x < map.length; x++) {
         var innerMap = map[x];
         for (var y = 0; y < innerMap.length; y++) {
-            if (innerMap[y]) {
-                createStone(x,y);
-                //console.log(`Creating stone @ x-${x} y-${y}`);
-            }
+            createBlock(x,y,innerMap[y]);
         }
     }
 }
