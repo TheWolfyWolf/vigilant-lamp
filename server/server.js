@@ -10,7 +10,7 @@ var server = app.listen(3000, () => {
 
    //makes the connection to the database of messages from users
    var mongoose = require('mongoose');
-   var dbUrl = 'https://cloud.mongodb.com/v2/5d98d90ca6f23936842d9eb5#metrics/replicaSet/5d98d9a879358e851d5b0563/explorer/in-game-chat/messages'
+   var dbUrl = 'https://cloud.mongodb.com/v2/5d98d90ca6f23936842d9eb5#metrics/replicaSet/5d98d9a879358e851d5b0563/explorer/in-game-chat'
    mongoose.connect(dbUrl , (err) => { 
     console.log('mongodb connected',err);
  })
