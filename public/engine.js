@@ -21,6 +21,9 @@ function gameLoop(delta){
     // Find adjacent blocks
     var playerBlocksX = Math.floor(pX) / blockSize;
     var playerBlocksY = Math.floor(pY) / blockSize;
+
+    //gravity
+    //NEEDS COLLISIONS FIRST! <------------------------
 }
 
 function onKeyDown(key) {
@@ -34,8 +37,6 @@ function onKeyDown(key) {
     if (key.keyCode === 87 || key.keyCode === 38 || key.keyCode === 32) {
         //jump code
     }
-    
-    
 }
 
 
