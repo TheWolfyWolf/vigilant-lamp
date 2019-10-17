@@ -5,6 +5,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.5/pixi.min.js"></script>
     <script src="pixi.js"></script>
     <script src="WorldGen.js"></script>
+    <script src="engine.js"></script>
     <style>
     html {
       background-color: #555;
