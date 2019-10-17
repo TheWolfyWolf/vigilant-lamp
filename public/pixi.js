@@ -40,8 +40,12 @@ function createPlayer(x,y) {
     newPlayer.height = 2* blockSize;
     
     app.stage.addChild(newPlayer);
-
-    return newPlayer;
+    
+    var playerToReturn = {
+        sprite: undefined
+    };
+    playerToReturn.sprite = newPlayer;
+    return playerToReturn;
 }
 
 function buildWorld(map) {
@@ -52,7 +56,6 @@ function buildWorld(map) {
         }
     }
 }
-
 
 /*
 

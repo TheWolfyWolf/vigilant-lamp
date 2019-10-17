@@ -8,11 +8,6 @@ var deathLimit = 4;
 
 var seed = 12;
 
-$(document).ready(function() {
-  var mapp = generateMap();
-  const player = createPlayer(50,51);
-})
-
 function doStep(map) {
   var newMap = [];
   for (var x = 0; x<map.length; x++) {
