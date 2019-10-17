@@ -86,9 +86,8 @@ function generateMap() {
   for (var i = 0; i < width; i++) {
     world[i] = map[i].concat(top[i]);
   }
-  /* Build World */
-  buildWorld(world);
-  return map;
+    
+  return world;
 }
 
 function generateTop(w,h) {
@@ -98,7 +97,7 @@ function generateTop(w,h) {
     var innerTop = [];
     for (var y = 0; y < topHeight; y++) {
       innerTop[y] = 3;
-      if (innerTop[y+1] == 0){
+      if ((y+1) == topHeight){
         innerTop[y] = 4;
       }
     }
