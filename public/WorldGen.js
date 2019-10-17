@@ -97,7 +97,10 @@ function generateTop(w,h) {
     var topHeight = parseInt(getNoise(x,15));
     var innerTop = [];
     for (var y = 0; y < topHeight; y++) {
-      innerTop[y] = 2;
+      innerTop[y] = 3;
+      if (innerTop[y+1] == 0){
+        innerTop[y] = 4;
+      }
     }
     top[x] = innerTop;
   }

@@ -3,7 +3,9 @@ var app;
 
 const blocks = {
     1: "stone.jpg",
-    2: "stoneBackground.jpg"
+    2: "stoneBackground.jpg",
+    3: "dirt.jpg",
+    4: "grass.jpeg"
 }
 
 $(document).ready(function() {
