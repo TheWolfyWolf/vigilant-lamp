@@ -86,9 +86,8 @@ function generateMap() {
   for (var i = 0; i < width; i++) {
     world[i] = map[i].concat(top[i]);
   }
-  /* Build World */
-  buildWorld(world);
-  return map;
+    
+  return world;
 }
 
 function generateTop(w,h) {
