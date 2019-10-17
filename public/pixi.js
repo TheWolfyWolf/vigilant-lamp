@@ -1,5 +1,6 @@
 var blockSize;
 var app;
+var blocksPerWidth = 50;
 
 const blocks = {
     1: "stone.jpg",
@@ -12,7 +13,7 @@ $(document).ready(function() {
     app = new PIXI.Application({ backgroundColor: 0x1099bb, resizeTo: document.getElementById("container") });
     document.getElementById("container").appendChild(app.view);
 
-    blockSize = parseInt(app.screen.height/50);
+    blockSize = parseInt(app.screen.width/blocksPerWidth);
 });
 
 function getPos(sprite) {
@@ -50,11 +51,11 @@ function createPlayer(x,y) {
     return playerToReturn;
 }
 
-function buildWorld(map) {
+function buildWorld(startCol,map) {
     for (var x = 0; x < map.length; x++) {
         var innerMap = map[x];
         for (var y = 0; y < innerMap.length; y++) {
-            createBlock(x,y,innerMap[y]);
+            createBlock(startCol+x,y,innerMap[y]);
         }
     }
 }

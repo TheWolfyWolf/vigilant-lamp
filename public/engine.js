@@ -3,8 +3,10 @@ var player;
 var worldMap;
 
 // Simulate what the server will return
-function getVisibleChunks() {
-    
+function getVisibleChunks(playerX) {
+    var startCol = (playerX-blocksPerWidth*2 < 0 ? 0 : playerX-blocksPerWidth*2);
+    var noCols = (worldMap.length - ((playerX-blocksPerWidth*2) < 0 ? 0 : playerX-blocksPerWidth*2)) < 0 ? 0 : (blocksPerWidth*4)
+    return [startCol,worldMap.slice(startCol,noCols)];
 }
 
 $(document).ready(function() {
@@ -18,9 +20,6 @@ $(document).ready(function() {
 });
 
 function gameLoop(delta){
-    // Build visible area
-    buildWorld(worldMap);
-    
     // Player Pos
     var pX = player.sprite.x;
     var pY = player.sprite.y;
@@ -29,11 +28,17 @@ function gameLoop(delta){
     app.stage.pivot.x = pX - parseInt(app.screen.width/2);
     app.stage.pivot.y = pY - parseInt(app.screen.height/2);
     
-    // Find adjacent blocks
+    // Player Pos In Blocks
     var playerBlocksX = Math.floor(pX/blockSize);
     var playerBlocksY = Math.floor(pY/blockSize);
     
-    console.log(`Player is x-${playerBlocksX} y-${playerBlocksY}`);
+    // Build visible area
+    returned = getVisibleChunks(playerBlocksX);
+    startCol = returned[0];
+    visibleMap = returned[1];
+    buildWorld(startCol,visibleMap);
+    
+    //console.log(`Player is x-${playerBlocksX} y-${playerBlocksY}`);
     
     
 }

@@ -97,7 +97,7 @@ function generateTop(w,h) {
     var innerTop = [];
     for (var y = 0; y < topHeight; y++) {
       innerTop[y] = 3;
-      if (innerTop[y+1] == 0){
+      if ((y+1) == topHeight){
         innerTop[y] = 4;
       }
     }
