@@ -9,32 +9,29 @@ var deathLimit = 4;
 var seed = 12;
 
 function doStep(map) {
-  var newMap = [];
-  for (var x = 0; x<map.length; x++) {
-    var innerMap = [];
-    for (var y = 0; y<map[0].length; y++) {
-      var nbs = trueNeighbours(map,x,y);
-      if (map[x][y]) {
-        if (nbs < deathLimit) {
-          innerMap[y] = 0;
-          //console.log("1");
-        } else {
-          innerMap[y] = 1;
-          //console.log("2");
+    for (var x = 0; x<map.length; x++) {
+        for (var y = 0; y<map[0].length; y++) {
+            var nbs = trueNeighbours(map,x,y);
+            if (map[x][y].blockID) {
+                if (nbs < deathLimit) {
+                    map[x][y].blockID = 0;
+                    //console.log("1");
+                } else {
+                    map[x][y].blockID = 1;
+                    //console.log("2");
+                }
+            } else {
+                if (nbs > birthLimit) {
+                    map[x][y].blockID = 1;
+                    //console.log("3");
+                } else {
+                    map[x][y].blockID = 0;
+                    //console.log("5");
+                }
+            }
         }
-      } else {
-        if (nbs > birthLimit) {
-          innerMap[y] = 1;
-          //console.log("3");
-        } else {
-          innerMap[y] = 0;
-          //console.log("5");
-        }
-      }
-      newMap[x] = innerMap;
     }
-  }
-  return newMap;
+    return map;
 }
 
 function trueNeighbours(map,x, y){
@@ -47,7 +44,7 @@ function trueNeighbours(map,x, y){
         // Nothing
       } else if (neighbourX < 0 || neighbourY < 0 || neighbourX >= map.length || neighbourY >= map[0].length) {
         count++;
-      } else if (map[neighbourX][neighbourY]) {
+      } else if (map[neighbourX][neighbourY].blockID) {
         count++;
       }
     }
@@ -60,12 +57,18 @@ function initialiseMap(w,h) {
   var map = [];
   for(var x = 0; x<w; x++){
     innerMap = []
-      for(var y = 0; y<h; y++){
-          if ((Math.random()) < trueChance) {
-              innerMap[y] = 1;
-          } else {
-            innerMap[y] = 0;
+      for(var y = 0; y<h; y++) {
+          var blockObject = {
+              sprite: undefined,
+              blockID: 0,
+              visible: false
           }
+          if ((Math.random()) < trueChance) {
+              blockObject.blockID = 1;
+          } else {
+              blockObject.blockID = 0;
+          }
+          innerMap[y] = blockObject;
       }
       map[x] = innerMap;
   }
@@ -73,21 +76,24 @@ function initialiseMap(w,h) {
 }
 
 function generateMap() {
-  /* Cave Area */
-  var map = initialiseMap(width, height*.8);
-  for (var i = 0; i < numSteps; i++) {
-    map = doStep(map);
-  }
+    /* Cave Area */
+    var map = initialiseMap(width, height*.8);
+    for (var i = 0; i < numSteps; i++) {
+        map = doStep(map);
+    }
 
+    /* Top Ground */
+    var top = generateTop(width,height*.2);
 
-  /* Top Ground */
-  var top = generateTop(width,height*.2);
-  var world = [];
-  for (var i = 0; i < width; i++) {
-    world[i] = map[i].concat(top[i]);
-  }
-    
-  return world;
+    // Merge
+    var world = [];
+    for (var i = 0; i < width; i++) {
+        if (map[i] != undefined) {
+            world[i] = map[i].concat(top[i]);
+        }
+    }
+
+    return world;
 }
 
 function generateTop(w,h) {
@@ -96,10 +102,16 @@ function generateTop(w,h) {
     var topHeight = parseInt(getNoise(x,15));
     var innerTop = [];
     for (var y = 0; y < topHeight; y++) {
-      innerTop[y] = 3;
+        var blockObject = {
+            sprite: undefined,
+            blockID: 0,
+            visible: false
+          }
+      blockObject.blockID = 3;
       if ((y+1) == topHeight){
-        innerTop[y] = 4;
+        blockObject.blockID = 4;
       }
+        innerTop[y] = blockObject;
     }
     top[x] = innerTop;
   }

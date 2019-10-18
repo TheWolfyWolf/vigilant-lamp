@@ -45,17 +45,21 @@ function createPlayer(x,y) {
     app.stage.addChild(newPlayer);
     
     var playerToReturn = {
-        sprite: undefined
+        sprite: newPlayer,
+        health: 100
     };
-    playerToReturn.sprite = newPlayer;
+    
     return playerToReturn;
 }
 
-function buildWorld(startCol,map) {
+function buildWorld(map) {
     for (var x = 0; x < map.length; x++) {
         var innerMap = map[x];
         for (var y = 0; y < innerMap.length; y++) {
-            createBlock(startCol+x,y,innerMap[y]);
+            if (!innerMap[y].visible) {
+                innerMap[y].sprite = createBlock(x,y,innerMap[y].blockID);
+                innerMap[y].visible = true;
+            }
         }
     }
 }

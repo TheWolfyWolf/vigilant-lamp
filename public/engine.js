@@ -7,11 +7,15 @@ var visibleMap;
 function getVisibleChunks(playerX) {
     var startCol = (playerX-blocksPerWidth < 0 ? 0 : playerX-blocksPerWidth);
     var noCols = (worldMap.length - ((playerX-blocksPerWidth) < 0 ? 0 : playerX-blocksPerWidth)) < 0 ? 0 : (blocksPerWidth*2);
-    return [startCol,worldMap.slice(startCol,noCols)];
+    return worldMap.slice(startCol,noCols);
 }
 
 $(document).ready(function() {
     worldMap = generateMap();
+    console.log(worldMap);
+    // Build visible area
+    visibleMap = getVisibleChunks();
+    buildWorld(worldMap);
 
     player = createPlayer(50,51);
 
@@ -31,23 +35,11 @@ function gameLoop(delta){
 
     // Player Pos In Blocks
     var playerBlocksX = Math.floor(pX/blockSize);
-    var playerBlocksY = Math.floor(pY/blockSize);
-
-    // Build visible area
-    returned = getVisibleChunks(playerBlocksX);
-    startCol = returned[0];
-    visibleMap = returned[1];
-    buildWorld(startCol,visibleMap);
+    var playerBlocksY = Math.floor(pY/blockSize)+1;
     
     // Collisions
-    if (!visibleMap[playerBlocksX+startCol][playerBlocksY+1]) {
-        // There is no floor
-        player.sprite.y += blockSize/3;
-    } else {
-        // Is a floor
-        // Make sure player reaches it
-    }
-    console.log(visibleMap[playerBlocksX+startCol][playerBlocksY+1]);
+    var b = new Bump(PIXI);
+    //b.hit(player.sprite, , true)
     
     //console.log(`Player is x-${playerBlocksX} y-${playerBlocksY}`);
 
@@ -56,10 +48,10 @@ function gameLoop(delta){
 
 function onKeyDown(key) {
     if (key.keyCode === 65 || key.keyCode === 37) {
-        player.sprite.x -= blockSize/3;
+        player.sprite.x -= 50;//blockSize/3;
     }
     if (key.keyCode === 68 || key.keyCode === 39) {
-        player.sprite.x += blockSize/3;
+        player.sprite.x += 50;//blockSize/3;
     }
     if (key.keyCode === 87 || key.keyCode === 38 || key.keyCode === 32) {
         //jump code
