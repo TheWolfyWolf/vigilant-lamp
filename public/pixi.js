@@ -59,10 +59,3 @@ function buildWorld(startCol,map) {
         }
     }
 }
-
-/*
-
-For physics use physicsjs
-https://www.html5gamedevs.com/topic/2823-building-a-platformer-with-pixi-and-physicsjs-good-idea/
-
-*/

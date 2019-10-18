@@ -12,9 +12,9 @@ function getVisibleChunks(playerX) {
 
 $(document).ready(function() {
     worldMap = generateMap();
-    
+
     player = createPlayer(50,51);
-    
+
     app.ticker.add(delta => gameLoop(delta));
     document.addEventListener('keydown', onKeyDown);
 
@@ -24,15 +24,15 @@ function gameLoop(delta){
     // Player Pos
     var pX = player.sprite.x;
     var pY = player.sprite.y;
-    
+
     // Camera Locking
     app.stage.pivot.x = pX - parseInt(app.screen.width/2);
     app.stage.pivot.y = pY - parseInt(app.screen.height/2);
-    
+
     // Player Pos In Blocks
     var playerBlocksX = Math.floor(pX/blockSize);
     var playerBlocksY = Math.floor(pY/blockSize);
-    
+
     // Build visible area
     returned = getVisibleChunks(playerBlocksX);
     startCol = returned[0];
@@ -50,8 +50,8 @@ function gameLoop(delta){
     console.log(visibleMap[playerBlocksX+startCol][playerBlocksY+1]);
     
     //console.log(`Player is x-${playerBlocksX} y-${playerBlocksY}`);
-    
-    
+
+
 }
 
 function onKeyDown(key) {
@@ -69,8 +69,4 @@ function onKeyDown(key) {
         //Down code
         player.sprite.y += 3;
     }
-    
-    
 }
-
-
