@@ -1,6 +1,6 @@
 var blockSize;
 var app;
-var blocksPerWidth = 50;
+var blocksPerWidth = 25;
 
 const blocks = {
     1: "stone.jpg",
@@ -14,6 +14,7 @@ $(document).ready(function() {
     document.getElementById("container").appendChild(app.view);
 
     blockSize = parseInt(app.screen.width/blocksPerWidth);
+    blockSize -= blockSize % 3;
 });
 
 function getPos(sprite) {
@@ -31,6 +32,8 @@ function createBlock(x,y,block) {
     newBlock.height = blockSize;
     
     app.stage.addChild(newBlock);
+    
+    return newBlock;
 }
 
 function createPlayer(x,y) {
@@ -44,21 +47,16 @@ function createPlayer(x,y) {
     
     app.stage.addChild(newPlayer);
     
-    var playerToReturn = {
-        sprite: newPlayer,
-        health: 100
-    };
-    
-    return playerToReturn;
+    return newPlayer;
 }
 
-function buildWorld(map) {
-    for (var x = 0; x < map.length; x++) {
-        var innerMap = map[x];
+function buildWorld() {
+    for (var x = 0; x < worldMap.length; x++) {
+        var innerMap = worldMap[x];
         for (var y = 0; y < innerMap.length; y++) {
-            if (!innerMap[y].visible) {
+            
+            if (innerMap[y] && innerMap[y].blockID != 0 && innerMap[y].sprite == undefined) {
                 innerMap[y].sprite = createBlock(x,y,innerMap[y].blockID);
-                innerMap[y].visible = true;
             }
         }
     }

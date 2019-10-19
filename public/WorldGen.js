@@ -1,10 +1,45 @@
 var width = 350;
 var height = 50;
 
+/*
+
+    CHANGE BLOCKS FROM AN OBJECT TO A CLASS !!!! BISHHHHH
+
+*/
+
+const nonSolidBlocks = [2];
+
+class blockObject {
+    constructor(x,y,block) {
+        this.x = x;
+        this.y = y;
+        this.blockID = block;
+        this.sprite = undefined;
+    }
+    
+    solid() {
+        for (var i = 0; i < nonSolidBlocks.length; i++) {
+            if (nonSolidBlocks[i] == this.blockID) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    visible() {
+        return this.sprite.visible;
+    }
+    
+    toggleVisible() {
+        this.sprite.visible = !this.sprite.visible;
+    }
+    
+}
+
 var trueChance = 0.4;
-var numSteps = 6;
-var birthLimit = 3;
-var deathLimit = 4;
+var numSteps = 5;
+var birthLimit = 4;
+var deathLimit = 2;
 
 var seed = 12;
 
@@ -58,17 +93,11 @@ function initialiseMap(w,h) {
   for(var x = 0; x<w; x++){
     innerMap = []
       for(var y = 0; y<h; y++) {
-          var blockObject = {
-              sprite: undefined,
-              blockID: 0,
-              visible: false
-          }
           if ((Math.random()) < trueChance) {
-              blockObject.blockID = 1;
+              innerMap[y] = new blockObject(x,y,1);
           } else {
-              blockObject.blockID = 0;
+              innerMap[y] = new blockObject(x,y,0);
           }
-          innerMap[y] = blockObject;
       }
       map[x] = innerMap;
   }
@@ -81,6 +110,7 @@ function generateMap() {
     for (var i = 0; i < numSteps; i++) {
         map = doStep(map);
     }
+    
 
     /* Top Ground */
     var top = generateTop(width,height*.2);
@@ -102,16 +132,11 @@ function generateTop(w,h) {
     var topHeight = parseInt(getNoise(x,15));
     var innerTop = [];
     for (var y = 0; y < topHeight; y++) {
-        var blockObject = {
-            sprite: undefined,
-            blockID: 0,
-            visible: false
-          }
-      blockObject.blockID = 3;
       if ((y+1) == topHeight){
-        blockObject.blockID = 4;
+          innerTop[y] = new blockObject(x,y,4);
+      } else {
+          innerTop[y] = new blockObject(x,y,3);
       }
-        innerTop[y] = blockObject;
     }
     top[x] = innerTop;
   }
