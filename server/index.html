@@ -13,7 +13,7 @@
  <br>
  <input id = “name” class=”form-control” placeholder=”Name”>
  <br>
- <textarea id = “message” class=”form-control” placeholder=”Your Message Here”>
+ <textarea id = “message” class=”form-control” placeholder="Your message here">
 </textarea>
  <br>
  <button id=”send” class=”btn btn-success”>Send</button>
@@ -24,7 +24,6 @@
 </div>
 <script>
 
-    //the code within the script tags is used to add messages and then have them displayed onto the in game chat on the server
 $(() => {
     $("#send").click(()=>{
        sendMessage({
@@ -35,27 +34,26 @@ $(() => {
     })
     
 function addMessages(message){
-   $('#messages').append(`
+   $("#messages").append(`
       <h4> ${message.name} </h4>
       <p>  ${message.message} </p>`)
    }
    
 function getMessages(){
-  $.get('http://localhost:3000/messages', (data) => {
+  $.get("http://localhost:3000/messages", (data) => {
    data.forEach(addMessages);
    })
  }
  
 function sendMessage(message){
-   $.post('http://localhost:3000/messages', message)
+   $.post("http://localhost:3000/messages", message)
  }
-
  var socket = io();
 
-socket.on('message', addMessages)
+ socket.on("message", addMessages)
+
 </script>
 
-//this sctript tag allows the index to connect to the socket.io
 <script src=”/socket.io/socket.io.js”></script>
 </body>
 </html>
