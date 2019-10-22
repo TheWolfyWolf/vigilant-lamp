@@ -1,29 +1,36 @@
 var blockSize;
 var app;
-var blocksPerWidth = 25;
+var blocksPerWidth = 20;
 
-const blocks = {
-    1: "stone.jpg",
-    2: "stoneBackground.jpg",
-    3: "dirt.jpg",
-    4: "grass.jpeg"
+const tools = {
+    pickaxe: 1,
+    axe: 2,
+    shovel: 3
 }
 
-$(document).ready(function() {
-    app = new PIXI.Application({ backgroundColor: 0x1099bb, resizeTo: document.getElementById("container") });
-    document.getElementById("container").appendChild(app.view);
+const toolLevels = {
+    none: 0,
+    wood: {durability: 50,damage: 1},
+    stone: {durability: 100,damage: 2},
+    diamond: {durability: 500,damage: 4}
+}
 
-    blockSize = parseInt(app.screen.width/blocksPerWidth);
-    blockSize -= blockSize % 3;
-});
+const blocks = {
+    1: {image:"stone.jpg",hardness:10, tool:tools.pickaxe, minTool:toolLevels.wood},
+    2: {image:"stoneBackground.jpg", hardness:10, tool:tools.pickaxe, minTool:toolLevels.stone},
+    3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none},
+    4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none},
+    5: {image:"bedrock.png",hardness:-1}
+}
 
 function getPos(sprite) {
     return {"x":sprite.x/blockSize,"y":(app.screen.height - sprite.y)/blockSize};
 }
 
+
 function createBlock(x,y,block) {
     if (block == 0) return;
-    const newBlock = PIXI.Sprite.from(`images/${blocks[block]}`);
+    const newBlock = PIXI.Sprite.from(`images/${blocks[block].image}`);
     
     newBlock.x = x * blockSize;
     newBlock.y = app.screen.height- (y * blockSize);
@@ -31,7 +38,13 @@ function createBlock(x,y,block) {
     newBlock.width = blockSize;
     newBlock.height = blockSize;
     
+    // Allow block interaction
+    newBlock.interactive = true;
+    newBlock.on('click', damageBlock).on('pointerdown',blockPointerDown).on('pointerup',blockPointerUp).on('pointerupoutside',blockPointerUpOutside).on('mouseover',blockMouseEnter).on('mouseout',blockMouseLeave);
+    
     app.stage.addChild(newBlock);
+    
+    newBlock.visible = false;
     
     return newBlock;
 }
@@ -45,7 +58,7 @@ function createPlayer(x,y) {
     newPlayer.width = blockSize;
     newPlayer.height = 2* blockSize;
     
-    app.stage.addChild(newPlayer);
+    //app.stage.addChild(newPlayer);
     
     return newPlayer;
 }

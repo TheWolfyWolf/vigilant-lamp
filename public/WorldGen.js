@@ -1,13 +1,7 @@
-var width = 350;
-var height = 50;
+var width = 1000;
+var height = 200;
 
-/*
-
-    CHANGE BLOCKS FROM AN OBJECT TO A CLASS !!!! BISHHHHH
-
-*/
-
-const nonSolidBlocks = [2];
+const nonSolidBlocks = [0,2];
 
 class blockObject {
     constructor(x,y,block) {
@@ -15,6 +9,7 @@ class blockObject {
         this.y = y;
         this.blockID = block;
         this.sprite = undefined;
+        this.damage = 0;
     }
     
     solid() {
@@ -26,12 +21,46 @@ class blockObject {
         return true;
     }
     
+    hardness() {
+        return blocks[this.blockID].hardness;
+    }
+    
+    unload() {
+        if (this.sprite != undefined) {
+            this.sprite.visible = false;
+        }
+    }
+    load() {
+        if (this.sprite != undefined) {
+            this.sprite.visible = true;
+        }
+    }
+    
     visible() {
-        return this.sprite.visible;
+        if (this.sprite != undefined) {
+            return this.sprite.visible;
+        }
+        return false;
     }
     
     toggleVisible() {
-        this.sprite.visible = !this.sprite.visible;
+        if (this.sprite != undefined) {
+            this.sprite.visible = !this.sprite.visible;
+        }
+    }
+    
+    dropLoot() {
+        if (player.freeInventorySpace(this.blockID) > 1) {
+            var itemToGive = this.blockID;
+            
+            switch (this.blockID) {
+                case 4:
+                    itemToGive = 3;
+                    break;
+            }
+            
+            player.giveItem(itemToGive);
+        }
     }
     
 }
@@ -118,9 +147,14 @@ function generateMap() {
     // Merge
     var world = [];
     for (var i = 0; i < width; i++) {
-        if (map[i] != undefined) {
+        if (map[i] != undefined && top[i] != undefined) {
             world[i] = map[i].concat(top[i]);
         }
+    }
+    
+    // Create bedrock
+    for (var x = 0; x < world.length; x++) {
+        world[x][0] = new blockObject(x,0,5);
     }
 
     return world;
