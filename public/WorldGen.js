@@ -70,7 +70,7 @@ var numSteps = 5;
 var birthLimit = 4;
 var deathLimit = 2;
 
-var seed = 12;
+var seed = 42069;
 
 function doStep(map) {
     for (var x = 0; x<map.length; x++) {
@@ -179,7 +179,6 @@ function generateTop(w,h) {
 
 
 /* TEST */
-var seed = 42069;
 
 function getNoise(x,range) {
     var selectionSize = 16  * 16;
