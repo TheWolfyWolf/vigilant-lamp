@@ -16,24 +16,30 @@ Version Goals:
 
 -Multiplayer Support
 -Complete Inventory
--Crafting / World Edit
+
+0.20
+-World Edit/ Fix Top Level
 -Ores and New Blocks
 -Menus
 
-0.20
+0.30
 
 -Saving
--Lighting
 -Chats
+-Player Deaths and Spawning
+
+0.40
+-Lighting
 -Movement
 
-0.30
+0.50
 
 -Mobs
 -Water?
 
-0.40
+0.60
 
 -Update Player
 -Models and Animations
+-Sounds
 
