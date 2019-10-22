@@ -66,7 +66,6 @@ class Player {
         for (var i = 0; i < 15; i++) {
             this.inventory.push(undefined);
         }
-        this.inventory[4] = new InventoryItem(-1);
     }
     
     updateHotBar() {
