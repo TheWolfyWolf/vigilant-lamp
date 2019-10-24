@@ -53,9 +53,20 @@ class Tool {
         this.img = "images/heart.png";
     }
 }
+class Inventory {
+    constructor(){
+        this.inv = [];
+        this.holding = 0;
+        this.size = 15;
+        for (var i =  0; i<= this.size; i++){
+            inv[i] = undefined;
+        }
+    }
 
+}
 class Player {
-    constructor(x,y) {
+    constructor(x, y, ident) {
+        this.id = ident;
         this.jumping = 0;
         this.sprite = createPlayer();
         this.spawn(x,y);
@@ -63,11 +74,7 @@ class Player {
         this.floored = false;
         this.health = 10;
         this.blocksFell = 0;
-        this.inventory = [];
-        this.holding = 0;
-        for (var i = 0; i < 15; i++) {
-            this.inventory.push(undefined);
-        }
+        this.inventory = new Inventory();
         this.updateHearts();
         this.updateHotBar();
     }
