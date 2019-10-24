@@ -37,6 +37,7 @@ io.on('connection', function(socket){
         playerHand = data.playerHand;
         if (world.damageBlock(blockPos,playerHand) == true) {
             io.emit("blockDeleted",blockPos);
+            socket.emit("blockBroken", getBlockID);
             world.removeBlock(blockPos);
         }
         
