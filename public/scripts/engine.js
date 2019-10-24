@@ -53,9 +53,20 @@ class Tool {
         this.img = "images/heart.png";
     }
 }
+class Inventory {
+    constructor(){
+        this.inv = [];
+        this.holding = 0;
+        this.size = 15;
+        for (var i =  0; i<= this.size; i++){
+            inv[i] = undefined;
+        }
+    }
 
+}
 class Player {
-    constructor(x,y) {
+    constructor(x, y, ident) {
+        this.id = ident;
         this.jumping = 0;
         this.sprite = createPlayer();
         this.spawn(x,y);
@@ -63,11 +74,7 @@ class Player {
         this.floored = false;
         this.health = 10;
         this.blocksFell = 0;
-        this.inventory = [];
-        this.holding = 0;
-        for (var i = 0; i < 15; i++) {
-            this.inventory.push(undefined);
-        }
+        this.inventory = new Inventory();
         this.updateHearts();
         this.updateHotBar();
     }
@@ -593,19 +600,19 @@ function onKeyDown(key) {
     } else {
         switch (key.keyCode) {
             case 49:
-                player.holding = 0;
+                player.inventory.holding = 0;
                 break;
             case 50:
-                player.holding = 1;
+                player.inventory.holding = 1;
                 break;
             case 51:
-                player.holding = 2;
+                player.inventory.holding = 2;
                 break;
             case 52:
-                player.holding = 3;
+                player.inventory.holding = 3;
                 break;
             case 53:
-                player.holding = 4;
+                player.inventory.holding = 4;
                 break;
             case 69:
                 toggleInv();
@@ -676,11 +683,11 @@ function damageBlock() {
     var blockInfo = worldMap[blockPos.x][blockPos.y];
     if (player.lineOfSight(blockPos.x,blockPos.y)) {
         var playerHand = {isTool: false};
-        if (player.inventory[player.holding] && player.inventory[player.holding].isTool) {
+        if (player.inventory[player.inventory.holding] && player.inventory[player.inventory.holding].isTool) {
             playerHand = {
-                tool: player.inventory[player.holding].tool,
-                damage: player.inventory[player.holding].damage,
-                level: player.inventory[player.holding].level,
+                tool: player.inventory[player.inventory.holding].tool,
+                damage: player.inventory[player.inventory.holding].damage,
+                level: player.inventory[player.inventory.holding].level,
                 isTool: true,
                 durability: 100
             };
@@ -703,24 +710,24 @@ function OLD__damageBlock() {
     var blockInfo = worldMap[blockPos.x][blockPos.y];
     if (player.lineOfSight(blockPos.x,blockPos.y)) {
         if (blockInfo.hardness() > 0) {
-            if (player.inventory[player.holding] != undefined && player.inventory[player.holding].isTool) {
-                if (blocks[blockInfo.blockID].tool == player.inventory[player.holding].tool) {
-                    blockInfo.damage += player.inventory[player.holding].damage;
-                    player.inventory[player.holding].durability -= 1;
+            if (player.inventory[player.inventory.holding] != undefined && player.inventory[player.inventory.holding].isTool) {
+                if (blocks[blockInfo.blockID].tool == player.inventory[player.inventory.holding].tool) {
+                    blockInfo.damage += player.inventory[player.inventory.holding].damage;
+                    player.inventory[player.inventory.holding].durability -= 1;
                 } else {
-                    player.inventory[player.holding].durability -= 2;
+                    player.inventory[player.inventory.holding].durability -= 2;
                 }
-                if (player.inventory[player.holding].durability <= 0) {
-                    player.inventory[player.holding] = undefined;
+                if (player.inventory[player.inventory.holding].durability <= 0) {
+                    player.inventory[player.inventory.holding] = undefined;
                 }
             }
             blockInfo.damage += 1;
             if (blockInfo.damage >= blocks[blockInfo.blockID].hardness) {
                 if (blocks[blockInfo.blockID].minTool != toolLevels.none) {
-                    if (player.inventory[player.holding] != undefined &&
-                        player.inventory[player.holding].isTool &&
-                        player.inventory[player.holding].level >= blocks[blockInfo.blockID].minTool &&
-                        blocks[blockInfo.blockID].tool == player.inventory[player.holding].tool) {
+                    if (player.inventory[player.inventory.holding] != undefined &&
+                        player.inventory[player.inventory.holding].isTool &&
+                        player.inventory[player.inventory.holding].level >= blocks[blockInfo.blockID].minTool &&
+                        blocks[blockInfo.blockID].tool == player.inventory[player.inventory.holding].tool) {
                         blockInfo.dropLoot();
                     }
                 } else {
