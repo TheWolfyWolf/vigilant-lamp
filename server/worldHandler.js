@@ -330,5 +330,9 @@ module.exports = {
     },
     damageBlock: function(blockPos,playerHand) {
         return damageBlock(blockPos,playerHand);
+    },
+    getBlockID: function(blockPos) {
+        return worldMap[blockPos.x][blockPos.y].blockID;
     }
+}
 }
