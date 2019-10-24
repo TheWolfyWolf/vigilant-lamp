@@ -335,4 +335,3 @@ module.exports = {
         return worldMap[blockPos.x][blockPos.y].blockID;
     }
 }
-}
