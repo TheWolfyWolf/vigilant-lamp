@@ -123,6 +123,10 @@ class Player {
         this.sprite.x += blockSize * moveSpeed;
     }
     
+    updateLocation() {
+        socket.emit("playerLocation",this.pos());
+    }
+    
     teleport(x,y,relative) {
         if (relative == true) {
             this.sprite.x = (this.pos().x + x)*blockSize;
@@ -669,6 +673,7 @@ function blockPointerDown() {
 
 function damageBlock() {
     var blockPos = getPos(this);
+    var blockInfo = worldMap[blockPos.x][blockPos.y];
     if (player.lineOfSight(blockPos.x,blockPos.y)) {
         var playerHand = {isTool: false};
         if (player.inventory[player.holding] && player.inventory[player.holding].isTool) {
@@ -679,6 +684,15 @@ function damageBlock() {
                 isTool: true,
                 durability: 100
             };
+            if (blocks[blockInfo.blockID].tool == player.inventory[player.holding].tool) {
+                blockInfo.damage += player.inventory[player.holding].damage;
+                player.inventory[player.holding].durability -= 1;
+            } else {
+                player.inventory[player.holding].durability -= 2;
+            }
+            if (player.inventory[player.holding].durability <= 0) {
+                player.inventory[player.holding] = undefined;
+            }
         }
         socket.emit('damageBlock', {blockPos: blockPos,playerHand:playerHand});
     }
