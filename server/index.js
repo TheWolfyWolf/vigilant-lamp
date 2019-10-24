@@ -33,11 +33,15 @@ io.on('connection', function(socket){
         //io.emit("currentWorld",world.getWorld());
     });
     socket.on('damageBlock', function(data) {
-        blockPos = data.blockPos;
-        playerHand = data.playerHand;
-        if (world.damageBlock(blockPos,playerHand) == true) {
+        var blockPos = data.blockPos;
+        var playerHand = data.playerHand;
+        var damageBlock = world.damageBlock(blockPos,playerHand);
+        console.log(damageBlock);
+        if (damageBlock != 0) {
+            if (damageBlock == 2) {
+                socket.emit("blockBroken", world.getBlockID(blockPos));
+            }
             io.emit("blockDeleted",blockPos);
-            socket.emit("blockBroken", getBlockID);
             world.removeBlock(blockPos);
         }
         

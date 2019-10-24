@@ -22,6 +22,11 @@ $(document).ready(function() {
         var ping = Date.now()-parseInt(startTime);
         console.log("Ping: " + ping);
     });
+    
+    socket.on('blockBroken', function(blockID) {
+        var lootBlock = new blockObject(0,0,blockID,0);
+        lootBlock.dropLoot();
+    });
 });
 
 function blockDeleted(pos) {

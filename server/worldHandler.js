@@ -305,13 +305,16 @@ function damageBlock(blockPos,playerHand) {
                     playerHand.level >= blocks[blockInfo.blockID].minTool &&
                     blocks[blockInfo.blockID].tool == playerHand.tool) {
                     //blockInfo.dropLoot();
+                    return 2;
                 }
             } else {
                 //blockInfo.dropLoot();
+                return 2;
             }
-            return true;
+            return 1;
         }
     }
+    return 0;
 }
 
 function removeBlock(pos) {
