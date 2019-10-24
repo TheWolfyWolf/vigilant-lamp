@@ -59,7 +59,7 @@ class Inventory {
         this.holding = 0;
         this.size = 15;
         for (var i =  0; i<= this.size; i++){
-            inv[i] = undefined;
+            this.inv[i] = undefined;
         }
     }
 
@@ -98,9 +98,9 @@ class Player {
     }
     
     updateHotBar() {
-        var hotbar = this.inventory.slice(0,5);
+        var hotbar = this.inventory.inv.slice(0,5);
         for (var i = 0; i < hotbar.length; i++) {
-            if (i == this.holding) {
+            if (i == this.inventory.holding) {
                 $(`.item.item-${i+1}`).addClass("selected");
             } else {
                 $(`.item.item-${i+1}`).removeClass("selected");
@@ -169,8 +169,8 @@ class Player {
     
     freeInventorySpace(item) {
         var freeSpace = 0;
-        for (var i = 0; i < this.inventory.length; i++) {
-            if (this.inventory[i] == undefined || (this.inventory[i].item == item && this.inventory[i].stackable)) {
+        for (var i = 0; i < this.inventory.inv.length; i++) {
+            if (this.inventory.inv[i] == undefined || (this.inventory.inv[i].item == item && this.inventory.inv[i].stackable)) {
                 freeSpace++;
             }
         }
@@ -178,9 +178,9 @@ class Player {
     }
     
     giveTool(toolID,toolLevel) {
-        for (var i = 0; i < this.inventory.length; i++) {
-            if (this.inventory[i] == undefined) {
-                this.inventory[i] = new Tool(toolID,toolLevel);
+        for (var i = 0; i < this.inventory.inv.length; i++) {
+            if (this.inventory.inv[i] == undefined) {
+                this.inventory.inv[i] = new Tool(toolID,toolLevel);
                 this.updateHotBar();
                 return true;
             }
@@ -189,16 +189,16 @@ class Player {
     }
     
     giveItem(item) {
-        for (var i = 0; i < this.inventory.length; i++) {
-            if (this.inventory[i] != undefined && this.inventory[i].id == item) {
-                this.inventory[i].count++;
+        for (var i = 0; i < this.inventory.inv.length; i++) {
+            if (this.inventory.inv[i] != undefined && this.inventory.inv[i].id == item) {
+                this.inventory.inv[i].count++;
                 this.updateHotBar();
                 return true;
             }
         }
-        for (var i = 0; i < this.inventory.length; i++) {
-            if (this.inventory[i] == undefined) {
-                this.inventory[i] = new InventoryItem(item);
+        for (var i = 0; i < this.inventory.inv.length; i++) {
+            if (this.inventory.inv[i] == undefined) {
+                this.inventory.inv[i] = new InventoryItem(item);
                 this.updateHotBar();
                 return true;
             }
@@ -683,22 +683,22 @@ function damageBlock() {
     var blockInfo = worldMap[blockPos.x][blockPos.y];
     if (player.lineOfSight(blockPos.x,blockPos.y)) {
         var playerHand = {isTool: false};
-        if (player.inventory[player.inventory.holding] && player.inventory[player.inventory.holding].isTool) {
+        if (player.inventory.inv[player.inventory.holding] && player.inventory.inv[player.inventory.holding].isTool) {
             playerHand = {
-                tool: player.inventory[player.inventory.holding].tool,
-                damage: player.inventory[player.inventory.holding].damage,
-                level: player.inventory[player.inventory.holding].level,
+                tool: player.inventory.inv[player.inventory.holding].tool,
+                damage: player.inventory.inv[player.inventory.holding].damage,
+                level: player.inventory.inv[player.inventory.holding].level,
                 isTool: true,
                 durability: 100
             };
-            if (blocks[blockInfo.blockID].tool == player.inventory[player.holding].tool) {
-                blockInfo.damage += player.inventory[player.holding].damage;
-                player.inventory[player.holding].durability -= 1;
+            if (blocks[blockInfo.blockID].tool == player.inventory.inv[player.inventory.holding].tool) {
+                blockInfo.damage += player.inventory.inv[player.inventory.holding].damage;
+                player.inventory.inv[player.inventory.holding].durability -= 1;
             } else {
-                player.inventory[player.holding].durability -= 2;
+                player.inventory.inv[player.inventory.holding].durability -= 2;
             }
-            if (player.inventory[player.holding].durability <= 0) {
-                player.inventory[player.holding] = undefined;
+            if (player.inventory.inv[player.inventory.holding].durability <= 0) {
+                player.inventory.inv[player.inventory.holding] = undefined;
             }
         }
         socket.emit('damageBlock', {blockPos: blockPos,playerHand:playerHand});
@@ -710,24 +710,24 @@ function OLD__damageBlock() {
     var blockInfo = worldMap[blockPos.x][blockPos.y];
     if (player.lineOfSight(blockPos.x,blockPos.y)) {
         if (blockInfo.hardness() > 0) {
-            if (player.inventory[player.inventory.holding] != undefined && player.inventory[player.inventory.holding].isTool) {
-                if (blocks[blockInfo.blockID].tool == player.inventory[player.inventory.holding].tool) {
-                    blockInfo.damage += player.inventory[player.inventory.holding].damage;
-                    player.inventory[player.inventory.holding].durability -= 1;
+            if (player.inventory.inv[player.inventory.holding] != undefined && player.inventory.inv[player.inventory.holding].isTool) {
+                if (blocks[blockInfo.blockID].tool == player.inventory.inv[player.inventory.holding].tool) {
+                    blockInfo.damage += player.inventory.inv[player.inventory.holding].damage;
+                    player.inventory.inv[player.inventory.holding].durability -= 1;
                 } else {
-                    player.inventory[player.inventory.holding].durability -= 2;
+                    player.inventory.inv[player.inventory.holding].durability -= 2;
                 }
-                if (player.inventory[player.inventory.holding].durability <= 0) {
-                    player.inventory[player.inventory.holding] = undefined;
+                if (player.inventory.inv[player.inventory.holding].durability <= 0) {
+                    player.inventory.inv[player.inventory.holding] = undefined;
                 }
             }
             blockInfo.damage += 1;
             if (blockInfo.damage >= blocks[blockInfo.blockID].hardness) {
                 if (blocks[blockInfo.blockID].minTool != toolLevels.none) {
-                    if (player.inventory[player.inventory.holding] != undefined &&
-                        player.inventory[player.inventory.holding].isTool &&
-                        player.inventory[player.inventory.holding].level >= blocks[blockInfo.blockID].minTool &&
-                        blocks[blockInfo.blockID].tool == player.inventory[player.inventory.holding].tool) {
+                    if (player.inventory.inv[player.inventory.holding] != undefined &&
+                        player.inventory.inv[player.inventory.holding].isTool &&
+                        player.inventory.inv[player.inventory.holding].level >= blocks[blockInfo.blockID].minTool &&
+                        blocks[blockInfo.blockID].tool == player.inventory.inv[player.inventory.holding].tool) {
                         blockInfo.dropLoot();
                     }
                 } else {
