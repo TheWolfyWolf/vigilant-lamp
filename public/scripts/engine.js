@@ -614,12 +614,21 @@ class OtherPlayer {
         this.sprite.x = pos.x*blockSize;
         this.sprite.y = app.screen.height - pos.y*blockSize;
         playersContainer.addChild(this.sprite);
+        this.sprite.interactive = true;
+        this.sprite.on('click', damagePlayer)
+        this.sprite.id = id;
     }
     // Set Location
     setLoc(pos) {
         this.sprite.x = pos.x*blockSize;
         this.sprite.y = app.screen.height - pos.y*blockSize;
     }
+}
+
+function damagePlayer() {
+    // Change for other damage
+    var damage = 2;
+    hurtPlayer(this.id,damage);
 }
 
 // Class to store other players

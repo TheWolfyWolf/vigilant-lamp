@@ -104,7 +104,16 @@ $(document).ready(function() {
             otherPlayers.allActive(ids);
         }
     });
+    
+    socket.on('hurtMe', function(damage) {
+        player.damage(damage);
+    });
 });
+
+function hurtPlayer(id,damage) {
+    console.log(id);
+    socket.emit("hurtPlayer",{id:id,damage:damage});
+}
 
 // Tells the server a block was deleted at a position
 function blockDeleted(pos) {

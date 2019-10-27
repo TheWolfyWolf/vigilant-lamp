@@ -333,6 +333,16 @@ io.on('connection', function(socket){
         saveUserPosition(socket.userid,pos.x,pos.y);
     });
     
+    socket.on('hurtPlayer', function(info) {
+        var damage = info.damage;
+        var playerID = info.id;
+        Object.keys(io.sockets.sockets).forEach(function(id) {
+            if (io.sockets.sockets[id].userid == playerID) {
+                io.sockets.sockets[id].emit('hurtMe',damage);
+            }
+        });
+    });
+    
     // On client requesting a world
     socket.on('worldRequest', function(msg){
         // Send them back the world converted to a string
