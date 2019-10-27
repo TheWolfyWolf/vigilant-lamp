@@ -797,6 +797,9 @@ function gameTick() {
             /*
                 NO DOWN CODE
             */
+            if (freeCam) {
+                player.sprite.y += blockSize * moveSpeed;
+            }
         }
 
         // Camera Locking
