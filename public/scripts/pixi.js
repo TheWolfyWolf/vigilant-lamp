@@ -33,7 +33,9 @@ const blocks = {
     4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none},
     5: {image:"bedrock.png",hardness:-1},
     6: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none},
-    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none}
+    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none},
+    8: {image:"leaf.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.wood},
+    9: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none}
 }
 
 // Function to get position of a sprite in blocks not standard x,y

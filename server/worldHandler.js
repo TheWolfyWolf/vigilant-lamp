@@ -36,7 +36,9 @@ const blocks = {
     4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none},
     5: {image:"bedrock.png",hardness:-1},
     6: {image:"wood.png",hardness:5,tool:tools.axe, minTool:toolLevels.none},
-    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none}
+    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none},
+    8: {image:"leaf.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.wood},
+    9: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none}
 }
 
 // Function to convert a world map to a string
@@ -132,10 +134,19 @@ class blockObject {
 }
 
 // Generation variables
-var trueChance = 0.4;
-var numSteps = 5;
-var birthLimit = 4;
-var deathLimit = 2;
+var caveGen_numSteps = 5;
+
+var stone_trueChance = 0.4;
+var stone_birthLimit = 4;
+var stone_deathLimit = 2;
+
+var coal_trueChance = 0.1;
+var coal_birthLimit = 4;
+var coal_deathLimit = 2;
+
+var iron_trueChance = 0.05;
+var iron_birthLimit = 4;
+var iron_deathLimit = 2;
 
 var treeChance = 0.9;
 var treeMaxHeight = 8;
@@ -148,19 +159,19 @@ var seed = 123456;
 // For each (potential) block - count their neighbours
 // if a block and their neighbours is below the death limit, kill this block
 // if air and their neighbours is above the birth limit, birth this block
-function doStep(map) {
+function doStep(map,birthLimit,deathLimit,blockID) {
     for (var x = 0; x<map.length; x++) {
         for (var y = 0; y<map[0].length; y++) {
-            var nbs = trueNeighbours(map,x,y);
+            var nbs = trueNeighbours(map,x,y,blockID);
             if (map[x][y].blockID) {
                 if (nbs < deathLimit) {
                     map[x][y].blockID = 0;
                 } else {
-                    map[x][y].blockID = 1;
+                    map[x][y].blockID = blockID;
                 }
             } else {
                 if (nbs > birthLimit) {
-                    map[x][y].blockID = 1;
+                    map[x][y].blockID = blockID;
                 } else {
                     map[x][y].blockID = 0;
                 }
@@ -171,7 +182,7 @@ function doStep(map) {
 }
 
 // Function to work out how many neighbours a (potential) block has
-function trueNeighbours(map,x, y){
+function trueNeighbours(map,x, y,blockID){
   var count = 0;
   for (var i=-1;i<2;i++) {
     for (var j =-1;j<2;j++) {
@@ -181,7 +192,7 @@ function trueNeighbours(map,x, y){
         // Nothing
       } else if (neighbourX < 0 || neighbourY < 0 || neighbourX >= map.length || neighbourY >= map[0].length) {
         count++;
-      } else if (map[neighbourX][neighbourY].blockID) {
+      } else if (map[neighbourX][neighbourY].blockID == blockID) {
         count++;
       }
     }
@@ -190,13 +201,30 @@ function trueNeighbours(map,x, y){
 }
 
 // Function to create a random underground that will become caves
-function initialiseMap(w,h) {
+function initialiseMap(w,h,trueChance) {
   var map = [];
   for(var x = 0; x<w; x++){
     innerMap = []
       for(var y = 0; y<h; y++) {
           if ((Math.random()) < trueChance) {
               innerMap[y] = new blockObject(x,y,1);
+          } else {
+              innerMap[y] = new blockObject(x,y,0);
+          }
+      }
+      map[x] = innerMap;
+  }
+  return map;
+}
+
+// Function to create a random underground that will become caves
+function initialiseOre(w,h,trueChance,oreID) {
+  var map = [];
+  for(var x = 0; x<w; x++){
+    innerMap = []
+      for(var y = 0; y<h; y++) {
+          if ((Math.random()) < trueChance) {
+              innerMap[y] = new blockObject(x,y,oreID);
           } else {
               innerMap[y] = new blockObject(x,y,0);
           }
@@ -241,20 +269,51 @@ function createTrees(map) {
 // Function to generate a full world - including caves, top level terrain, and trees
 function generateMap() {
     // Cave Area
-    var map = initialiseMap(width, height*.8);
-    for (var i = 0; i < numSteps; i++) {
-        map = doStep(map);
+    var caveMap = initialiseMap(width, height*.8,stone_trueChance);
+    for (var i = 0; i < caveGen_numSteps; i++) {
+        caveMap = doStep(caveMap,stone_birthLimit,stone_deathLimit,1);
     }
     
-
+    // Coal Areas
+    var coalMap = initialiseOre(width, height*.8,coal_trueChance,8);
+    for (var i = 0; i < caveGen_numSteps; i++) {
+        coalMap = doStep(coalMap,coal_birthLimit,coal_deathLimit,8);
+    }
+    // Iron Areas
+    var ironMap = initialiseOre(width, height*.8,iron_trueChance,9);
+    for (var i = 0; i < caveGen_numSteps; i++) {
+        ironMap = doStep(ironMap,iron_birthLimit,iron_deathLimit,9);
+    }
+    // Put iron into map
+    
+    for (var x = 0; x<ironMap.length; x++) {
+        if (coalMap[x]) {
+            for (var y = 0; y<ironMap[x].length; y++) {
+                if (ironMap[x][y] && ironMap[x][y].blockID != 0) {
+                    caveMap[x][y] = ironMap[x][y];
+                }
+            }
+        }
+    }
+    // Put coal into map
+    for (var x = 0; x<coalMap.length; x++) {
+        if (coalMap[x]) {
+            for (var y = 0; y<coalMap[x].length; y++) {
+                if (coalMap[x][y] && coalMap[x][y].blockID != 0) {
+                    caveMap[x][y] = coalMap[x][y];
+                }
+            }
+        }
+    }
+    
     // Top Ground 
     var top = generateTop(width,height*.2);
 
     // Merge
     var world = [];
     for (var i = 0; i < width; i++) {
-        if (map[i] != undefined && top[i] != undefined) {
-            world[i] = map[i].concat(top[i]);
+        if (caveMap[i] != undefined && top[i] != undefined) {
+            world[i] = caveMap[i].concat(top[i]);
         }
     }
     

@@ -30,7 +30,7 @@ Version Goals:
 
 0.40
 -Lighting
--Movement
+-Movement (kinda)
 
 0.50
 

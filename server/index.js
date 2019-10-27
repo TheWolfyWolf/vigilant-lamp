@@ -103,6 +103,7 @@ function loadWorld(callback) {
             var userReturn = undefined;
             // If some kind of problem, generate new world
             if (rows.length != 1) {
+                console.log("Making New");
                 world.generateWorld();
             } else {
                 // Load world
