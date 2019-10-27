@@ -9,24 +9,24 @@ Version Goals:
 
 0.00:
 
--Basic Features (Movement, World Gen)
--Physics
+-Basic Features (Movement, World Gen) (Done)
+-Physics (Done)
 
 0.10:
 
--Multiplayer Support
--Complete Inventory
+-Multiplayer Support (Done)
+-Complete Inventory (eh)
 
 0.20
--World Edit/ Fix Top Level
--Ores and New Blocks
+-World Edit/ Fix Top Level (Done WE not Top Level)
+-Ores and New Blocks 
 -Menus
 
 0.30
 
--Saving
+-Saving (Done for world, not player info)
 -Chats
--Player Deaths and Spawning
+-Player Deaths and Spawning (Done, need to fix spawn location defaults to 0,160)
 
 0.40
 -Lighting

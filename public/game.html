@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.5/pixi.min.js"></script>
-        <!-- <script src="scripts/jquery.min.js"></script> -->
-        <!-- <script src="scripts/pixi.min.js"></script> -->
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.5/pixi.min.js"></script> -->
+        <script src="scripts/jquery.min.js"></script> 
+        <script src="scripts/pixi.min.js"></script> 
+        <!-- Pixi Bump (Collissions) -->
         <script src="scripts/bump.js"></script>
 
+        <!-- Game Script Files -->
         <script src="scripts/pixi.js"></script>
         <script src="scripts/WorldGen.js"></script>
         <script src="scripts/serverConnect.js"></script>
         <script src="scripts/engine.js"></script>
+        
+        <!-- Basic Styling -->
         <style>
             html {
                 background-color: #555;
@@ -31,22 +35,30 @@
             
             #infoContainer {
                 width: 100%;
+                display: -webkit-inline-flex;
+                display: -ms-inline-flexbox;
                 display: inline-flex;
                 justify-content: space-between;
             }
             
             #heartsContainer {
+                display: -webkit-inline-flex;
+                display: -ms-inline-flexbox;
                 display: inline-flex;
                 justify-content: space-between;
                 border-right: 2px solid black;
                 width: 50%;
+                white-space: nowrap;
             }
             
             #inventoryContainer {
+                display: -webkit-inline-flex;
+                display: -ms-inline-flexbox;
                 display: inline-flex;
                 justify-content: space-between;
                 border-left: 2px solid black;
                 width: 50%;
+                white-space: nowrap; 
             }
             
             .item {
@@ -54,6 +66,7 @@
                 background-color: #666;
                 border-radius: 50%;
                 border: 2px solid #666;
+                display: inline-block;
             }
             .item.selected {
                 background-color: #999;
@@ -66,6 +79,7 @@
             
             .heart {
                 width: 8%;
+                display: inline-block;
             }
             
             .hidden {
@@ -97,6 +111,7 @@
     </head>
     <body>
         <div id="content" draggable="false">
+            <!-- Container for health and hotbar -->
             <div id="infoContainer">
                 <div id="heartsContainer">
                     <img src="images/heart.png" class="heart heart-1" />
@@ -119,6 +134,7 @@
                     <img src="images/bag.png" id="openInv" class="item" />
                 </div>
             </div>
+            <!-- Container for games -->
             <div id="container"></div>
         </div>
         <script src="/socket.io/socket.io.js"></script>
