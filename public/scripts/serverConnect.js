@@ -130,6 +130,12 @@ function updateInv() {
     }
 }
 
+function saveHearts() {
+    if (player) {
+        socket.emit('updateHearts', player.health);
+    }
+}
+
 // Pings the server
 function pingServer() {
     socket.emit('pingSend', `${Date.now()}`);

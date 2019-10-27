@@ -131,6 +131,13 @@ function savePlayerInventory(userid,inventory) {
     userdb.run(sql)
 }
 
+// Function to save players hearts
+function savePlayerHearts(userid,hearts) {
+    let userdb = new sqlite3.Database('dbs/users.db');
+    let sql = "UPDATE `users` SET `health`='" + hearts + "' WHERE `userid`='" + userid + "';";
+    userdb.run(sql)
+}
+
 // Function to get a players info from userid
 function getPlayerInfo(userid,callback) {
     let userdb = new sqlite3.Database('dbs/users.db');
@@ -418,6 +425,10 @@ io.on('connection', function(socket){
     
     socket.on('updateInv', function(inventory){
         savePlayerInventory(socket.userid,inventory);
+    });
+    
+    socket.on('updateHearts', function(hearts){
+        savePlayerHearts(socket.userid,hearts);
     });
     
     // IMPLEMENT MESSAGING

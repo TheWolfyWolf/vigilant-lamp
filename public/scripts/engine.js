@@ -303,6 +303,7 @@ class Player {
             this.updateHearts();
             this.spawn(this.spawnx,this.spawny);
         }
+        saveHearts();
     }
     
     // Checks if a player has free inventory space for an item
