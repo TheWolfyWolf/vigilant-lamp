@@ -30,6 +30,9 @@ $(document).ready(function() {
     socket.emit('playerRequest', true);
     // Handles recieving the player
     socket.on('currentPlayer', function(playerInfo){
+        
+        console.log(playerInfo);
+        
         // Loads a player using the info requested
         loadPlayer(playerInfo);
         // Says the player has been recieved
@@ -118,6 +121,13 @@ function hurtPlayer(id,damage) {
 // Tells the server a block was deleted at a position
 function blockDeleted(pos) {
     socket.emit('blockDeleted', pos);
+}
+
+function updateInv() {
+    if (player) {
+        var inventory = player.inventory.toString();
+        socket.emit('updateInv', inventory);
+    }
 }
 
 // Pings the server

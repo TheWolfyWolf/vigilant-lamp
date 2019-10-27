@@ -30,9 +30,9 @@ var freeCam = false;
 
 // Inventory Item Class (for storing blocks)
 class InventoryItem {
-    constructor(itemID) {
+    constructor(itemID,count) {
         this.id = itemID;
-        this.count = 1;
+        this.count = count | 1;
         this.stackable = true;
         this.isTool = false;
         if (itemID > 0) {
@@ -43,17 +43,34 @@ class InventoryItem {
             this.img = "images/heart.png";
         }
     }
+    
+    toString() {
+        return JSON.stringify({
+            id: this.id,
+            count: this.count,
+            isTool: this.isTool
+        });
+    }
 }
 
 // Inventory Tool Class (for storing tools)
 class Tool {
-    constructor(toolID,toolLevel) {
+    constructor(toolID,toolLevel,durability) {
         this.tool = toolID;
         this.damage = toolLevel.damage;
-        this.durability = toolLevel.durability;
+        this.durability = durability | toolLevel.durability;
         this.level = toolLevel
         this.isTool = true;
         this.img = "images/heart.png";
+    }
+    
+    toString() {
+        return JSON.stringify({
+            tool: this.tool,
+            level: this.level,
+            isTool: this.isTool,
+            durability: this.durability
+        });
     }
 }
 // Inventory Class, for storing players inventory
@@ -62,7 +79,7 @@ class Inventory {
         this.inv = [];
         this.holding = 0;
         this.size = 15;
-        for (var i =  0; i<= this.size; i++){
+        for (var i =  0; i < this.size; i++){
             this.inv[i] = undefined;
         }
     }
@@ -74,8 +91,33 @@ class Inventory {
                 this.inv[this.holding] = undefined;
             }
         }
+        updateInv();
     }
-
+    toString() {
+        var out = "";
+        this.inv.forEach(function(item) {
+            if (item) {
+                out += "," + item.toString();
+            } else {
+                out += ",null";
+            }
+        });
+        return "[" + out.substr(1,(out.length-1)) + "]";
+    }
+    
+    loadInventory(invToLoad) {
+        for (var i = 0; i < invToLoad.length; i++) {
+            if (i < this.inv.length) {
+                if (invToLoad[i]) {
+                    if (invToLoad[i].isTool) {
+                        this.inv[i] = new Tool(invToLoad[i].tool,invToLoad[i].level,invToLoad[i].durability);
+                    } else {
+                        this.inv[i] = new InventoryItem(invToLoad[i].id,invToLoad[i].count);
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Player Class
@@ -186,6 +228,7 @@ class Player {
                 $(`.item.item-${i+1}`).attr("content",hotbar[i].count);
             }
         }
+        updateInv();
     }
     
     // Jumps
@@ -272,6 +315,7 @@ class Player {
                 freeSpace++;
             }
         }
+        updateInv();
         // Returns freeSpace
         return freeSpace;
     }
@@ -695,6 +739,9 @@ function loadPlayer(playerInfo) {
         player.health = playerInfo.health;
         player.updateHotBar();
         player.updateHearts();
+        var parsedInv = JSON.parse(playerInfo.inventory);
+        player.inventory.loadInventory(parsedInv);
+        player.updateHotBar();
     }
 }
 

@@ -124,6 +124,13 @@ function saveUserPosition(userid,x,y) {
     userdb.run(sql)
 }
 
+// Function to save players inventory
+function savePlayerInventory(userid,inventory) {
+    let userdb = new sqlite3.Database('dbs/users.db');
+    let sql = "UPDATE `users` SET `inventory`='" + inventory + "' WHERE `userid`='" + userid + "';";
+    userdb.run(sql)
+}
+
 // Function to get a players info from userid
 function getPlayerInfo(userid,callback) {
     let userdb = new sqlite3.Database('dbs/users.db');
@@ -323,6 +330,12 @@ io.on('connection', function(socket){
         socket.broadcast.emit("allActivePlayers",allPlayers);
     });
     
+    // On Request Mobs
+    //  => Send player list of all mobs
+    //  => If mob is less than 20 blocks from a player start moving towards player
+    //  => Mob deals 2 hearts per hit, 1 hit every second
+    //  => Mob has 10 hearts
+    
     // On player location update
     socket.on('playerLocation', function(pos) {
         // Update players location in players list
@@ -403,6 +416,10 @@ io.on('connection', function(socket){
         
     });
     
+    socket.on('updateInv', function(inventory){
+        savePlayerInventory(socket.userid,inventory);
+    });
+    
     // IMPLEMENT MESSAGING
     socket.on('messageSent', function(msg){
         io.emit("messageRecieve",msg);
@@ -417,5 +434,5 @@ io.on('connection', function(socket){
 
 // Listen on port 80 (HTTP port)
 http.listen(80, function(){
-  console.log('listening on *:80');
+  console.log('Server Started On Port 80');
 });
