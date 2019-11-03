@@ -942,7 +942,7 @@ function onKeyDown(key) {
 function toggleInv() {
     
     //opens popup and loads in the inventroy by calling the function from Iventory class
-     alert(Inventory.loadInventory(invToLoad));
+     alert(Player.inventory.inv);
     // Checks if inventory open
     if (invOpen) {
         // Closing inv
