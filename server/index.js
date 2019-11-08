@@ -240,6 +240,7 @@ rootDir = resolve('../');
 
 // Use
 app.use('/scripts', express.static(rootDir + '/public/scripts'));
+app.use('/styles', express.static(rootDir + '/public/styles'));
 app.use('/images', express.static(rootDir + '/public/images'));
 app.use(express.static(rootDir + '/public'));
 app.use(express.urlencoded({ extended: false }))
