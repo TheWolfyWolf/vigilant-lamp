@@ -1,105 +1,105 @@
 @import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
 html {
-                background-color: #555;
-            }
-            
-            *, * * {
-                font-family: 'Press Start 2P', cursive;
-                margin: 0;
-                padding: 0;
-            }
+    background-color: #555;
+}
 
-            #container {
-                width: 90vw;
-                left: 5vw;
-                position: relative;
-                flex: 1 1 auto;
-                z-index: 1;
-            }
-            
-            #infoContainer {
-                width: 100%;
-                display: -webkit-inline-flex;
-                display: -ms-inline-flexbox;
-                display: inline-flex;
-                justify-content: space-between;
-            }
-            
-            #heartsContainer {
-                display: -webkit-inline-flex;
-                display: -ms-inline-flexbox;
-                display: inline-flex;
-                justify-content: space-between;
-                border-right: 2px solid black;
-                width: 50%;
-                white-space: nowrap;
-            }
-            
-            #inventoryContainer {
-                display: -webkit-inline-flex;
-                display: -ms-inline-flexbox;
-                display: inline-flex;
-                justify-content: space-between;
-                border-left: 2px solid black;
-                width: 50%;
-                white-space: nowrap; 
-            }
-            
-            .item {
-                width: 8%;
-                background-color: #666;
-                border-radius: 50%;
-                border: 2px solid #666;
-                display: inline-block;
-            }
-            .item.selected {
-                background-color: #999;
-                border-color: #333;
-            }
-            #openInv {
-                border-width: 0;
-                background-color: transparent;
-            }
-            
-            .heart {
-                width: 8%;
-                display: inline-block;
-            }
-            
-            .hidden {
-                opacity: 0;
-            }
-            
-            #content {
-                display: flex;
-                flex-flow: column;
-                height: 100vh;
-            }
-            
-            #inv {
-                position: fixed;
-                width: 90vw;
-                height: 90vh;
-                background-color: red;
-                z-index: 9999;
-                top: 5vh;
-                left: 5vw;
-                display: none;
-            }
-            
-            .visible {
-                display: block !important;
-            }
-            
-            .fadeOut {
-                animation: fadeOut 5s 1; 
-            }
-            
-            @keyframes fadeOut {
-                from {
-                    opacity: 100%;
-                }
-                to {
-                    opacity: 0%;
-                }
-            }
+*, * * {
+    font-family: 'Press Start 2P', cursive;
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    width: 90vw;
+    left: 5vw;
+    position: relative;
+    flex: 1 1 auto;
+    z-index: 1;
+}
+
+#infoContainer {
+    width: 100%;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    justify-content: space-between;
+}
+
+#heartsContainer {
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    justify-content: space-between;
+    border-right: 2px solid black;
+    width: 50%;
+    white-space: nowrap;
+}
+
+#inventoryContainer {
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    justify-content: space-between;
+    border-left: 2px solid black;
+    width: 50%;
+    white-space: nowrap; 
+}
+
+.item {
+    width: 8%;
+    background-color: #666;
+    border-radius: 50%;
+    border: 2px solid #666;
+    display: inline-block;
+}
+.item.selected {
+    background-color: #999;
+    border-color: #333;
+}
+#openInv {
+    border-width: 0;
+    background-color: transparent;
+}
+
+.heart {
+    width: 8%;
+    display: inline-block;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+#content {
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+}
+
+#inv {
+    position: fixed;
+    width: 90vw;
+    height: 90vh;
+    background-color: red;
+    z-index: 9999;
+    top: 5vh;
+    left: 5vw;
+    display: none;
+}
+
+.visible {
+    display: block !important;
+}
+
+.fadeOut {
+    animation: fadeOut 5s 1; 
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 100%;
+    }
+    to {
+        opacity: 0%;
+    }
+}
