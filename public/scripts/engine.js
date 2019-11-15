@@ -26,6 +26,8 @@ var renderedMaxX = 0;
 
 var freeCam = false;
 
+var invSelected = false;
+
 // Inventory Item Class (for storing blocks)
 class InventoryItem {
     constructor(itemID,count) {
@@ -115,6 +117,12 @@ class Inventory {
                 }
             }
         }
+    }
+    
+    swapItem(i1,i2) {
+        var temp = this.inv[i1];
+        this.inv[i1] = this.inv[i2];
+        this.inv[i2] = temp;
     }
 }
 
@@ -223,10 +231,23 @@ class Player {
             } else {
                 // Else adds the image
                 $(`.item.item-${i+1}`).attr("src",hotbar[i].img);
-                $(`.item.item-${i+1}`).attr("content",hotbar[i].count);
+                $(`.item.item-${i+1}`).attr("count",hotbar[i].count);
             }
         }
         updateInv();
+        this.updateInventory();
+    }
+    
+    updateInventory() {
+        for (var i = 0; i < this.inventory.inv.length; i++) {
+            if (this.inventory.inv[i] == undefined) {
+                $(`#${i}.invItem img`).attr("src"," ");
+                $(`#${i}.invItem span`).html("&nbsp;");
+            } else {
+                $(`#${i}.invItem img`).attr("src",this.inventory.inv[i].img);
+                $(`#${i}.invItem span`).html(this.inventory.inv[i].count);
+            }
+        }
     }
     
     // Jumps
@@ -714,6 +735,7 @@ var otherPlayers = new Players();
 
 // Called when the document is ready
 $(document).ready(function() {
+    
     // Creates the pixi App
     app = new PIXI.Application({ backgroundColor: 0x1099bb, resizeTo: document.getElementById("container") });
     // Adds the app to the container
@@ -721,13 +743,22 @@ $(document).ready(function() {
     // Adds the blocks and players container
     app.stage.addChild(blocksContainer);
     app.stage.addChild(playersContainer);
+    
+    window.addEventListener('resize', resized);
     window.setTimeout(function() {
         // Calculates block size
         blockSize = parseInt(app.screen.width/blocksPerWidth);
         blockSize -= blockSize % 3;
         setupGame();
     },300);
+    
 });
+
+function resized() {
+    renderedMinX = -100;
+    renderedMaxX = -100;
+    renderWorld();
+}
 
 // Creates a player using the player info
 function loadPlayer(playerInfo) {
@@ -745,12 +776,40 @@ function loadPlayer(playerInfo) {
     }
 }
 
+// Function to hide the loading icon
+function hideLoading() {
+    $(".loadingIcon").each(function() {
+        $(this).addClass("complete");
+    });
+    $(".completeIcon").each(function() {
+        $(this).addClass("complete");
+    });
+    $("#gameOuter").addClass("show");
+    $("#loadingBox").addClass("complete");
+    setTimeout(function() {
+        $("#loadingBox").addClass("hide");
+    },3000);
+}
+function showLoading() {
+    $(".loadingIcon").each(function() {
+        $(this).removeClass("complete");
+    });
+    $(".completeIcon").each(function() {
+        $(this).removeClass("complete");
+    });
+    $("#gameOuter").removeClass("show");
+    $("#loadingBox").removeClass("complete");
+    $("#loadingBox").removeClass("hide");
+}
+
 // Starts the game
 function startGame() {
+    
     // Creates a new array of other players
     otherPlayers = new Players();
     
-    // Add listeners
+    // Hide loading icon
+    hideLoading();
     
     //app.ticker.add(delta => gameLoop(delta)); /* Old Game Ticks */
     // Creates a game tick function calling every 20 milliseconds (1000/50 = 50 times a second)
@@ -758,14 +817,32 @@ function startGame() {
         gameTick();
     }, 1000/50);
     
+    $(".invItem").each(function() {
+        $(this).on("click",function() {
+            console.log(invSelected);
+            console.log($(this).attr("id"));
+            if (invSelected === false) {
+                invSelected = $(this).attr("id");
+                $(this).addClass("selected");
+            } else {
+                var currentInvID = $(this).attr("id");
+                $(".invItem.selected").each(function() {
+                    $(this).removeClass("selected");
+                })
+                player.inventory.swapItem(parseInt(invSelected),parseInt(currentInvID));
+                player.updateHotBar();
+                invSelected = false;
+            }
+        });
+    });
+    
     // Adds event listeners for keyup and keydown
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('keyup', onKeyUp);
     // Button to open inventory
     $("#openInv").on("click",toggleInv);
     
-    $(".invSortable").sortable();
-    $(".invSortable").disableSelection();
+    
 }
 
 // Game Tick Function
@@ -774,6 +851,16 @@ function gameTick() {
     if (!invOpen && player) {
         // Sends players location to the server
         player.updateLocation();
+        
+        if ((player.pos().y % moveSpeed > 0.03 && player.pos().y % moveSpeed < 0.3) ||
+            (player.pos().x % moveSpeed > 0.03 && player.pos().x % moveSpeed < 0.3)) {
+            console.log("Fixing player pos " + player.pos().x % moveSpeed + " & " + player.pos().y % moveSpeed); 
+            renderedMinX = -100;
+            renderedMaxX = -100;
+            renderWorld();
+            app.renderer.render(app.stage);
+            //player.teleport(Math.ceil(player.pos().x),Math.ceil(player.pos().y));
+        }
 
         // Movement (uses assoc array of keys where their value is set to true when pressed and false when released)
         if (pressedKeys["65"] || pressedKeys["37"]) {
@@ -862,6 +949,7 @@ function renderWorld(pX) {
                         } else {
                             // Renders middle blocks
                             verticalChunk[y].load();
+                            
                         }
                     }
                 }

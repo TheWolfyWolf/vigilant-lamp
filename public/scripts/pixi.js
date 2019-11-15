@@ -115,7 +115,7 @@ function buildWorld() {
 
 // Update world
 // (destorys and rebuilds)
-function updateWorld() {
+async function updateWorld() {
     // Checks world map exists
     if (worldMap) {
         // Goes thru every vertical chunk

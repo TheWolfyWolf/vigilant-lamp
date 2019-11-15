@@ -26,6 +26,13 @@ html {
     z-index: 1;
     display: block;
     overflow: hidden;
+    opacity: 0;
+}
+#gameOuter.show {
+    animation: fadeInAni 2s ease-in-out;
+    -webkit-animation: fadeInAni 2s ease-in-out;
+    animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
 }
 
 #container canvas {
@@ -111,7 +118,42 @@ html {
     box-sizing: border-box;
     height: 100%;
     overflow: hidden;
+    padding-top: 10%;
 }
+
+.invRow {
+    margin-top: 2vmin;
+    margin-bottom: 2vmin;
+}
+
+.invRow.hotbarRow {
+    background-color: #777;
+}
+
+.invItem {
+    display: inline-block;
+    width: 14vmin;
+    height: 16vmin;
+    background-color: #999;
+    border: .5vmin solid #333;
+    transition: transform .1s;
+    cursor: pointer;
+}
+.invItem:hover {
+    transform: scale(1.2);
+}
+.invItem.selected {
+    border-color: green;
+}
+.invItem > img {
+    width: 14vmin;
+    height: 14vmin;
+}
+.invItem > span {
+    font-size: 1.6vmin;
+    display: block;
+}
+
 
 .hide {
     animation: hideAni .3s linear;
@@ -125,6 +167,15 @@ html {
     animation-fill-mode: both;
     -webkit-animation: showAni .3s linear;
     -webkit-animation-fill-mode: both;
+}
+
+@keyframes fadeInAni {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 @keyframes hideAni {
@@ -150,20 +201,185 @@ html {
     }
 }
 
-.invSortable {
-    list-style-type: none;
-    width: 80vw;
-    padding-top: 12%;
-    height: 100%;
+
+#loadingBox {
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+    position: fixed;
+    z-index: 100;
+    line-height: 100vh;
+    background-color: #555;
+}
+#loadingMessage {
+    position: relative;
+    text-align: center;
+    font-size: 8vmin;
+    padding: 3vmin;
+}
+#loadingMessage.hidden {
+    display: none;
 }
 
-.invSortableItem {
-    width: 14vw;
-    display: inline-block;
-    height: 14vw;
-    float: left;
-    background-color: darkblue;
-    box-sizing: border-box;
-    border: 1px solid red;
-    margin: 1vw;
+.loadingIcon {
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    top: 0;
+    width: 2vmin;
+    height: 2vmin;
+    background-color: red;
+    animation: loadingAni 5s cubic-bezier(.52,1.18,.5,-0.22) infinite;
+    -webkit-animation: loadingAni 5s cubic-bezier(.52,1.18,.5,-0.22) infinite;
+    border-radius: 15%;
+    transition: opacity .5s;
+}
+.loadingIcon.complete {
+    opacity: 0;
+}
+.loadingIcon:nth-child(1) {
+    animation-delay: 0.02s;
+}
+.loadingIcon:nth-child(2) {
+    animation-delay: 0.04s; 
+}
+.loadingIcon:nth-child(3) {
+    animation-delay: 0.06s; 
+}
+.loadingIcon:nth-child(4) {
+    animation-delay: 0.08s; 
+}
+.loadingIcon:nth-child(5) {
+    animation-delay: 0.10s; 
+}
+.loadingIcon:nth-child(6) {
+    animation-delay: 0.12s; 
+}
+.loadingIcon:nth-child(7) {
+    animation-delay: 0.14s; 
+}
+.loadingIcon:nth-child(8) {
+    animation-delay: 0.16s; 
+}
+.loadingIcon:nth-child(9) {
+    animation-delay: 0.18s; 
+}
+.loadingIcon:nth-child(10) {
+    animation-delay: 0.20s; 
+}
+.loadingIcon:nth-child(11) {
+    animation-delay: 0.22s; 
+}
+.loadingIcon:nth-child(12) {
+    animation-delay: 0.24s; 
+}
+.loadingIcon:nth-child(13) {
+    animation-delay: 0.26s; 
+}
+.loadingIcon:nth-child(14) {
+    animation-delay: 0.28s; 
+}
+.loadingIcon:nth-child(15) {
+    animation-delay: 0.30s; 
+}
+.loadingIcon:nth-child(16) {
+    animation-delay: 0.32s; 
+}
+
+.completeIcon {
+    position: absolute;
+    z-index: 3;
+    width: 2vmin;
+    height: 2vmin;
+    background-color: green;
+    transition: opacity .5s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
+}
+.completeIcon.completeIcon1 {
+    left: 0;
+    top: 0;
+}
+.completeIcon.completeIcon2 {
+    right: 0;
+    top: 0;
+}
+.completeIcon.completeIcon3 {
+    right: 0;
+    bottom: 0;
+}
+.completeIcon.completeIcon4 {
+    left: 0;
+    bottom: 0;
+}
+.completeIcon.completeIcon1.complete, .completeIcon.completeIcon3.complete {
+    animation: widthAni 3s ease-in-out;
+    -webkit-animation: widthAni 3s ease-in-out;
+}
+.completeIcon.completeIcon2.complete, .completeIcon.completeIcon4.complete {
+    animation: heightAni 3s ease-in-out;
+    -webkit-animation: heightAni 3s ease-in-out;
+}
+
+#loadingBox {
+    transition: opacity 2s;
+}
+#loadingBox.complete {
+    opacity: 0;
+}
+#loadingBox.hide {
+    display: none;
+}
+
+@keyframes widthAni {
+    0% {
+        width: 2vmin;
+        opacity: 1;
+    }
+    24% {
+        width: 100%;
+        opacity: 1;
+    }
+    100% {
+        width: 100%;
+        opacity: 1;
+    }
+}
+@keyframes heightAni {
+    0% {
+        height: 2vmin;
+        opacity: 1;
+    }
+    24% {
+        height: 100%;
+        opacity: 1;
+    }
+    100% {
+        height: 100%;
+        opacity: 1;
+    }
+}
+
+@keyframes loadingAni {
+    0% {
+        top: 0;
+        left: 0;
+    }
+    25% {
+        top: 0;
+        left: 100%;
+    }
+    50% {
+        top: 100%;
+        left: 100%;
+    }
+    75% {
+        top: 100%;
+        left: 0;
+    }
+    100% {
+        top: 0;
+        left: 0;
+    }
 }

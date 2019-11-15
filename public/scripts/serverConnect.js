@@ -16,14 +16,16 @@ function setupGame() {
         // Converts the world to a worldMap
         worldMap = strToWorldMap(world);
         // Updates the world
-        updateWorld();
-        // Says the world has been recieved
-        worldRecieved = true;
+        updateWorld().then(function() {
+            // Says the world has been recieved
+            worldRecieved = true;
+
+            // If world recieved and playerInfo recieved then starts the game
+            if (worldRecieved && playerInfoRecieved) {
+                startGame();
+            }
+        });;
         
-        // If world recieved and playerInfo recieved then starts the game
-        if (worldRecieved && playerInfoRecieved) {
-            startGame();
-        }
     });
     
     // Requests the player

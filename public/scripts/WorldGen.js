@@ -86,6 +86,8 @@ class blockObject {
     load() {
         if (this.sprite != undefined) {
             this.sprite.visible = true;
+            this.sprite.x = this.x*blockSize;
+            this.sprite.y = app.screen.height - this.y*blockSize;
         }
     }
     
