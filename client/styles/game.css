@@ -114,6 +114,12 @@ html {
     display: block !important;
 }
 
+#crafting {
+    box-sizing: border-box;
+    height: 100%;
+    overflow: hidden;
+}
+
 #inventory {
     box-sizing: border-box;
     height: 100%;

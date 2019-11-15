@@ -8,6 +8,7 @@ var moveSpeed = 1/3;
 var blocksContainer = new PIXI.Container();
 var playersContainer = new PIXI.Container();
 var invOpen = false;
+var craftOpen = false;
 
 var pressedKeys = {
     65: false,
@@ -848,7 +849,7 @@ function startGame() {
 // Game Tick Function
 function gameTick() {
     // Checks if inventory is open and player exists
-    if (!invOpen && player) {
+    if (!invOpen && !craftOpen && player) {
         // Sends players location to the server
         player.updateLocation();
         
@@ -1012,20 +1013,38 @@ function onKeyDown(key) {
                 player.inventory.holding = 4;
                 break;
             case 69:
-                // Toggle the inventory
+                // E pressed, toggle the inventory
                 toggleInv();
                 break;
             case 81:
-                // Place current block (if possible)
+                // Q pressed, place current block (if possible)
                 player.placeHand();
                 break;
+            case 67:
+                // C pressed, open crafting
+                toggleCraft();
             default:
-               //console.log(key.keyCode);
+                console.log(key.keyCode);
                 break;
         }
         // Update the players hotbar
         player.updateHotBar();
     }
+}
+
+function toggleCraft() {
+    if (craftOpen) {
+        $("#container").removeClass("hide").addClass("show");
+        $("#crafting").removeClass("show").addClass("hide");
+        $("#inventory").removeClass("show").addClass("hide");
+    } else  {
+        // Opening crafting
+        invOpen = false;
+        $("#container").removeClass("show").addClass("hide");
+        $("#crafting").removeClass("hide").addClass("show");
+        $("#inventory").removeClass("show").addClass("hide");
+    }
+    craftOpen = !craftOpen;
 }
 
 // Function to toggle the inventory
@@ -1036,18 +1055,15 @@ function toggleInv() {
     // Checks if inventory open
     if (invOpen) {
         // Closing inv
-        // Stores inv stage
-        // Loads world stage
-        //$("#inventory").addClass("reverseAni");
         $("#container").removeClass("hide").addClass("show");
         $("#inventory").removeClass("show").addClass("hide");
+        $("#crafting").removeClass("show").addClass("hide");
     } else  {
         // Opening inv
-        // Stores world stage
-        // Loads inv stage
+        craftOpen = false;
         $("#container").removeClass("show").addClass("hide");
         $("#inventory").removeClass("hide").addClass("show");
-        //$("#inventory").removeClass("reverseAni");
+        $("#crafting").removeClass("show").addClass("hide");
     }
     // Toggles invOpen
     invOpen = !invOpen;
