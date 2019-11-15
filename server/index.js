@@ -275,12 +275,12 @@ app.post('/game', function(req, res) {
     checkLogin(req.body.user,req.body.pass,function(loggedIn,user) {
         if (loggedIn) {
             console.log(`loggedIn: ${loggedIn}`);
-            res.sendFile(rootDir + '/public/game.html');
+            res.sendFile(rootDir + '/client/game.html');
             userid = user.userid;
             
         } else {
             console.log(`failedLogIn: ${loggedIn}`);
-            res.sendFile(rootDir + '/public/login.html');
+            res.sendFile(rootDir + '/client/login.html');
         }
     });
 });
@@ -289,7 +289,7 @@ app.post('/game', function(req, res) {
 app.get(['/login','/','/signup','/game'], function(req, res){
     console.log(req._parsedUrl.pathname);
     console.log("@Login.html");
-    res.sendFile(rootDir + '/public/login.html');
+    res.sendFile(rootDir + '/client/login.html');
 });
 // Handles a post request sent to signupHandle
 app.post('/signupHandle', function(req,res) {
