@@ -239,10 +239,10 @@ resolve = require('path').resolve;
 rootDir = resolve('../');
 
 // Use
-app.use('/scripts', express.static(rootDir + '/public/scripts'));
-app.use('/styles', express.static(rootDir + '/public/styles'));
-app.use('/images', express.static(rootDir + '/public/images'));
-app.use(express.static(rootDir + '/public'));
+app.use('/scripts', express.static(rootDir + '/client/scripts'));
+app.use('/styles', express.static(rootDir + '/client/styles'));
+app.use('/images', express.static(rootDir + '/client/images'));
+app.use(express.static(rootDir + '/client'));
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
