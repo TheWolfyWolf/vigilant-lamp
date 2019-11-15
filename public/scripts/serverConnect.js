@@ -5,7 +5,7 @@ var worldRecieved = false;
 var playerInfoRecieved = false;
 
 // Called when the document is ready
-$(document).ready(function() {
+function setupGame() {
     // Connects to server
     socket = io();
     
@@ -111,7 +111,7 @@ $(document).ready(function() {
     socket.on('hurtMe', function(damage) {
         player.damage(damage);
     });
-});
+}
 
 function hurtPlayer(id,damage) {
     console.log(id);

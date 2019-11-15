@@ -5,10 +5,8 @@ var visibleMap;
 
 var moveSpeed = 1/3;
 
-var worldStage = new PIXI.Container();
 var blocksContainer = new PIXI.Container();
 var playersContainer = new PIXI.Container();
-var invStage = new PIXI.Container();
 var invOpen = false;
 
 var pressedKeys = {
@@ -723,11 +721,12 @@ $(document).ready(function() {
     // Adds the blocks and players container
     app.stage.addChild(blocksContainer);
     app.stage.addChild(playersContainer);
-
-    // Calculates block size
-    blockSize = parseInt(app.screen.width/blocksPerWidth);
-    blockSize -= blockSize % 3;
-
+    window.setTimeout(function() {
+        // Calculates block size
+        blockSize = parseInt(app.screen.width/blocksPerWidth);
+        blockSize -= blockSize % 3;
+        setupGame();
+    },300);
 });
 
 // Creates a player using the player info
@@ -764,6 +763,9 @@ function startGame() {
     document.addEventListener('keyup', onKeyUp);
     // Button to open inventory
     $("#openInv").on("click",toggleInv);
+    
+    $(".invSortable").sortable();
+    $(".invSortable").disableSelection();
 }
 
 // Game Tick Function
@@ -942,20 +944,22 @@ function onKeyDown(key) {
 function toggleInv() {
     
     //opens popup and loads in the inventroy by calling the function from Iventory class
-     alert(Player.inventory.inv);
+    console.log(player.inventory.inv);
     // Checks if inventory open
     if (invOpen) {
         // Closing inv
         // Stores inv stage
         // Loads world stage
-        invStage = app.stage;
-        app.stage = worldStage;
+        //$("#inventory").addClass("reverseAni");
+        $("#container").removeClass("hide").addClass("show");
+        $("#inventory").removeClass("show").addClass("hide");
     } else  {
         // Opening inv
         // Stores world stage
         // Loads inv stage
-        worldStage = app.stage;
-        app.stage = invStage;
+        $("#container").removeClass("show").addClass("hide");
+        $("#inventory").removeClass("hide").addClass("show");
+        //$("#inventory").removeClass("reverseAni");
     }
     // Toggles invOpen
     invOpen = !invOpen;
