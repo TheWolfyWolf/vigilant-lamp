@@ -1,8 +1,23 @@
 # vigilant-lamp
 Web Programming Project
 
-CURRENT-VERSION: 0.00
+Done:
 
+-Basic Features
+-Features
+-Multiplayer Support
+-World Edit
+-Player Deaths
+
+WIP:
+-Inv
+-Screen Size Ajustments
+
+Todo:
+-Animations
+-Spites
+-Sound?
+-Tidy Code and Refactoring
 
 
 Version Goals:
@@ -10,7 +25,7 @@ Version Goals:
 0.00:
 
 -Basic Features (Movement, World Gen) (Done)
--Physics (Done)
+-Features (Done)
 
 0.10:
 
@@ -31,11 +46,6 @@ Version Goals:
 0.40
 -Lighting
 -Movement (kinda)
-
-0.50
-
--Mobs
--Water?
 
 0.60
 
