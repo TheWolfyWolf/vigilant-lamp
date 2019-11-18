@@ -24,6 +24,8 @@ Todo:
 - Commands (Started kill command, only works on self)
 - Settings (change key binds)
 - Help
+- MOBS !
+- Chests?
 
 
 Version Goals:
