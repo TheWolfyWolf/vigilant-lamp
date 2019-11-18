@@ -1,47 +1,5 @@
-// Global variables
-var blockSize;
-var app;
-var blocksPerWidth = 20;
-
-// ENUM for tools
-const tools = {
-    pickaxe: 1,
-    axe: 2,
-    shovel: 3
-}
-
-// ENUM for tool levels
-const toolLevels = {
-    none: 0,
-    wood: {durability: 50,damage: 1},
-    stone: {durability: 100,damage: 2},
-    iron: {durability: 220,damage: 3},
-    diamond: {durability: 500,damage: 4}
-}
-
 function toolImage(tool) {
     return `tools/${hoverName(tool).replace(" ","").toLowerCase()}.png`;
-}
-
-// Dict to handle all block info
-/*
-    Stores:
-        - Image
-        - Hardness
-        - (Ideal) tool
-        - Min Tool
-*/
-const blocks = {
-    1: {image:"stone.jpg",hardness:10, tool:tools.pickaxe, minTool:toolLevels.wood,name:"Stone"},
-    2: {image:"stoneBackground.jpg", hardness:10, tool:tools.pickaxe, minTool:toolLevels.stone,name:"Stone Background"},
-    3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none,name:"Dirt"},
-    4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none,name:"Grass"},
-    5: {image:"bedrock.png",hardness:-1,name:"Bedrock"},
-    6: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
-    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Leaf"},
-    8: {image:"iron.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
-    9: {image:"diamond.jpeg",hardness:1,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
-    10: {image:"planks.jpg",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"}
 }
 
 // Function to get position of a sprite in blocks not standard x,y

@@ -1,10 +1,3 @@
-// Global variables
-
-var width = 200;
-var height = 100;
-
-const nonSolidBlocks = [0,2];
-
 // Function to convert a world map to a string
 function worldMapToStr(mapToUse) {
     // Checks a map has been passed

@@ -1,9 +1,3 @@
-// Global variables
-var socket;
-
-var worldRecieved = false;
-var playerInfoRecieved = false;
-
 // Called when the document is ready
 function setupGame() {
     // Connects to server
