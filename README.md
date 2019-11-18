@@ -11,16 +11,19 @@ Done:
 - Crafting
 - Inventory
 - Proximity Crafting
+- Chat
 
 WIP:
 - Screen Size Ajustments
 - Tidy Code and Refactoring
-- Chat
 
 Todo:
 - Animations
 - Spites
 - Sound?
+- Commands (Started kill command, only works on self)
+- Settings (change key binds)
+- Help
 
 
 Version Goals:

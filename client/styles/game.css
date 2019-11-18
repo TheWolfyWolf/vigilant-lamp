@@ -168,8 +168,13 @@ html {
     color: cornflowerblue;
 }
 #chat #messages .message .time {
-    color: red;
+    color: white;
     font-size: 70%;
+}
+#chat #messages .message .error {
+    margin-top: .5%;
+    margin-bottom: .5%;
+    color: red;
 }
 
 #crafting {

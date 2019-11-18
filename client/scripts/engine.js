@@ -502,3 +502,47 @@ function OLD__damageBlock() {
         }
     }
 }
+
+function errorMessage(message) {
+    var messages = $("#messages").html();
+    messages += `<div class="message"><span class='error'>${message}</span></div>`;
+    $("#messages").html(messages);
+}
+
+function runCommand(command,args) {
+    switch (command) {
+        case "kill":
+            if (args.length == 0) {
+                player.damage(1E3);
+            } else {
+                if (args.length > 1) {
+                    errorMessage(`Command kill expected 0-1 arguments, ${args.length} given`);
+                } else {
+                    // Code to kill other player
+                }
+            }
+            break;
+        case "tp":
+        case "teleport":
+        case "warp":
+            if (args.length != 2) {
+                errorMessage(`Command tp expected 2 arguments (x,y), ${args.length} given`);
+            } else {
+                player.teleport(parseInt(args[0]),parseInt(args[1]));
+            }
+            break;
+        case "shift":
+            if (args.length != 2) {
+                errorMessage(`Command shift expected 2 arguments (x,y), ${args.length} given`);
+            } else {
+                player.teleport(parseInt(args[0]),parseInt(args[1]),true);
+            }
+            break;
+        case "help":
+            errorMessage(`List of Commands:`);
+            errorMessage(`tp/teleport/warp -> /tp {x} {y} {playername | optional} -> teleports a player to a specific location`);
+            errorMessage(`shift -> /shift {x} {y} {playername | optional} -> moves a player by a specified number of blocks`);
+            errorMessage(`kill -> /kill {playername | optional} -> kills a player`);
+            break;
+    }
+}

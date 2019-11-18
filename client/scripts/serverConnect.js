@@ -126,15 +126,23 @@ function setupGame() {
             messages += `<div class="message"><span class='time'>[${dateStr}]</span><span class="from">${message.from}:</span>&nbsp;<span class="contents">${message.message}</span></div>`;
             $("#messages").html(messages);
         }
-        console.log("message");
-        console.log(message);
     });
 }
 
 function sendMessage() {
     var message = $("#messagesInput").val();
     $("#messagesInput").val("");
-    socket.emit("messageSend",message);
+    if (message[0] == "/") {
+        // Is a command
+        var fullCommand = message.substr(1,message.length-1);
+        var commandParts = fullCommand.split(" ");
+        var command = commandParts[0].toLowerCase();
+        var args = commandParts.slice(1,commandParts.length);
+        runCommand(command,args);
+    } else {
+        // Is a message
+        socket.emit("messageSend",message);
+    }
 }
 
 function hurtPlayer(id,damage) {
