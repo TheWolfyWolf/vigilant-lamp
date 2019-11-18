@@ -15,6 +15,7 @@ Done:
 WIP:
 - Screen Size Ajustments
 - Tidy Code and Refactoring
+- Chat
 
 Todo:
 - Animations

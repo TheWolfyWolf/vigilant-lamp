@@ -142,7 +142,7 @@ function savePlayerHearts(userid,hearts) {
 // Function to get a players info from userid
 function getPlayerInfo(userid,callback) {
     let userdb = new sqlite3.Database('dbs/users.db');
-    let sql = "SELECT `inventory`,`spawnx`,`spawny`,`health`,`lastx`,`lasty` FROM `users` WHERE `userid`='" + userid + "';";
+    let sql = "SELECT `username`,`inventory`,`spawnx`,`spawny`,`health`,`lastx`,`lasty` FROM `users` WHERE `userid`='" + userid + "';";
     userdb.all(sql, function(err,rows) {
         if (err) {
             callback(false);
@@ -321,6 +321,12 @@ io.on('connection', function(socket){
     // Add the new user to the players list
     player.addPlayer(socket.userid);
     
+    getPlayerInfo(socket.userid, function(info) {
+        if (info) {
+            io.emit("messageRecieve",{message:`${info.username} has joined the server`,server:true});
+        }
+    });
+    
     // On user disconnect
     socket.on('disconnect', function() {
         console.log(`userid ${socket.userid} disconnected`);
@@ -337,6 +343,11 @@ io.on('connection', function(socket){
             }
         });
         socket.broadcast.emit("allActivePlayers",allPlayers);
+        getPlayerInfo(socket.userid, function(info) {
+            if (info) {
+                io.emit("messageRecieve",{message:`${info.username} has left the server`,server:true});
+            }
+        });
     });
     
     // On Request Mobs
@@ -433,9 +444,15 @@ io.on('connection', function(socket){
         savePlayerHearts(socket.userid,hearts);
     });
     
-    // IMPLEMENT MESSAGING
-    socket.on('messageSent', function(msg){
-        io.emit("messageRecieve",msg);
+    socket.on('messageSend', function(message){
+        if (message.trim().length > 0) {
+            getPlayerInfo(socket.userid, function(info) {
+                if (info) {
+                    console.log(`Message from ${info.username} saying: ${message}`);
+                    io.emit("messageRecieve",{from:info.username,message:message,server:false});
+                }
+            });
+        }
     });
     
     // Handle client requesting a ping

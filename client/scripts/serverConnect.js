@@ -107,6 +107,34 @@ function setupGame() {
     socket.on('hurtMe', function(damage) {
         player.damage(damage);
     });
+    
+    socket.on('messageRecieve', function(message) {
+        /*
+        <div class="message"><span class="from">${message.from}:</span>&nbsp;<span class="contents">${message.message}</span></div>
+        */
+        if (!chatOpen) {
+                $("#gameOuter").addClass("unreadMessage");
+        }
+        var date = new Date();
+        var dateStr = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        if (message.server) {
+            var messages = $("#messages").html();
+            messages += `<div class="message"><span class='time'>[${dateStr}]</span><span class="server">${message.message}</span></div>`;
+            $("#messages").html(messages);
+        } else {
+            var messages = $("#messages").html();
+            messages += `<div class="message"><span class='time'>[${dateStr}]</span><span class="from">${message.from}:</span>&nbsp;<span class="contents">${message.message}</span></div>`;
+            $("#messages").html(messages);
+        }
+        console.log("message");
+        console.log(message);
+    });
+}
+
+function sendMessage() {
+    var message = $("#messagesInput").val();
+    $("#messagesInput").val("");
+    socket.emit("messageSend",message);
 }
 
 function hurtPlayer(id,damage) {

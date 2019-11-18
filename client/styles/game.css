@@ -27,6 +27,11 @@ html {
     display: block;
     overflow: hidden;
     opacity: 0;
+    border-bottom: 1vh solid #555;
+    box-sizing: border-box;
+}
+#gameOuter.unreadMessage {
+    border-color: red;
 }
 #gameOuter.show {
     animation: fadeInAni 2s ease-in-out;
@@ -112,6 +117,59 @@ html {
 
 .visible {
     display: block !important;
+}
+
+#chat {
+    box-sizing: border-box;
+    height: 100%;
+    overflow: scroll;
+    padding: 2%;
+}
+#chat #messages {
+    height: 90%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    word-break: break-word;
+}
+#chat #typeArea {
+    height: 10%;
+}
+#chat #typeArea form {
+    width: 100%;
+    height: 100%;
+}
+#chat #typeArea form input {
+    width: 100%;
+    height: 100%;
+    font-size: 3vh;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    border: .4vw solid #999;
+    background-color: #666;
+    color: #999;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+#chat #messages .message {
+    width: 100%;
+    height: auto;
+    min-height: 2vh;
+}
+
+#chat #messages .message .from {
+    color: orange;
+}
+#chat #messages .message .contents {
+    color: darkgoldenrod;
+}
+#chat #messages .message .server {
+    color: cornflowerblue;
+}
+#chat #messages .message .time {
+    color: red;
+    font-size: 70%;
 }
 
 #crafting {

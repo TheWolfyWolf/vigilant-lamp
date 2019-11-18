@@ -133,7 +133,7 @@ function gameTick() {
             //player.teleport(Math.ceil(player.pos().x),Math.ceil(player.pos().y));
         }
         
-        if (!(invOpen || craftOpen)) {
+        if (!(invOpen || craftOpen || chatOpen)) {
 
             // Movement (uses assoc array of keys where their value is set to true when pressed and false when released)
             if (pressedKeys["65"] || pressedKeys["37"]) {
@@ -236,74 +236,105 @@ function renderWorld(pX) {
 
 // Called when a key is released
 function onKeyUp(key) {
-    // Checks if the key is in the pressed keys assoc array
-    // I.e. the key is a movement key
-    if (key.keyCode in pressedKeys) {
-        // Sets to false to let program know the key is no longer being pressed
-        pressedKeys[key.keyCode] = false;
+    // Checks that the player isn't typing
+    if (!$("#messagesInput").is(':focus')) {
+        // Checks if the key is in the pressed keys assoc array
+        // I.e. the key is a movement key
+        if (key.keyCode in pressedKeys) {
+            // Sets to false to let program know the key is no longer being pressed
+            pressedKeys[key.keyCode] = false;
+        }
     }
 }
 
 // Called when a key is pressed
 function onKeyDown(key) {
-    // Checks if the key is in the pressed keys assoc array
-    // I.e. the key is a movement key
-    if (key.keyCode in pressedKeys) {
-        // Sets to true to let program know the key is being pressed
-        pressedKeys[key.keyCode] = true;
-    } else {
-        // If not a movement key 
-        // Switch the keyCode
-        /*
-            key.keyCode:
-                49 = 1 button
-                50 = 2 button
-                51 = 3 button
-                52 = 4 button
-                53 = 5 button
-                69 = e button
-                81 = q button
-        */
-        switch (key.keyCode) {
-            case 49:
-                // Switch inv item
-                player.inventory.holding = 0;
-                break;
-            case 50:
-                // Switch inv item
-                player.inventory.holding = 1;
-                break;
-            case 51:
-                // Switch inv item
-                player.inventory.holding = 2;
-                break;
-            case 52:
-                // Switch inv item
-                player.inventory.holding = 3;
-                break;
-            case 53:
-                // Switch inv item
-                player.inventory.holding = 4;
-                break;
-            case 69:
-                // E pressed, toggle the inventory
-                toggleInv();
-                break;
-            case 81:
-                // Q pressed, place current block (if possible)
-                player.placeHand();
-                break;
-            case 67:
-                // C pressed, open crafting
-                toggleCraft();
-                break;
-            default:
-                console.log(key.keyCode);
-                break;
+    // Checks that the player isn't typing
+    if (!$("#messagesInput").is(':focus')) {
+        // Checks if the key is in the pressed keys assoc array
+        // I.e. the key is a movement key
+        if (key.keyCode in pressedKeys) {
+            // Sets to true to let program know the key is being pressed
+            pressedKeys[key.keyCode] = true;
+        } else {
+            // If not a movement key 
+            // Switch the keyCode
+            /*
+                key.keyCode:
+                    49 = 1 button
+                    50 = 2 button
+                    51 = 3 button
+                    52 = 4 button
+                    53 = 5 button
+                    69 = e button
+                    81 = q button
+            */
+            switch (key.keyCode) {
+                case 49:
+                    // Switch inv item
+                    player.inventory.holding = 0;
+                    break;
+                case 50:
+                    // Switch inv item
+                    player.inventory.holding = 1;
+                    break;
+                case 51:
+                    // Switch inv item
+                    player.inventory.holding = 2;
+                    break;
+                case 52:
+                    // Switch inv item
+                    player.inventory.holding = 3;
+                    break;
+                case 53:
+                    // Switch inv item
+                    player.inventory.holding = 4;
+                    break;
+                case 69:
+                    // E pressed, toggle the inventory
+                    toggleInv();
+                    break;
+                case 81:
+                    // Q pressed, place current block (if possible)
+                    player.placeHand();
+                    break;
+                case 67:
+                    // C pressed, open crafting
+                    toggleCraft();
+                    break;
+                case 84:
+                    // C pressed, open crafting
+                    toggleChat();
+                    break;
+                default:
+                    console.log(key.keyCode);
+                    break;
+            }
+            // Update the players hotbar
+            player.updateHotBar();
         }
-        // Update the players hotbar
-        player.updateHotBar();
     }
+}
+
+function toggleChat() {
+    if (chatOpen) {
+        $("#container").removeClass("hide").addClass("show");
+        $("#chat").removeClass("show").addClass("hide");
+        $("#inventory").removeClass("show").addClass("hide");
+        $("#crafting").removeClass("show").addClass("hide");
+    } else  {
+        // Opening crafting
+        invOpen = false;
+        craftOpen = false;
+        
+        $("#gameOuter").removeClass("unreadMessage");
+        
+        $("#container").removeClass("show").addClass("hide");
+        $("#chat").removeClass("hide").addClass("show");
+        $("#inventory").removeClass("show").addClass("hide");
+        $("#crafting").removeClass("show").addClass("hide");
+    }
+    chatOpen = !chatOpen;
 }
 
 function toggleCraft() {
@@ -311,14 +342,17 @@ function toggleCraft() {
         $("#container").removeClass("hide").addClass("show");
         $("#crafting").removeClass("show").addClass("hide");
         $("#inventory").removeClass("show").addClass("hide");
+        $("#chat").removeClass("show").addClass("hide");
     } else  {
         // Opening crafting
         invOpen = false;
+        chatOpen = false;
         updateCraftable();
         
         $("#container").removeClass("show").addClass("hide");
         $("#crafting").removeClass("hide").addClass("show");
         $("#inventory").removeClass("show").addClass("hide");
+        $("#chat").removeClass("show").addClass("hide");
     }
     craftOpen = !craftOpen;
 }
@@ -337,6 +371,7 @@ function toggleInv() {
     } else  {
         // Opening inv
         craftOpen = false;
+        chatOpen = false;
         $("#container").removeClass("show").addClass("hide");
         $("#inventory").removeClass("hide").addClass("show");
         $("#crafting").removeClass("show").addClass("hide");

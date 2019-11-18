@@ -98,6 +98,7 @@ var blocksContainer = new PIXI.Container();
 var playersContainer = new PIXI.Container();
 var invOpen = false;
 var craftOpen = false;
+var chatOpen = false;
 
 var pressedKeys = {
     65: false,
