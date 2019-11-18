@@ -14,6 +14,18 @@ var recipes = {
     3: {
         input: [{id: 10, count: 3}],
         output: [{isTool: true,tool:tools.shovel,level:toolLevels.wood}]
+    },
+    4: {
+        input: [{id:10, count: 2},{id: 1, count: 1}],
+        output: [{isTool: true,tool:tools.shovel,level:toolLevels.stone}]
+    },
+    5: {
+        input: [{id:10, count: 2},{id: 1, count: 3}],
+        output: [{isTool: true,tool:tools.axe,level:toolLevels.stone}]
+    },
+    6: {
+        input: [{id:10, count: 2},{id: 1, count: 3}],
+        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.stone}]
     }
 }
 
@@ -34,12 +46,11 @@ function craftable() {
     for (recipeID in recipes) {
         var cRecipe = recipes[recipeID];
         var cost = cRecipe.input;
-        var canAfford = false;
+        var canAfford = true;
         for (var i = 0; i < cost.length; i++) {
             var cCost = cost[i];
-            console.log(cCost);
-            if (items[cCost.id] && items[cCost.id] >= cCost.count) {
-                canAfford = true;
+            if (!items[cCost.id] || items[cCost.id] < cCost.count) {
+                canAfford = false;
             }
         }
         if (canAfford) {
