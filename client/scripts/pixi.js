@@ -63,7 +63,6 @@ function buildWorld() {
         var innerMap = worldMap[x];
         // Goes thru every block in the vertical chunk
         for (var y = 0; y < innerMap.length; y++) {
-            //console.log(innerMap[y] + " - " + (innerMap[y] && innerMap[y].blockID != 0 && innerMap[y].sprite == undefined));
             // If the block exists, isn't air, and doesn't have a sprite
             if (innerMap[y] && innerMap[y].blockID != 0 && innerMap[y].sprite == undefined) {
                 // Creates a sprite for the block
@@ -134,7 +133,6 @@ function setBlock(blockid,pos) {
             socket.emit('blockPlaced', {blockid: blockid,pos:pos});
         } else {
             // a block already exists there
-            //console.log("Block exists");
         }
     }
 }

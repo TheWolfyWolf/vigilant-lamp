@@ -118,6 +118,13 @@ function loadWorld(callback) {
     });
 }
 
+// Function to chagne players spawn
+function changePlayersSpawn(userid,x,y) {
+    let userdb = new sqlite3.Database('dbs/users.db');
+    let sql = "UPDATE `users` SET `spawnx`='" + x + "',`spawny`='" + y + "' WHERE `userid`='" + userid + "';";
+    userdb.run(sql)
+}
+
 // Function to save a users position in the database
 function saveUserPosition(userid,x,y) {
     let userdb = new sqlite3.Database('dbs/users.db');
@@ -364,6 +371,12 @@ io.on('connection', function(socket){
         socket.broadcast.emit("playerLocation",{id: socket.userid,pos:pos});
         // Save players location
         saveUserPosition(socket.userid,pos.x,pos.y);
+    });
+    
+    // On player spawn update
+    socket.on('spawnChange', function(pos) {
+        // Save players location
+        changePlayerSpawn(socket.userid,pos.x,pos.y);
     });
     
     socket.on('hurtPlayer', function(info) {

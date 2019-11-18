@@ -27,8 +27,6 @@ function setupGame() {
     // Handles recieving the player
     socket.on('currentPlayer', function(playerInfo){
         
-        console.log(playerInfo);
-        
         // Loads a player using the info requested
         loadPlayer(playerInfo);
         // Says the player has been recieved
@@ -56,7 +54,6 @@ function setupGame() {
     // Handles a block being places
     socket.on('blockPlaced', function(info){
         setBlock(info.blockid,info.pos);
-        console.log("Block Placed");
     });
     
     // Handles a ping return
@@ -91,7 +88,6 @@ function setupGame() {
         // Makes sure the world has been rendered
         if (!initialRender) {
             // Logs that a player left, then removes the player
-            console.log("Player " + id + " left");
             otherPlayers.removePlayer(id);
         }
     });
@@ -99,7 +95,6 @@ function setupGame() {
     // Handles making sure only active players are visible
     socket.on('allActivePlayers', function(ids) {
         if (!initialRender) {
-            console.log("Fixing active players");
             otherPlayers.allActive(ids);
         }
     });
@@ -145,8 +140,11 @@ function sendMessage() {
     }
 }
 
+function spawnChanged() {
+    socket.emit("spawnChange",{x:player.spawnx,y:player.spawny});
+}
+
 function hurtPlayer(id,damage) {
-    console.log(id);
     socket.emit("hurtPlayer",{id:id,damage:damage});
 }
 

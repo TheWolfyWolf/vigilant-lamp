@@ -84,6 +84,11 @@ var recipes = {
         input: [{id:10, count: 4}],
         output: [{isTool: false,id:11,count:1}],
         requiresBench: false
+    },
+    13: {
+        input: [{id:10, count: 6},{id:8,count:3},{id:9,count:2}],
+        output: [{isTool:false,id:12,count:2}],
+        requiresBench: true
     }
 }
 
@@ -141,7 +146,12 @@ const blocks = {
     8: {image:"iron.png",hardness:20,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
     9: {image:"diamond.jpeg",hardness:30,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
     10: {image:"planks.jpg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"},
-    11: {image:"bench.jpeg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Work Bench"}
+    11: {image:"bench.jpeg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Work Bench"},
+    12: {image:"spawnChanger.png",hardness:-1,tool:tools.axe, minTool:toolLevels.none,name:"Spawn Changer",customPlace:function() {
+        player.setSpawn(player.pos().x,player.pos().y);
+        errorMessage(`Your spawn is set to x:${player.spawnx} y:${player.spawny}`);
+        $("#gameOuter").addClass("unreadMessage");
+    }}
 }
 
 /* From ServerConnect.js */

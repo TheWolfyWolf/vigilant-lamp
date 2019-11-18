@@ -16,7 +16,6 @@ function craftable() {
     var i = 0;
     for (var x = parseInt(pPos.x)-5; x < parseInt(pPos.x)+5; x++) {
         for (var y = parseInt(pPos.y)-5; y < parseInt(pPos.y)+5; y++) {
-            console.log(`${i} & ${x},${y}`);
             if (worldMap && worldMap[x] && worldMap[x][y] && worldMap[x][y].blockID == 11) {
                 if (player.lineOfSight(x,y)) {
                     hasBench = true;
@@ -148,8 +147,6 @@ function craft(recipeID) {
     for (var i = 0; i < output.length; i++) {
         var cOut = output[i];
         if (cOut.isTool) {
-            console.log(cOut.tool);
-            console.log(cOut.level);
             player.giveTool(cOut.tool,cOut.level);
         } else {
             player.giveItem(cOut.id,cOut.count);

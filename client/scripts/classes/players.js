@@ -19,6 +19,7 @@ class Player {
     setSpawn(x,y) {
         this.spawnx = x;
         this.spawny = y;
+        spawnChanged();
     }
     
     // Places the players hand (if a block)
@@ -33,8 +34,12 @@ class Player {
         if (this.lineOfSight(blockPos.x,blockPos.y)) {
             // Check that the player has an item and it isn't a tool
             if (this.inventory.inv[this.inventory.holding] && !this.inventory.inv[this.inventory.holding].isTool) {
-                // Places block and removes from players inventory
-                setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
+                if (blocks[this.inventory.inv[this.inventory.holding].id].customPlace) {
+                    blocks[this.inventory.inv[this.inventory.holding].id].customPlace();
+                } else {
+                    // Places block
+                    setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
+                }
                 this.inventory.removeOne();
                 this.updateHotBar();
             }
@@ -71,9 +76,7 @@ class Player {
                 down = false;
                 currentY = y;
             }
-            console.log(currentY);
             if (currentY > worldMap[parseInt(x)].length) {
-                console.log("BAD SPAWN");
                 this.setSpawn(0,worldMap[0].length);
                 x = worldMap[0].length;
                 currentY = worldMap[0].length;
@@ -492,14 +495,17 @@ class Player {
             // Gravity
             if (!hasFloor && player.jumping == 0) {
                 player.sprite.y += blockSize * moveSpeed;
-                player.blocksFell += moveSpeed;
+                if (player.pos().y > player.blocksFell) {
+                    player.blocksFell = player.pos().y;
+                }
                 //console.log("Falling");
             } else {
                 // Fall damage
-                if (player.blocksFell > 0) {
-                    if (player.blocksFell > 10) {
+                if ((player.blocksFell - player.pos().y) > 0) {
+                    var blocksFell = player.blocksFell - player.pos().y;
+                    if (blocksFell > 10) {
                         //console.log(player.blocksFell);
-                        player.damage(Math.floor((player.blocksFell-10)/2));
+                        player.damage(Math.floor((blocksFell-10)/2));
                     }
                     player.blocksFell = 0;
                 }
@@ -513,7 +519,6 @@ class Player {
             if (worldMap[floorPX-1] && (worldMap[floorPX-1].length>ceilPHeadY)) {
                 leftBlocks.push(worldMap[floorPX-1][ceilPHeadY]);
             }
-
             if (worldMap[floorPX] && (worldMap[floorPX].length>ceilPFeetY)) {
                 leftBlocks.push(worldMap[floorPX][ceilPFeetY]);
             }
@@ -526,6 +531,12 @@ class Player {
             }
             if (worldMap[floorPX+1] && (worldMap[floorPX+1].length>ceilPHeadY)) {
                 rightBlocks.push(worldMap[floorPX+1][ceilPHeadY]);
+            }
+            if (worldMap[floorPX] && (worldMap[floorPX].length>ceilPFeetY)) {
+                rightBlocks.push(worldMap[floorPX][ceilPFeetY]);
+            }
+            if (worldMap[floorPX] && (worldMap[floorPX].length>ceilPHeadY)) {
+                rightBlocks.push(worldMap[floorPX][ceilPHeadY]);
             }
 
             // Checks collisions for left and right blocks

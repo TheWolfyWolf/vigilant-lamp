@@ -84,8 +84,6 @@ function startGame() {
     
     $(".invItem").each(function() {
         $(this).on("click",function() {
-            console.log(invSelected);
-            console.log($(this).attr("id"));
             if (invSelected === false) {
                 if ($(this).attr("id") != "deleteItem") {
                     invSelected = $(this).attr("id");
@@ -125,7 +123,6 @@ function gameTick() {
         
         if ((player.pos().y % moveSpeed > 0.03 && player.pos().y % moveSpeed < 0.3) ||
             (player.pos().x % moveSpeed > 0.03 && player.pos().x % moveSpeed < 0.3)) {
-            console.log("Fixing player pos " + player.pos().x % moveSpeed + " & " + player.pos().y % moveSpeed); 
             renderedMinX = -100;
             renderedMaxX = -100;
             renderWorld();
@@ -360,8 +357,6 @@ function toggleCraft() {
 // Function to toggle the inventory
 function toggleInv() {
     
-    //opens popup and loads in the inventroy by calling the function from Iventory class
-    console.log(player.inventory.inv);
     // Checks if inventory open
     if (invOpen) {
         // Closing inv

@@ -5,12 +5,10 @@ class InventoryItem {
         this.count = count || 1;
         this.stackable = true;
         this.isTool = false;
+        this.img = "images/unknown.png";
         if (itemID > 0) {
             // Block
             this.img = `images/${blocks[itemID].image}`;
-        } else {
-            // Tool/other
-            this.img = "images/unknown.png";
         }
     }
     
