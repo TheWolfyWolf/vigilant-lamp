@@ -33,7 +33,7 @@ var invSelected = false;
 class InventoryItem {
     constructor(itemID,count) {
         this.id = itemID;
-        this.count = count | 1;
+        this.count = count || 1;
         this.stackable = true;
         this.isTool = false;
         if (itemID > 0) {
@@ -41,7 +41,7 @@ class InventoryItem {
             this.img = `images/${blocks[itemID].image}`;
         } else {
             // Tool/other
-            this.img = "images/heart.png";
+            this.img = "images/unknown.png";
         }
     }
     
@@ -54,15 +54,51 @@ class InventoryItem {
     }
 }
 
+function hoverName(item) {
+    if (item.isTool) {
+        
+        var toolStr = "";
+        switch (item.tool) {
+            case tools.axe:
+                toolStr = "Axe";
+                break;
+            case tools.pickaxe:
+                toolStr = "Pickaxe";
+                break;
+            case tools.shovel:
+                toolStr = "Shovel";
+                break;
+        }
+        
+        var levelStr = "";
+        switch (JSON.stringify(item.level)) {
+            case JSON.stringify(toolLevels.wood):
+                levelStr = "Wooden";
+                break;
+            case JSON.stringify(toolLevels.stone):
+                levelStr = "Stone";
+                break;
+            case JSON.stringify(toolLevels.diamond):
+                levelStr = "Diamond";
+                break;
+        }
+        
+        return `${levelStr} ${toolStr}`;
+    } else {
+        var id = item.id;
+        return blocks[id].name;
+    }
+}
+
 // Inventory Tool Class (for storing tools)
 class Tool {
     constructor(toolID,toolLevel,durability) {
         this.tool = toolID;
         this.damage = toolLevel.damage;
-        this.durability = durability | toolLevel.durability;
+        this.durability = durability || toolLevel.durability;
         this.level = toolLevel
         this.isTool = true;
-        this.img = "images/heart.png";
+        this.img = "images/" + toolImage(this);
     }
     
     toString() {
@@ -243,10 +279,16 @@ class Player {
         for (var i = 0; i < this.inventory.inv.length; i++) {
             if (this.inventory.inv[i] == undefined) {
                 $(`#${i}.invItem img`).attr("src"," ");
+                $(`#${i}.invItem img`).attr("title","");
                 $(`#${i}.invItem span`).html("&nbsp;");
             } else {
                 $(`#${i}.invItem img`).attr("src",this.inventory.inv[i].img);
-                $(`#${i}.invItem span`).html(this.inventory.inv[i].count);
+                $(`#${i}.invItem img`).attr("title",hoverName(this.inventory.inv[i]));
+                if (this.inventory.inv[i].isTool) {
+                    $(`#${i}.invItem span`).html(this.inventory.inv[i].durability);
+                } else {
+                    $(`#${i}.invItem span`).html(this.inventory.inv[i].count);
+                }
             }
         }
     }
@@ -354,11 +396,11 @@ class Player {
     }
     
     // Gives the player an item
-    giveItem(item) {
+    giveItem(item,count) {
         if  (item != 0) {
             for (var i = 0; i < this.inventory.inv.length; i++) {
                 if (this.inventory.inv[i] != undefined && this.inventory.inv[i].id == item) {
-                    this.inventory.inv[i].count++;
+                    this.inventory.inv[i].count += (count||1);
                     this.updateHotBar();
                     return true;
                 }
@@ -366,6 +408,7 @@ class Player {
             for (var i = 0; i < this.inventory.inv.length; i++) {
                 if (this.inventory.inv[i] == undefined) {
                     this.inventory.inv[i] = new InventoryItem(item);
+                    this.inventory.inv[i].count = (count||1);
                     this.updateHotBar();
                     return true;
                 }
@@ -823,14 +866,20 @@ function startGame() {
             console.log(invSelected);
             console.log($(this).attr("id"));
             if (invSelected === false) {
-                invSelected = $(this).attr("id");
-                $(this).addClass("selected");
+                if ($(this).attr("id") != "deleteItem") {
+                    invSelected = $(this).attr("id");
+                    $(this).addClass("selected");
+                }
             } else {
                 var currentInvID = $(this).attr("id");
-                $(".invItem.selected").each(function() {
-                    $(this).removeClass("selected");
-                })
-                player.inventory.swapItem(parseInt(invSelected),parseInt(currentInvID));
+                if (currentInvID == "deleteItem") {
+                    player.inventory.inv[invSelected] = undefined;
+                } else {
+                    $(".invItem.selected").each(function() {
+                        $(this).removeClass("selected");
+                    })
+                    player.inventory.swapItem(parseInt(invSelected),parseInt(currentInvID));
+                }
                 player.updateHotBar();
                 invSelected = false;
             }
@@ -1023,6 +1072,7 @@ function onKeyDown(key) {
             case 67:
                 // C pressed, open crafting
                 toggleCraft();
+                break;
             default:
                 console.log(key.keyCode);
                 break;
@@ -1040,6 +1090,8 @@ function toggleCraft() {
     } else  {
         // Opening crafting
         invOpen = false;
+        updateCraftable();
+        
         $("#container").removeClass("show").addClass("hide");
         $("#crafting").removeClass("hide").addClass("show");
         $("#inventory").removeClass("show").addClass("hide");

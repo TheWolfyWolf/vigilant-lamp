@@ -18,6 +18,10 @@ const toolLevels = {
     diamond: {durability: 500,damage: 4}
 }
 
+function toolImage(tool) {
+    return `tools/${hoverName(tool).replace(" ","").toLowerCase()}.png`;
+}
+
 // Dict to handle all block info
 /*
     Stores:
@@ -27,15 +31,16 @@ const toolLevels = {
         - Min Tool
 */
 const blocks = {
-    1: {image:"stone.jpg",hardness:10, tool:tools.pickaxe, minTool:toolLevels.wood},
-    2: {image:"stoneBackground.jpg", hardness:10, tool:tools.pickaxe, minTool:toolLevels.stone},
-    3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none},
-    4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none},
-    5: {image:"bedrock.png",hardness:-1},
-    6: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none},
-    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none},
-    8: {image:"leaf.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.wood},
-    9: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none}
+    1: {image:"stone.jpg",hardness:10, tool:tools.pickaxe, minTool:toolLevels.wood,name:"Stone"},
+    2: {image:"stoneBackground.jpg", hardness:10, tool:tools.pickaxe, minTool:toolLevels.stone,name:"Stone Background"},
+    3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none,name:"Dirt"},
+    4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none,name:"Grass"},
+    5: {image:"bedrock.png",hardness:-1,name:"Bedrock"},
+    6: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
+    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Leaf"},
+    8: {image:"leaf.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.wood,name:"Iron"}, /* ORE */
+    9: {image:"leaf.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.none,name:"Diamond"}, /* ORE */
+    10: {image:"planks.jpg",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"}
 }
 
 // Function to get position of a sprite in blocks not standard x,y

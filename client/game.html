@@ -12,6 +12,7 @@
         <script src="scripts/pixi.js"></script>
         <script src="scripts/WorldGen.js"></script>
         <script src="scripts/serverConnect.js"></script>
+        <script src="scripts/crafting.js"></script>
         <script src="scripts/engine.js"></script>
         
         <!-- Basic Styling -->
@@ -71,10 +72,20 @@
                             <div id="3" class="invItem"><img /><span>0</span></div>
                             <div id="4" class="invItem"><img /><span>0</span></div>
                         </div>
+                        <div class="invRow">
+                            <div id="deleteItem" title="Destroy Item" class="invItem"><img src="images/delete.png" /><span>DELETE</span></div>
+                        </div>
                     </center>
                 </div>
-                <div class="crafting" class="hide">
-                    CRAFTING
+                <div id="crafting" class="hide">
+                    <center>
+                        <div class="craftRow">
+                            <div class="craftItem"><img /><span>0</span></div>
+                            <div class="craftItem"><img /><span>0</span></div>
+                            <div class="craftItem"><img /><span>0</span></div>
+                            <div class="craftItem"><img /><span>0</span></div>
+                            <div class="craftItem craftReturn"><img /><span>0</span></div>
+                    </center>
                 </div>
             </div>
             <div id="loadingBox">
