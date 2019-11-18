@@ -119,7 +119,7 @@ function startGame() {
 // Game Tick Function
 function gameTick() {
     // Checks if inventory is open and player exists
-    if (!invOpen && !craftOpen && player) {
+    if (player) {
         // Sends players location to the server
         player.updateLocation();
         
@@ -132,33 +132,36 @@ function gameTick() {
             app.renderer.render(app.stage);
             //player.teleport(Math.ceil(player.pos().x),Math.ceil(player.pos().y));
         }
+        
+        if (!(invOpen || craftOpen)) {
 
-        // Movement (uses assoc array of keys where their value is set to true when pressed and false when released)
-        if (pressedKeys["65"] || pressedKeys["37"]) {
-            // Left arrow or A pressed
-            player.moveLeft();
-        }
-        if (pressedKeys["68"] || pressedKeys["39"]) {
-            // Right arrow or D pressed
-            player.moveRight();
-        }
-        if (pressedKeys["87"] || pressedKeys["38"] || pressedKeys["32"]) {
-            // Up arrow or W or Space Bar pressed
-            //jump code
-            if (!freeCam) {
-                player.jump();
-            } else {
-                player.sprite.y -= blockSize * moveSpeed;
+            // Movement (uses assoc array of keys where their value is set to true when pressed and false when released)
+            if (pressedKeys["65"] || pressedKeys["37"]) {
+                // Left arrow or A pressed
+                player.moveLeft();
             }
-        }
-        if (pressedKeys["40"] || pressedKeys["40"]) {
-            //Down code
-            //player.sprite.y += blockSize/3;
-            /*
-                NO DOWN CODE
-            */
-            if (freeCam) {
-                player.sprite.y += blockSize * moveSpeed;
+            if (pressedKeys["68"] || pressedKeys["39"]) {
+                // Right arrow or D pressed
+                player.moveRight();
+            }
+            if (pressedKeys["87"] || pressedKeys["38"] || pressedKeys["32"]) {
+                // Up arrow or W or Space Bar pressed
+                //jump code
+                if (!freeCam) {
+                    player.jump();
+                } else {
+                    player.sprite.y -= blockSize * moveSpeed;
+                }
+            }
+            if (pressedKeys["40"] || pressedKeys["40"]) {
+                //Down code
+                //player.sprite.y += blockSize/3;
+                /*
+                    NO DOWN CODE
+                */
+                if (freeCam) {
+                    player.sprite.y += blockSize * moveSpeed;
+                }
             }
         }
 
