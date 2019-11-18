@@ -8,9 +8,10 @@ Done:
 -Multiplayer Support
 -World Edit
 -Player Deaths
+-Crafting
+-Inventory
 
 WIP:
--Inv
 -Screen Size Ajustments
 
 Todo:
@@ -18,6 +19,7 @@ Todo:
 -Spites
 -Sound?
 -Tidy Code and Refactoring
+-Crafting based on proximity to crafting table??
 
 
 Version Goals:
