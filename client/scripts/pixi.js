@@ -15,6 +15,7 @@ const toolLevels = {
     none: 0,
     wood: {durability: 50,damage: 1},
     stone: {durability: 100,damage: 2},
+    iron: {durability: 220,damage: 3},
     diamond: {durability: 500,damage: 4}
 }
 
@@ -38,8 +39,8 @@ const blocks = {
     5: {image:"bedrock.png",hardness:-1,name:"Bedrock"},
     6: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
     7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Leaf"},
-    8: {image:"leaf.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.wood,name:"Iron"}, /* ORE */
-    9: {image:"leaf.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.none,name:"Diamond"}, /* ORE */
+    8: {image:"iron.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
+    9: {image:"diamond.jpeg",hardness:1,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
     10: {image:"planks.jpg",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"}
 }
 

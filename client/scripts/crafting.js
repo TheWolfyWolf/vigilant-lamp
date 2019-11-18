@@ -26,6 +26,30 @@ var recipes = {
     6: {
         input: [{id:10, count: 2},{id: 1, count: 3}],
         output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.stone}]
+    },
+    7: {
+        input: [{id:10, count: 2},{id: 8, count: 1}],
+        output: [{isTool: true,tool:tools.shovel,level:toolLevels.iron}]
+    },
+    8: {
+        input: [{id:10, count: 2},{id: 8, count: 3}],
+        output: [{isTool: true,tool:tools.axe,level:toolLevels.iron}]
+    },
+    9: {
+        input: [{id:10, count: 2},{id: 8, count: 3}],
+        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.iron}]
+    },
+    10: {
+        input: [{id:10, count: 2},{id: 9, count: 1}],
+        output: [{isTool: true,tool:tools.shovel,level:toolLevels.diamond}]
+    },
+    11: {
+        input: [{id:10, count: 2},{id: 9, count: 3}],
+        output: [{isTool: true,tool:tools.axe,level:toolLevels.diamond}]
+    },
+    12: {
+        input: [{id:10, count: 2},{id: 9, count: 3}],
+        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.diamond}]
     }
 }
 
@@ -156,6 +180,8 @@ function craft(recipeID) {
     for (var i = 0; i < output.length; i++) {
         var cOut = output[i];
         if (cOut.isTool) {
+            console.log(cOut.tool);
+            console.log(cOut.level);
             player.giveTool(cOut.tool,cOut.level);
         } else {
             player.giveItem(cOut.id,cOut.count);

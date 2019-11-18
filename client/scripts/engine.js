@@ -78,6 +78,9 @@ function hoverName(item) {
             case JSON.stringify(toolLevels.stone):
                 levelStr = "Stone";
                 break;
+            case JSON.stringify(toolLevels.iron):
+                levelStr = "Iron";
+                break;
             case JSON.stringify(toolLevels.diamond):
                 levelStr = "Diamond";
                 break;
@@ -271,8 +274,8 @@ class Player {
                 $(`.item.item-${i+1}`).attr("count",hotbar[i].count);
             }
         }
-        updateInv();
         this.updateInventory();
+        updateInv();
     }
     
     updateInventory() {
@@ -875,11 +878,11 @@ function startGame() {
                 if (currentInvID == "deleteItem") {
                     player.inventory.inv[invSelected] = undefined;
                 } else {
-                    $(".invItem.selected").each(function() {
-                        $(this).removeClass("selected");
-                    })
                     player.inventory.swapItem(parseInt(invSelected),parseInt(currentInvID));
                 }
+                $(".invItem.selected").each(function() {
+                    $(this).removeClass("selected");
+                })
                 player.updateHotBar();
                 invSelected = false;
             }
