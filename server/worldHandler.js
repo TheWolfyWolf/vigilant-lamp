@@ -36,11 +36,12 @@ const blocks = {
     3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none,name:"Dirt"},
     4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none,name:"Grass"},
     5: {image:"bedrock.png",hardness:-1,name:"Bedrock"},
-    6: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
+    6: {image:"wood.png",hardness:8,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
     7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Leaf"},
-    8: {image:"iron.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
-    9: {image:"diamond.jpeg",hardness:1,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
-    10: {image:"planks.jpg",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"}
+    8: {image:"iron.png",hardness:20,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
+    9: {image:"diamond.jpeg",hardness:30,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
+    10: {image:"planks.jpg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"},
+    11: {image:"bench.jpeg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Work Bench"}
 }
 
 // Function to convert a world map to a string

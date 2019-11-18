@@ -11,7 +11,22 @@ function craftable() {
         }
     }
     
+    var hasBench = false;
+    var pPos = player.pos();
+    var i = 0;
+    for (var x = parseInt(pPos.x)-5; x < parseInt(pPos.x)+5; x++) {
+        for (var y = parseInt(pPos.y)-5; y < parseInt(pPos.y)+5; y++) {
+            console.log(`${i} & ${x},${y}`);
+            if (worldMap && worldMap[x] && worldMap[x][y] && worldMap[x][y].blockID == 11) {
+                if (player.lineOfSight(x,y)) {
+                    hasBench = true;
+                }
+            }
+        }
+    }
+    
     var craftableOut = [];
+    var requiresWorkbench = 0;
     for (recipeID in recipes) {
         var cRecipe = recipes[recipeID];
         var cost = cRecipe.input;
@@ -23,14 +38,20 @@ function craftable() {
             }
         }
         if (canAfford) {
-            craftableOut.push({id: recipeID, recipe: cRecipe});
+            if (cRecipe.requiresBench && !hasBench) {
+                requiresWorkbench++;
+            } else {
+                craftableOut.push({id: recipeID, recipe: cRecipe});
+            }
         }
     }
-    return craftableOut;
+    return {craftable:craftableOut,uncraftable:requiresWorkbench};
 }
 
 function updateCraftable() {
-    var craftableItems = craftable();
+    var craftableResults = craftable()
+    var craftableItems = craftableResults.craftable;
+    var uncraftableItems = craftableResults.uncraftable;
 
     /*
     <div class="craftRow">
@@ -86,7 +107,9 @@ function updateCraftable() {
             cRecipeHTML += `</div>`;
             craftableHTML += cRecipeHTML;
         }
-
+        if (uncraftableItems > 0) {
+            craftableHTML += `<br /><h2>And ${uncraftableItems} More Items</h2><h5>Craft a work bench to see them!</h5>`
+        }
         $("#crafting center").html(craftableHTML);
     }
 }
@@ -95,7 +118,7 @@ function craft(recipeID) {
     var recipe = recipes[recipeID];
     
     var canAfford = false;
-    var craftableItems = craftable();
+    var craftableItems = craftable().craftable;
     for (var i = 0; i < craftableItems.length; i++) {
         if (craftableItems[i].id == recipeID) {
             canAfford = true;

@@ -27,51 +27,63 @@ var recipes = {
     },
     1: {
         input: [{id: 10, count: 5}],
-        output: [{isTool: true,tool:tools.axe,level:toolLevels.wood}]
+        output: [{isTool: true,tool:tools.axe,level:toolLevels.wood}],
+        requiresBench: true
     },
     2: {
         input: [{id: 10, count: 5}],
-        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.wood}]
+        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.wood}],
+        requiresBench: true
     },
     3: {
         input: [{id: 10, count: 3}],
-        output: [{isTool: true,tool:tools.shovel,level:toolLevels.wood}]
+        output: [{isTool: true,tool:tools.shovel,level:toolLevels.wood}],
+        requiresBench: true
     },
     4: {
         input: [{id:10, count: 2},{id: 1, count: 1}],
-        output: [{isTool: true,tool:tools.shovel,level:toolLevels.stone}]
+        output: [{isTool: true,tool:tools.shovel,level:toolLevels.stone}],
+        requiresBench: true
     },
     5: {
         input: [{id:10, count: 2},{id: 1, count: 3}],
-        output: [{isTool: true,tool:tools.axe,level:toolLevels.stone}]
+        output: [{isTool: true,tool:tools.axe,level:toolLevels.stone}],
+        requiresBench: true
     },
     6: {
         input: [{id:10, count: 2},{id: 1, count: 3}],
-        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.stone}]
+        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.stone}],
+        requiresBench: true
     },
     7: {
         input: [{id:10, count: 2},{id: 8, count: 1}],
-        output: [{isTool: true,tool:tools.shovel,level:toolLevels.iron}]
+        output: [{isTool: true,tool:tools.shovel,level:toolLevels.iron}],
+        requiresBench: true
     },
     8: {
         input: [{id:10, count: 2},{id: 8, count: 3}],
-        output: [{isTool: true,tool:tools.axe,level:toolLevels.iron}]
+        output: [{isTool: true,tool:tools.axe,level:toolLevels.iron}],
+        requiresBench: true
     },
     9: {
         input: [{id:10, count: 2},{id: 8, count: 3}],
-        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.iron}]
+        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.iron}],
+        requiresBench: true
     },
     10: {
         input: [{id:10, count: 2},{id: 9, count: 1}],
-        output: [{isTool: true,tool:tools.shovel,level:toolLevels.diamond}]
+        output: [{isTool: true,tool:tools.shovel,level:toolLevels.diamond}],
+        requiresBench: true
     },
     11: {
         input: [{id:10, count: 2},{id: 9, count: 3}],
-        output: [{isTool: true,tool:tools.axe,level:toolLevels.diamond}]
+        output: [{isTool: true,tool:tools.axe,level:toolLevels.diamond}],
+        requiresBench: true
     },
     12: {
-        input: [{id:10, count: 2},{id: 9, count: 3}],
-        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.diamond}]
+        input: [{id:10, count: 4}],
+        output: [{isTool: false,id:11,count:1}],
+        requiresBench: false
     }
 }
 
@@ -123,11 +135,12 @@ const blocks = {
     3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none,name:"Dirt"},
     4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none,name:"Grass"},
     5: {image:"bedrock.png",hardness:-1,name:"Bedrock"},
-    6: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
+    6: {image:"wood.png",hardness:8,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
     7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Leaf"},
-    8: {image:"iron.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
-    9: {image:"diamond.jpeg",hardness:1,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
-    10: {image:"planks.jpg",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"}
+    8: {image:"iron.png",hardness:20,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
+    9: {image:"diamond.jpeg",hardness:30,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
+    10: {image:"planks.jpg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"},
+    11: {image:"bench.jpeg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Work Bench"}
 }
 
 /* From ServerConnect.js */
