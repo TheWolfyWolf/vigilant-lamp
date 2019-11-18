@@ -81,11 +81,16 @@ var recipes = {
         requiresBench: true
     },
     12: {
+        input: [{id:10, count: 2},{id: 9, count: 3}],
+        output: [{isTool: true,tool:tools.pickaxe,level:toolLevels.diamond}],
+        requiresBench: true
+    },
+    13: {
         input: [{id:10, count: 4}],
         output: [{isTool: false,id:11,count:1}],
         requiresBench: false
     },
-    13: {
+    14: {
         input: [{id:10, count: 6},{id:8,count:3},{id:9,count:2}],
         output: [{isTool:false,id:12,count:2}],
         requiresBench: true
@@ -104,6 +109,7 @@ var playersContainer = new PIXI.Container();
 var invOpen = false;
 var craftOpen = false;
 var chatOpen = false;
+var allRecipesVisible = false;
 
 var pressedKeys = {
     65: false,

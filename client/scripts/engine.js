@@ -110,6 +110,7 @@ function startGame() {
     document.addEventListener('keyup', onKeyUp);
     // Button to open inventory
     $("#openInv").on("click",toggleInv);
+    $("#allRecipesToggle img").on("click",toggleAllRecipes);
     
     
 }
@@ -373,6 +374,12 @@ function toggleInv() {
     }
     // Toggles invOpen
     invOpen = !invOpen;
+}
+
+// function to toggle all crafting visible
+function toggleAllRecipes() {
+    allRecipesVisible = !allRecipesVisible;
+    updateCraftable();
 }
 
 /* DEPRECATED */

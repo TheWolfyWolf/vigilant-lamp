@@ -1,4 +1,4 @@
-function craftable() {
+function craftable(hasBench,returnAllRecipes) {
     var inv = player.inventory.inv;
     
     var items = {};
@@ -10,6 +10,35 @@ function craftable() {
             items[inv[i].id] += inv[i].count;
         }
     }
+    
+    var craftableOut = [];
+    var requiresWorkbench = 0;
+    for (recipeID in recipes) {
+        var cRecipe = recipes[recipeID];
+        var cost = cRecipe.input;
+        var canAfford = true;
+        if (!returnAllRecipes) {
+            for (var i = 0; i < cost.length; i++) {
+                var cCost = cost[i];
+                if (!items[cCost.id] || items[cCost.id] < cCost.count) {
+                    canAfford = false;
+                }
+            }
+        }
+        if (canAfford) {
+            if ((cRecipe.requiresBench && !hasBench) && !returnAllRecipes) {
+                requiresWorkbench++;
+            } else {
+                craftableOut.push({id: recipeID, recipe: cRecipe});
+            }
+        }
+    }
+    return {craftable:craftableOut,uncraftable:requiresWorkbench};
+}
+
+function updateCraftable() {
+    
+    $("#allRecipesToggle span").html(allRecipesVisible ? "All Recipes" : "Craftable Recipes")
     
     var hasBench = false;
     var pPos = player.pos();
@@ -24,31 +53,7 @@ function craftable() {
         }
     }
     
-    var craftableOut = [];
-    var requiresWorkbench = 0;
-    for (recipeID in recipes) {
-        var cRecipe = recipes[recipeID];
-        var cost = cRecipe.input;
-        var canAfford = true;
-        for (var i = 0; i < cost.length; i++) {
-            var cCost = cost[i];
-            if (!items[cCost.id] || items[cCost.id] < cCost.count) {
-                canAfford = false;
-            }
-        }
-        if (canAfford) {
-            if (cRecipe.requiresBench && !hasBench) {
-                requiresWorkbench++;
-            } else {
-                craftableOut.push({id: recipeID, recipe: cRecipe});
-            }
-        }
-    }
-    return {craftable:craftableOut,uncraftable:requiresWorkbench};
-}
-
-function updateCraftable() {
-    var craftableResults = craftable()
+    var craftableResults = craftable(hasBench,allRecipesVisible)
     var craftableItems = craftableResults.craftable;
     var uncraftableItems = craftableResults.uncraftable;
 
@@ -82,12 +87,24 @@ function updateCraftable() {
             var cRecipeHTML = `<div class="craftRow">`;
 
             var cRecipe = craftableItems[i].recipe;
+            var afford = true;
             // Costs
             var cost = cRecipe.input;
             for (var j = 0; j < cost.length; j++) {
                 var cCost = cost[j];
                 var hoverText = hoverName(cCost);
-                cRecipeHTML += `<div title="${hoverText}" class="craftItem"><img src="images/${blocks[cCost.id].image}" /><span>${items[cCost.id]}/${cCost.count||1}</span></div>`;
+                if ((items[cCost.id]||0) >= cCost.count) {
+                    cRecipeHTML += `<div title="${hoverText}" class="craftItem afford"><img src="images/${blocks[cCost.id].image}" /><span>${items[cCost.id]||0}/${cCost.count||1}</span></div>`;
+                } else {
+                    cRecipeHTML += `<div title="${hoverText}" class="craftItem"><img src="images/${blocks[cCost.id].image}" /><span>${items[cCost.id]||0}/${cCost.count||1}</span></div>`;
+                    afford = false;
+                }
+            }
+            if (cRecipe.requiresBench && !hasBench) {
+                cRecipeHTML += `<div title="Work Bench" class="craftItem"><img src="images/${blocks[11].image}" /><span>&nbsp;</span></div>`;
+                afford = false;
+            } else if (cRecipe.requiresBench && hasBench) {
+                cRecipeHTML += `<div title="Work Bench" class="craftItem afford"><img src="images/${blocks[11].image}" /><span>&nbsp;</span></div>`;
             }
 
             // Output
@@ -96,10 +113,17 @@ function updateCraftable() {
                 var cOutput = output[j];
                 var hoverText = hoverName(cOutput);
                 if (cOutput.isTool) {
-
-                    cRecipeHTML += `<div title="${hoverText}" onclick="craft(${craftableItems[i].id})" class="craftItem craftReturn"><img src="images/${toolImage(cOutput)}" /><span>${cOutput.count||1}</span></div>`;
+                    cRecipeHTML += `<div title="${hoverText}"`;
+                    if (!allRecipesVisible) {
+                        cRecipeHTML += `onclick="craft(${craftableItems[i].id})"`;
+                    }
+                    cRecipeHTML += `class="craftItem craftReturn ${afford?"afford":""}"><img src="images/${toolImage(cOutput)}" /><span>${cOutput.count||1}</span></div>`;
                 } else {
-                    cRecipeHTML += `<div title="${hoverText}" onclick="craft(${craftableItems[i].id})" class="craftItem craftReturn"><img src="images/${blocks[cOutput.id].image}" /><span>${cOutput.count}</span></div>`;
+                    cRecipeHTML += `<div title="${hoverText}"`;
+                    if (!allRecipesVisible) {
+                        cRecipeHTML += `onclick="craft(${craftableItems[i].id})"`;
+                    }
+                    cRecipeHTML += `class="craftItem craftReturn ${afford?"afford":""}"><img src="images/${blocks[cOutput.id].image}" /><span>${cOutput.count}</span></div>`;
                 }
             }
 
