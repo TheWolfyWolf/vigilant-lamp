@@ -81,6 +81,7 @@ class blockObject {
             this.sprite.visible = true;
             this.sprite.x = this.x*blockSize;
             this.sprite.y = app.screen.height - this.y*blockSize;
+            this.sprite.tint = blocksTint;
         }
     }
     

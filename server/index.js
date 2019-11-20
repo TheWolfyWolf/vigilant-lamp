@@ -119,7 +119,7 @@ function loadWorld(callback) {
 }
 
 // Function to chagne players spawn
-function changePlayersSpawn(userid,x,y) {
+function changePlayerSpawn(userid,x,y) {
     let userdb = new sqlite3.Database('dbs/users.db');
     let sql = "UPDATE `users` SET `spawnx`='" + x + "',`spawny`='" + y + "' WHERE `userid`='" + userid + "';";
     userdb.run(sql)
@@ -315,6 +315,11 @@ app.post('/signupHandle', function(req,res) {
 loadWorld(function() {
     saveWorld();
 });
+
+setInterval(function(){
+    world.incTime();
+    io.emit("time",{time:world.getTime()});
+}, 1*200);
 
 // Handle sockets
 io.on('connection', function(socket){

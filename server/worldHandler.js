@@ -4,6 +4,8 @@ var height = 200; /* Height of the world */
 
 var worldMap = undefined;
 
+var time = 0;
+
 const nonSolidBlocks = [0,2];
 
 // ENUM for tools
@@ -485,5 +487,11 @@ module.exports = {
     },
     loadWorld: function(world) {
         worldMap = strToWorldMap(world);
+    },
+    getTime: function() {
+        return time % 100;
+    },
+    incTime: function() {
+        time += 1;
     }
 }

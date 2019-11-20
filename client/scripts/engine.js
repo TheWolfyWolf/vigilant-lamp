@@ -2,7 +2,7 @@
 $(document).ready(function() {
     
     // Creates the pixi App
-    app = new PIXI.Application({ backgroundColor: 0x1099bb, resizeTo: document.getElementById("container") });
+    app = new PIXI.Application({ backgroundColor: '0x1099bb', resizeTo: document.getElementById("container") });
     // Adds the app to the container
     document.getElementById("container").appendChild(app.view);
     // Adds the blocks and players container
@@ -20,9 +20,7 @@ $(document).ready(function() {
 });
 
 function resized() {
-    renderedMinX = -100;
-    renderedMaxX = -100;
-    renderWorld();
+    reRender();
 }
 
 // Creates a player using the player info
@@ -124,9 +122,7 @@ function gameTick() {
         
         if ((player.pos().y % moveSpeed > 0.03 && player.pos().y % moveSpeed < 0.3) ||
             (player.pos().x % moveSpeed > 0.03 && player.pos().x % moveSpeed < 0.3)) {
-            renderedMinX = -100;
-            renderedMaxX = -100;
-            renderWorld();
+            reRender();
             app.renderer.render(app.stage);
             //player.teleport(Math.ceil(player.pos().x),Math.ceil(player.pos().y));
         }
@@ -185,6 +181,12 @@ function gameLoop(delta){
     /* DEPRECATED GAME LOOP */
     /* DEPRECATED GAME LOOP */
     
+}
+
+function reRender() {
+    renderedMinX = -100;
+    renderedMaxX = -100;
+    renderWorld();
 }
 
 // Function to render world
@@ -547,4 +549,20 @@ function runCommand(command,args) {
             errorMessage(`kill -> /kill {playername | optional} -> kills a player`);
             break;
     }
+}
+
+function createColor(color,percent) {
+    var r = Number(parseInt(color.r * percent)).toString(16).padStart(2,"0");
+    var g = Number(parseInt(color.g * percent)).toString(16).padStart(2,"0");
+    var b = Number(parseInt(color.b * percent)).toString(16).padStart(2,"0");
+    return `0x${r}${g}${b}`;
+}
+function updateTime(time) {
+    var timeOffMidday = Math.abs(time-50);
+    var daylightPercent = 1-(timeOffMidday)/50;
+    // Time 0 = midnight
+    // Time 50 = midday
+    app.renderer.backgroundColor = createColor({r:16,g:153,b:187},daylightPercent);
+    blocksTint = createColor({r:255,g:255,b:255},(daylightPercent+1)/2);
+    reRender();
 }

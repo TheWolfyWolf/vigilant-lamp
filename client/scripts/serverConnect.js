@@ -103,6 +103,10 @@ function setupGame() {
         player.damage(damage);
     });
     
+    socket.on('time', function(data) {
+        updateTime(data.time);
+    });
+    
     socket.on('messageRecieve', function(message) {
         /*
         <div class="message"><span class="from">${message.from}:</span>&nbsp;<span class="contents">${message.message}</span></div>
