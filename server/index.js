@@ -299,6 +299,11 @@ app.get(['/login','/','/signup','/game'], function(req, res){
     console.log("@Login.html");
     res.sendFile(rootDir + '/client/login.html');
 });
+app.get('/help', function(req, res){
+    console.log(req._parsedUrl.pathname);
+    console.log("@help.html");
+    res.sendFile(rootDir + '/client/help.html');
+});
 // Handles a post request sent to signupHandle
 app.post('/signupHandle', function(req,res) {
     // If successfully created user redirect to login
