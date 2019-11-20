@@ -30,14 +30,29 @@ html {
     border-bottom: 1vh solid #555;
     box-sizing: border-box;
 }
-#gameOuter.unreadMessage {
-    border-color: red;
-}
 #gameOuter.show {
     animation: fadeInAni 2s ease-in-out;
     -webkit-animation: fadeInAni 2s ease-in-out;
     animation-fill-mode: forwards;
     -webkit-animation-fill-mode: forwards;
+}
+#gameOuter.unreadMessage {
+    animation: unreadAni .5s linear infinite, fadeInAni 0s;
+    -webkit-animation: unreadAni .5s linear infinite, fadeInAni 0s;
+    animation-fill-mode: forwards;
+    -webkit-animation-fill-mode: forwards;
+}
+
+@keyframes unreadAni {
+    0% {
+        border-color: #555;
+    }
+    50% {
+        border-color: red;
+    }
+    100% {
+        border-color: #555;
+    }
 }
 
 #container canvas {

@@ -125,10 +125,10 @@ const blocks = {
             errorMessage(`Your spawn is set to x:${player.spawnx} y:${player.spawny}`);
             $("#gameOuter").addClass("unreadMessage");
         }},
-    13: {image:"clock.png",hardness:-1,tool:tools.axe, minTool:toolLevels.none,name:"Spawn Changer",customPlace:function() {
+    13: {image:"clock.png",hardness:-1,tool:tools.axe, minTool:toolLevels.none,name:"Clock",customPlace:function() {
             errorMessage(`The time is ${new Date(parseInt((time/999)*86400)*1000).toLocaleTimeString()}`);
             $("#gameOuter").addClass("unreadMessage");
-        },removeOnPlace:false}
+        },removeOnPlace:false,requiresSight:false}
 }
 
 const nonSolidBlocks = [0,2];

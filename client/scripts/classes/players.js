@@ -31,7 +31,11 @@ class Player {
         blockPos.y = Math.ceil(blockPos.y);
         
         // Check the player can see where they want to place
-        if (this.lineOfSight(blockPos.x,blockPos.y)) {
+        var hasLineOfSight = true;
+        if (blocks[this.inventory.inv[this.inventory.holding].id].requiresSight == undefined || blocks[this.inventory.inv[this.inventory.holding].id].requiresSight) {
+            hasLineOfSight = this.lineOfSight(blockPos.x,blockPos.y);
+        }
+        if (hasLineOfSight) {
             // Check that the player has an item and it isn't a tool
             if (this.inventory.inv[this.inventory.holding] && !this.inventory.inv[this.inventory.holding].isTool) {
                 if (blocks[this.inventory.inv[this.inventory.holding].id].customPlace) {
@@ -40,7 +44,7 @@ class Player {
                     // Places block
                     setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
                 }
-                if (!!blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace) {
+                if (blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace == undefined || blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace) {
                     this.inventory.removeOne();
                 }
                 this.updateHotBar();
