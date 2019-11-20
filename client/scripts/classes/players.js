@@ -84,7 +84,7 @@ class Player {
             }
         }
         // Teleports the player to the position
-        console.log("Spawning" this.id " @ " + x + "," + currentY);
+        console.log("Spawning" + this.id + " @ " + x + "," + currentY);
         this.teleport(parseInt(x),parseInt(currentY+1));
     }
     
