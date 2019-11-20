@@ -6,45 +6,9 @@ var worldMap = undefined;
 
 var time = 0;
 
-const nonSolidBlocks = [0,2];
 
-// ENUM for tools
-const tools = {
-    pickaxe: 1,
-    axe: 2,
-    shovel: 3
-}
+var data = require('./data');
 
-// ENUM for tool levels
-const toolLevels = {
-    none: 0,
-    wood: {durability: 50,damage: 1},
-    stone: {durability: 100,damage: 2},
-    iron: {durability: 220,damage: 3},
-    diamond: {durability: 500,damage: 4}
-}
-
-// Dict to handle all block info
-/*
-    Stores:
-        - Image
-        - Hardness
-        - (Ideal) tool
-        - Min Tool
-*/
-const blocks = {
-    1: {image:"stone.jpg",hardness:10, tool:tools.pickaxe, minTool:toolLevels.wood,name:"Stone"},
-    2: {image:"stoneBackground.jpg", hardness:10, tool:tools.pickaxe, minTool:toolLevels.stone,name:"Stone Background"},
-    3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none,name:"Dirt"},
-    4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none,name:"Grass"},
-    5: {image:"bedrock.png",hardness:-1,name:"Bedrock"},
-    6: {image:"wood.png",hardness:8,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
-    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Leaf"},
-    8: {image:"iron.png",hardness:20,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
-    9: {image:"diamond.jpeg",hardness:30,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
-    10: {image:"planks.jpg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"},
-    11: {image:"bench.jpeg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Work Bench"}
-}
 
 // Function to convert a world map to a string
 function worldMapToStr(mapToUse) {
@@ -99,8 +63,8 @@ class blockObject {
     
     // Checks if the block is solid
     solid() {
-        for (var i = 0; i < nonSolidBlocks.length; i++) {
-            if (nonSolidBlocks[i] == this.blockID) {
+        for (var i = 0; i < data.nonSolidBlocks.length; i++) {
+            if (data.nonSolidBlocks[i] == this.blockID) {
                 return false;
             }
         }
@@ -109,7 +73,7 @@ class blockObject {
     
     // Gets the blocks hardness
     hardness() {
-        return blocks[this.blockID].hardness;
+        return data.blocks[this.blockID].hardness;
     }
     
     // Drops the blocks loot (not used in server yet)
@@ -406,20 +370,20 @@ function damageBlock(blockPos,playerHand) {
         // Checks if player is holding a tool
         if (playerHand != undefined && playerHand.isTool) {
             // If players tool is the correct tool deal extra damage
-            if (blocks[blockInfo.blockID].tool == playerHand.tool) {
+            if (data.blocks[blockInfo.blockID].tool == playerHand.tool) {
                 blockInfo.damage += playerHand.damage;
             }
         }
         // Damage the block
         blockInfo.damage += 1;
         // If block is broken
-        if (blockInfo.damage >= blocks[blockInfo.blockID].hardness) {
-            if (blocks[blockInfo.blockID].minTool != toolLevels.none) {
+        if (blockInfo.damage >= data.blocks[blockInfo.blockID].hardness) {
+            if (data.blocks[blockInfo.blockID].minTool != data.toolLevels.none) {
                 // Checks that the player is holding a tool, that is the right too for the job
                 if (playerHand != undefined &&
                     playerHand.isTool &&
-                    playerHand.level >= blocks[blockInfo.blockID].minTool &&
-                    blocks[blockInfo.blockID].tool == playerHand.tool) {
+                    playerHand.level >= data.blocks[blockInfo.blockID].minTool &&
+                    data.blocks[blockInfo.blockID].tool == playerHand.tool) {
                     //blockInfo.dropLoot();
                     return 2;
                 }
@@ -489,7 +453,7 @@ module.exports = {
         worldMap = strToWorldMap(world);
     },
     getTime: function() {
-        return time % 100;
+        return time % 1000;
     },
     incTime: function() {
         time += 1;

@@ -104,7 +104,8 @@ function setupGame() {
     });
     
     socket.on('time', function(data) {
-        updateTime(data.time);
+        time = data.time;
+        updateTime();
     });
     
     socket.on('messageRecieve', function(message) {

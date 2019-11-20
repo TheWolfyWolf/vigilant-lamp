@@ -40,7 +40,9 @@ class Player {
                     // Places block
                     setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
                 }
-                this.inventory.removeOne();
+                if (!!blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace) {
+                    this.inventory.removeOne();
+                }
                 this.updateHotBar();
             }
         }

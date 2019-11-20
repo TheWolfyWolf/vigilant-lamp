@@ -36,22 +36,26 @@ function craftable(hasBench,returnAllRecipes) {
     return {craftable:craftableOut,uncraftable:requiresWorkbench};
 }
 
-function updateCraftable() {
-    
-    $("#allRecipesToggle span").html(allRecipesVisible ? "All Recipes" : "Craftable Recipes")
-    
-    var hasBench = false;
+function playerHasBench() {
     var pPos = player.pos();
     var i = 0;
     for (var x = parseInt(pPos.x)-5; x < parseInt(pPos.x)+5; x++) {
         for (var y = parseInt(pPos.y)-5; y < parseInt(pPos.y)+5; y++) {
             if (worldMap && worldMap[x] && worldMap[x][y] && worldMap[x][y].blockID == 11) {
                 if (player.lineOfSight(x,y)) {
-                    hasBench = true;
+                    return true;
                 }
             }
         }
     }
+    return false;
+}
+
+function updateCraftable() {
+    
+    $("#allRecipesToggle span").html(allRecipesVisible ? "All Recipes" : "Craftable Recipes")
+    
+    var hasBench = playerHasBench();
     
     var craftableResults = craftable(hasBench,allRecipesVisible)
     var craftableItems = craftableResults.craftable;
@@ -139,9 +143,10 @@ function updateCraftable() {
 
 function craft(recipeID) {
     var recipe = recipes[recipeID];
+    var hasBench = playerHasBench();
     
     var canAfford = false;
-    var craftableItems = craftable().craftable;
+    var craftableItems = craftable(hasBench,false).craftable;
     for (var i = 0; i < craftableItems.length; i++) {
         if (craftableItems[i].id == recipeID) {
             canAfford = true;

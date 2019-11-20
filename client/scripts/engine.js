@@ -296,7 +296,9 @@ function onKeyDown(key) {
                     break;
                 case 81:
                     // Q pressed, place current block (if possible)
-                    player.placeHand();
+                    if (!(invOpen || craftOpen || chatOpen)) {
+                        player.placeHand();
+                    }
                     break;
                 case 67:
                     // C pressed, open crafting
@@ -557,11 +559,11 @@ function createColor(color,percent) {
     var b = Number(parseInt(color.b * percent)).toString(16).padStart(2,"0");
     return `0x${r}${g}${b}`;
 }
-function updateTime(time) {
-    var timeOffMidday = Math.abs(time-50);
-    var daylightPercent = 1-(timeOffMidday)/50;
+function updateTime() {
+    var timeOffMidday = Math.abs(time-500);
+    var daylightPercent = 1-(timeOffMidday)/500;
     // Time 0 = midnight
-    // Time 50 = midday
+    // Time 500 = midday
     app.renderer.backgroundColor = createColor({r:16,g:153,b:187},daylightPercent);
     blocksTint = createColor({r:255,g:255,b:255},(daylightPercent+1)/2);
     reRender();

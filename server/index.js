@@ -249,6 +249,7 @@ rootDir = resolve('../');
 app.use('/scripts', express.static(rootDir + '/client/scripts'));
 app.use('/styles', express.static(rootDir + '/client/styles'));
 app.use('/images', express.static(rootDir + '/client/images'));
+app.use('/data', express.static(rootDir + '/server/data.js'));
 app.use(express.static(rootDir + '/client'));
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
@@ -316,10 +317,15 @@ loadWorld(function() {
     saveWorld();
 });
 
+/* Day Length in Mins */
+var dayLength = 10;
+
+// Handle Times
+dayLength *= 60;
 setInterval(function(){
     world.incTime();
     io.emit("time",{time:world.getTime()});
-}, 1*200);
+}, dayLength);
 
 // Handle sockets
 io.on('connection', function(socket){
