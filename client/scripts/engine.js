@@ -110,6 +110,37 @@ function startGame() {
     $("#openInv").on("click",toggleInv);
     $("#allRecipesToggle img").on("click",toggleAllRecipes);
     
+    $(".item.item-1").on("click",function() {
+        if (worldRecieved && playerInfoRecieved) {
+            player.inventory.holding = 0;
+            player.updateHotBar();
+        }
+    });
+    $(".item.item-2").on("click",function() {
+        if (worldRecieved && playerInfoRecieved) {
+            player.inventory.holding = 1;
+            player.updateHotBar();
+        }
+    });
+    $(".item.item-3").on("click",function() {
+        if (worldRecieved && playerInfoRecieved) {
+            player.inventory.holding = 2;
+            player.updateHotBar();
+        }
+    });
+    $(".item.item-4").on("click",function() {
+        if (worldRecieved && playerInfoRecieved) {
+            player.inventory.holding = 3;
+            player.updateHotBar();
+        }
+    });
+    $(".item.item-5").on("click",function() {
+        if (worldRecieved && playerInfoRecieved) {
+            player.inventory.holding = 4;
+            player.updateHotBar();
+        }
+    });
+    
     
 }
 
@@ -117,15 +148,28 @@ function startGame() {
 function gameTick() {
     // Checks if inventory is open and player exists
     if (player) {
+        
+        var lastPos = player.prevpos;
+        var currentPos = player.pos();
+        
+        var changeX = lastPos.x-currentPos.x;
+        var changeY = lastPos.y-currentPos.y;
+        var dist = Math.sqrt(changeX**2 + changeY**2);
+        if (dist > 1) {
+            player.teleport(lastPos.x,lastPos.y);
+        }
+        player.prevpos = player.pos();
+        
         // Sends players location to the server
         player.updateLocation();
         
         if ((player.pos().y % moveSpeed > 0.03 && player.pos().y % moveSpeed < 0.3) ||
             (player.pos().x % moveSpeed > 0.03 && player.pos().x % moveSpeed < 0.3)) {
             reRender();
-            app.renderer.render(app.stage);
             //player.teleport(Math.ceil(player.pos().x),Math.ceil(player.pos().y));
         }
+        
+        
         
         if (!(invOpen || craftOpen || chatOpen)) {
 
@@ -186,7 +230,7 @@ function gameLoop(delta){
 function reRender() {
     renderedMinX = -100;
     renderedMaxX = -100;
-    renderWorld();
+    renderWorld(player.pos().x);
 }
 
 // Function to render world
@@ -223,7 +267,6 @@ function renderWorld(pX) {
                         } else {
                             // Renders middle blocks
                             verticalChunk[y].load();
-                            
                         }
                     }
                 }
@@ -554,17 +597,26 @@ function runCommand(command,args) {
 }
 
 function createColor(color,percent) {
+    if (percent > 1) {
+        percent = 1;
+    }
     var r = Number(parseInt(color.r * percent)).toString(16).padStart(2,"0");
     var g = Number(parseInt(color.g * percent)).toString(16).padStart(2,"0");
     var b = Number(parseInt(color.b * percent)).toString(16).padStart(2,"0");
     return `0x${r}${g}${b}`;
 }
 function updateTime() {
-    var timeOffMidday = Math.abs(time-500);
-    var daylightPercent = 1-(timeOffMidday)/500;
-    // Time 0 = midnight
-    // Time 500 = midday
-    app.renderer.backgroundColor = createColor({r:16,g:153,b:187},daylightPercent);
-    blocksTint = createColor({r:255,g:255,b:255},(daylightPercent+1)/2);
-    reRender();
+    if (worldRecieved && playerInfoRecieved) {
+        var timeOffMidday = Math.abs(time-500);
+        var daylightPercent = 1-(timeOffMidday)/500;
+        // Time 0 = midnight
+        // Time 500 = midday
+        app.renderer.backgroundColor = createColor({r:16,g:153,b:187},daylightPercent);
+        if (player.inventory.inv[player.inventory.holding] && player.inventory.inv[player.inventory.holding].id == 15) {
+            player.sprite.tint = createColor({r:255,g:255,b:255},1);
+        } else {
+            player.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+.8)/2);
+        }
+        reRender();
+    }
 }

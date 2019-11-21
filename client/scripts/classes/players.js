@@ -14,6 +14,7 @@ class Player {
         this.updateHotBar();
         this.spawnx = x;
         this.spawny = y;
+        this.prevpos = {x:x,y:y}
     }
     // Changes the players spawn
     setSpawn(x,y) {

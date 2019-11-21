@@ -38,6 +38,20 @@
 }
 .buttonsContainer span.pageNumber {
     font-size: 6vh;
+    width: 10%;
+    display: inline-block;
+}
+
+.buttonsContainer .leftButtonContainer, .buttonsContainer .rightButtonContainer {
+    width: 40%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.buttonsContainer .leftButtonContainer {
+    text-align: right;
+}
+.buttonsContainer .rightButtonContainer {
+    text-align: left;
 }
 
 .pageContainer {
@@ -61,6 +75,8 @@
     transition: transform 1.4s;
     transform: rotateY(0deg);
     -webkit-transform: rotateY(0deg);
+    border-radius: 10%;
+    border: .5vw solid black;
 }
 
 #page1 {

@@ -41,7 +41,17 @@ class blockObject {
             this.sprite.visible = true;
             this.sprite.x = this.x*blockSize;
             this.sprite.y = app.screen.height - this.y*blockSize;
-            this.sprite.tint = blocksTint;
+            
+            var timeOffMidday = Math.abs(time-500);
+            var daylightPercent = (1-timeOffMidday/500);
+            
+            if (player.inventory.inv[player.inventory.holding] && player.inventory.inv[player.inventory.holding].id == 15) {
+                var changeX = player.pos().x-this.x;
+                var changeY = player.pos().y-this.y;
+                var dist = Math.sqrt(changeX**2 + changeY**2);
+                if (1/((dist||1)/4) > daylightPercent) daylightPercent = 1/((dist||1)/4);
+            }
+            this.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+.3)/2);
         }
     }
     

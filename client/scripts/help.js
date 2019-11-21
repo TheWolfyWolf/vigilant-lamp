@@ -1,6 +1,8 @@
 
 var currentPage = 0;
+
 var pages = ["Help Page 1", "Help Page 2", "Help Page 3", "Help Page 4"];
+
 $(document).ready(function() {
     $("#nextButton").on("click",function() {
         if (currentPage < pages.length-1) {
@@ -18,14 +20,9 @@ $(document).ready(function() {
                 $("#nextButton").removeClass("disabled");
             }
             $("#prevButton").removeClass("disabled");
-            $(".pageNumber").html(currentPage+1);
             
-            window.setTimeout(function() {
-                $("#page1").css('transform',`rotateY(${currentPage*-180}deg)`);
-                $("#page1").css('-webkit-transform',`rotateY(${currentPage*-180}deg)`);
-                $("#page2").css('transform',`rotateY(${(currentPage*-180)+180}deg)`);
-                $("#page2").css('-webkit-transform',`rotateY(${(currentPage*-180)+180}deg)`); 
-            },200);
+            $(".pageNumber").html(currentPage+1);
+            window.setTimeout(updatePages,250);
         }
     });
     $("#prevButton").on("click",function() {
@@ -44,14 +41,9 @@ $(document).ready(function() {
                 $("#prevButton").removeClass("disabled");
             }
             $("#nextButton").removeClass("disabled");
-            $(".pageNumber").html(currentPage+1);
             
-            window.setTimeout(function() {
-                $("#page1").css('transform',`rotateY(${currentPage*-180}deg)`);
-                $("#page1").css('-webkit-transform',`rotateY(${currentPage*-180}deg)`);
-                $("#page2").css('transform',`rotateY(${(currentPage*-180)+180}deg)`);
-                $("#page2").css('-webkit-transform',`rotateY(${(currentPage*-180)+180}deg)`); 
-            },200);
+            $(".pageNumber").html(currentPage+1);
+            window.setTimeout(updatePages,250);
         }
     });
     $("#page1").html(pages[0]);
@@ -59,5 +51,8 @@ $(document).ready(function() {
 });
 
 function updatePages() {
-    
+    $("#page1").css('transform',`rotateY(${currentPage*-180}deg)`);
+    $("#page1").css('-webkit-transform',`rotateY(${currentPage*-180}deg)`);
+    $("#page2").css('transform',`rotateY(${(currentPage*-180)+180}deg)`);
+    $("#page2").css('-webkit-transform',`rotateY(${(currentPage*-180)+180}deg)`);
 }
