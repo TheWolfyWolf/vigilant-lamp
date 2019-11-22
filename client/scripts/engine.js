@@ -114,6 +114,10 @@ function startGame() {
     $("#openInv").on("click",toggleInv);
     $("#allRecipesToggle img").on("click",toggleAllRecipes);
     
+    $("#messagesInput").keydown(function(e) {
+        if (e.which == 27 && chatOpen) toggleChat();
+    });
+    
     $(".item.item-1").on("click",function() {
         if (worldRecieved && playerInfoRecieved) {
             player.inventory.holding = 0;
@@ -357,6 +361,9 @@ function onKeyDown(key) {
                     // C pressed, open crafting
                     toggleChat();
                     break;
+                case 27:
+                    if (chatOpen) toggleChat();
+                    break;
                 default:
                     console.log(key.keyCode);
                     break;
@@ -373,10 +380,13 @@ function toggleChat() {
         $("#chat").removeClass("show").addClass("hide");
         $("#inventory").removeClass("show").addClass("hide");
         $("#crafting").removeClass("show").addClass("hide");
+        $("#messagesInput").blur();
     } else  {
-        // Opening crafting
+        // Opening chat
         invOpen = false;
         craftOpen = false;
+        
+        $("#messagesInput").focus();
         
         $("#gameOuter").removeClass("unreadMessage");
         
