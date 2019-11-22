@@ -112,6 +112,10 @@ function setupGame() {
         updateTime();
     });
     
+    socket.on('playerHolding', function(data) {
+        otherPlayers.changeHand(data.id,data.item);
+    });
+    
     socket.on('messageRecieve', function(message) {
         /*
         <div class="message"><span class="from">${message.from}:</span>&nbsp;<span class="contents">${message.message}</span></div>
@@ -165,7 +169,9 @@ function blockDeleted(pos) {
 function updateInv() {
     if (player) {
         var inventory = player.inventory.toString();
-        socket.emit('updateInv', inventory);
+        var item = undefined;
+        if (player.inventory.inv[player.inventory.holding]) item = player.inventory.inv[player.inventory.holding].toString();
+        socket.emit('updateInv', {inv:inventory,holding:item});
     }
 }
 

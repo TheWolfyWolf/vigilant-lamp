@@ -164,7 +164,7 @@ class Player {
     
     // Move Left
     moveLeft() {
-        if (this.sprite.x > 0) {
+        if (this.sprite.x - blockSize*moveSpeed > 0) {
             if (this.sprite.scale.x > 0) this.sprite.scale.x *= -1;
             this.sprite.x -= blockSize * moveSpeed;
             this.hand.y += Math.floor((Math.random()*11)+1)-6;
@@ -197,11 +197,11 @@ class Player {
         allowLargeMove = true;
         if (relative == true) {
             // Works out the x position relative to the player
-            this.sprite.x = (this.pos().x + x)*(blockSize-0.5);
+            this.sprite.x = (this.pos().x + x-0.5)*blockSize;
             this.sprite.y = app.screen.height - ((this.pos().y + y)*blockSize);
         } else {
             // Teleports the player to the location specified
-            this.sprite.x = x*(blockSize-0.5);
+            this.sprite.x = (x-0.5)*blockSize;
             this.sprite.y = app.screen.height - y*blockSize;
         }
     }
@@ -604,16 +604,19 @@ class OtherPlayer {
         this.sprite = PIXI.Sprite.from('images/stoneBackground.jpg');
         this.sprite.width = blockSize;
         this.sprite.height = 2* blockSize;
-        this.sprite.x = pos.x*blockSize;
+        this.sprite.x = pos.x*(blockSize+0.5);
         this.sprite.y = app.screen.height - pos.y*blockSize;
+        this.sprite.anchor.x = 0.5;
         playersContainer.addChild(this.sprite);
         this.sprite.interactive = true;
         this.sprite.on('click', damagePlayer)
         this.sprite.id = id;
+        this.hand = createPlayerHand();
+        this.sprite.addChild(this.hand);
     }
     // Set Location
     setLoc(pos) {
-        this.sprite.x = pos.x*blockSize;
+        this.sprite.x = (pos.x+0.5)*blockSize;
         this.sprite.y = app.screen.height - pos.y*blockSize;
     }
 }
@@ -654,6 +657,21 @@ class Players {
             if (this.players.hasOwnProperty(key)) {
                 if (!ids.includes(key)) {
                     this.removePlayer(key);
+                }
+            }
+        }
+    }
+    
+    changeHand(id,item) {
+        if (id in this.players) {
+            if (item == undefined) {
+                this.players[id].hand.texture = PIXI.Texture.EMPTY;
+            } else {
+                item = JSON.parse(item);
+                if (item.isTool) {
+                    this.players[id].hand.texture = PIXI.Texture.from(`images/${toolImage(tools[item.id])}`);
+                } else {
+                    this.players[id].hand.texture = PIXI.Texture.from(`images/${blocks[item.id].image}`);
                 }
             }
         }

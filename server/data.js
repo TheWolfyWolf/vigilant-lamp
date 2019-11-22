@@ -102,8 +102,8 @@ var recipes = {
         requiresBench: false
     },
     17: {
-        input: [{id:14, count: 2},{id:8,count:1}],
-        output: [{isTool:false,id:15,count:4}],
+        input: [{id:14, count: 2},{id:7,count:1}],
+        output: [{isTool:false,id:15,count:1}],
         requiresBench: false
     }
 }
