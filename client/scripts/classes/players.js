@@ -66,18 +66,23 @@ class Player {
                 y = worldMap[0].length += 100;
             }
         }
+        
+        
         var down = true;
         var currentY = y;
         // Checks if the block beneath the player is solid, if not moves them down 1 block
         //  Until y=0, then starts going up
         var working = true;
         while (working) {
-            if ((worldMap[parseInt(x)] && worldMap[parseInt(x)][parseInt(currentY-1)] && worldMap[parseInt(x)][parseInt(currentY-1)].solid())) {
+            if ((worldMap[parseInt(x)] && worldMap[parseInt(x)][parseInt(currentY-1)] && worldMap[parseInt(x)][parseInt(currentY-1)].solid()) && 
+                (worldMap[parseInt(x)][parseInt(currentY)] == undefined || nonSolidBlocks.indexOf(worldMap[parseInt(x)][parseInt(currentY)].blockID) != -1) && 
+                (worldMap[parseInt(x)][parseInt(currentY+1)] == undefined || nonSolidBlocks.indexOf(worldMap[parseInt(x)][parseInt(currentY+1)].blockID) != -1)) {
+                console.log(`${x} ${currentY}`);
                 working = false;
             }
-            if (down) {
+            if (working && down) {
                 currentY -= 1;
-            } else {
+            } else if (working) {
                 currentY += 1;
             }
             if (currentY < 1) {
@@ -104,7 +109,9 @@ class Player {
             // Adds/Removes selected tag from each item
             if (i == this.inventory.holding) {
                 $(`.item.item-${i+1}`).addClass("selected");
-                if (hotbar[i] != undefined) {
+                if (hotbar[i] == undefined) {
+                    this.hand.texture = PIXI.Texture.EMPTY;
+                } else {
                     if (hotbar[i].isTool) {
                         this.hand.texture = PIXI.Texture.from(`images/${toolImage(hotbar[i])}`);
                     } else {

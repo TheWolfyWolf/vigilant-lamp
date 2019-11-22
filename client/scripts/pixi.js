@@ -60,7 +60,7 @@ function createPlayer() {
 
 // Creates a player
 function createPlayerHand() {
-    const playerHand = PIXI.Sprite.from('images/diamond.jpeg');
+    const playerHand = new PIXI.Sprite();
     
     playerHand.scale.x = 1;
     playerHand.scale.y = 1;
