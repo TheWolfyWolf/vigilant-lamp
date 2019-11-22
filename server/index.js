@@ -118,6 +118,13 @@ function loadWorld(callback) {
     });
 }
 
+// Function to chagne players spawn
+function changePlayerSpawn(userid,x,y) {
+    let userdb = new sqlite3.Database('dbs/users.db');
+    let sql = "UPDATE `users` SET `spawnx`='" + x + "',`spawny`='" + y + "' WHERE `userid`='" + userid + "';";
+    userdb.run(sql)
+}
+
 // Function to save a users position in the database
 function saveUserPosition(userid,x,y) {
     let userdb = new sqlite3.Database('dbs/users.db');
@@ -142,7 +149,7 @@ function savePlayerHearts(userid,hearts) {
 // Function to get a players info from userid
 function getPlayerInfo(userid,callback) {
     let userdb = new sqlite3.Database('dbs/users.db');
-    let sql = "SELECT `inventory`,`spawnx`,`spawny`,`health`,`lastx`,`lasty` FROM `users` WHERE `userid`='" + userid + "';";
+    let sql = "SELECT `username`,`inventory`,`spawnx`,`spawny`,`health`,`lastx`,`lasty` FROM `users` WHERE `userid`='" + userid + "';";
     userdb.all(sql, function(err,rows) {
         if (err) {
             callback(false);
@@ -242,6 +249,7 @@ rootDir = resolve('../');
 app.use('/scripts', express.static(rootDir + '/client/scripts'));
 app.use('/styles', express.static(rootDir + '/client/styles'));
 app.use('/images', express.static(rootDir + '/client/images'));
+app.use('/data', express.static(rootDir + '/server/data.js'));
 app.use(express.static(rootDir + '/client'));
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
@@ -275,12 +283,12 @@ app.post('/game', function(req, res) {
     checkLogin(req.body.user,req.body.pass,function(loggedIn,user) {
         if (loggedIn) {
             console.log(`loggedIn: ${loggedIn}`);
-            res.sendFile(rootDir + '/public/game.html');
+            res.sendFile(rootDir + '/client/game.html');
             userid = user.userid;
             
         } else {
             console.log(`failedLogIn: ${loggedIn}`);
-            res.sendFile(rootDir + '/public/login.html');
+            res.sendFile(rootDir + '/client/login.html');
         }
     });
 });
@@ -289,7 +297,12 @@ app.post('/game', function(req, res) {
 app.get(['/login','/','/signup','/game'], function(req, res){
     console.log(req._parsedUrl.pathname);
     console.log("@Login.html");
-    res.sendFile(rootDir + '/public/login.html');
+    res.sendFile(rootDir + '/client/login.html');
+});
+app.get('/help', function(req, res){
+    console.log(req._parsedUrl.pathname);
+    console.log("@help.html");
+    res.sendFile(rootDir + '/client/help.html');
 });
 // Handles a post request sent to signupHandle
 app.post('/signupHandle', function(req,res) {
@@ -309,6 +322,16 @@ loadWorld(function() {
     saveWorld();
 });
 
+/* Day Length in Mins */
+var dayLength = 10;
+
+// Handle Times
+dayLength *= 60;
+setInterval(function(){
+    world.incTime();
+    io.emit("time",{time:world.getTime()});
+}, dayLength);
+
 // Handle sockets
 io.on('connection', function(socket){
     // Stores users id in the socket
@@ -320,6 +343,12 @@ io.on('connection', function(socket){
     }
     // Add the new user to the players list
     player.addPlayer(socket.userid);
+    
+    getPlayerInfo(socket.userid, function(info) {
+        if (info) {
+            io.emit("messageRecieve",{message:`${info.username} has joined the server`,server:true});
+        }
+    });
     
     // On user disconnect
     socket.on('disconnect', function() {
@@ -337,6 +366,11 @@ io.on('connection', function(socket){
             }
         });
         socket.broadcast.emit("allActivePlayers",allPlayers);
+        getPlayerInfo(socket.userid, function(info) {
+            if (info) {
+                io.emit("messageRecieve",{message:`${info.username} has left the server`,server:true});
+            }
+        });
     });
     
     // On Request Mobs
@@ -353,6 +387,12 @@ io.on('connection', function(socket){
         socket.broadcast.emit("playerLocation",{id: socket.userid,pos:pos});
         // Save players location
         saveUserPosition(socket.userid,pos.x,pos.y);
+    });
+    
+    // On player spawn update
+    socket.on('spawnChange', function(pos) {
+        // Save players location
+        changePlayerSpawn(socket.userid,pos.x,pos.y);
     });
     
     socket.on('hurtPlayer', function(info) {
@@ -433,9 +473,15 @@ io.on('connection', function(socket){
         savePlayerHearts(socket.userid,hearts);
     });
     
-    // IMPLEMENT MESSAGING
-    socket.on('messageSent', function(msg){
-        io.emit("messageRecieve",msg);
+    socket.on('messageSend', function(message){
+        if (message.trim().length > 0) {
+            getPlayerInfo(socket.userid, function(info) {
+                if (info) {
+                    console.log(`Message from ${info.username} saying: ${message}`);
+                    io.emit("messageRecieve",{from:info.username,message:message,server:false});
+                }
+            });
+        }
     });
     
     // Handle client requesting a ping

@@ -1,37 +1,35 @@
-// Global variables
-var socket;
-
-var worldRecieved = false;
-var playerInfoRecieved = false;
-
 // Called when the document is ready
 function setupGame() {
     // Connects to server
     socket = io();
+
+    // Will attempt to request any unrequested information
+    (function requestInfo() {
+        console.log("Requesting information");
+        if (!worldRecieved) socket.emit('worldRequest', true);
+        if (!playerInfoRecieved) socket.emit('playerRequest', true);
+        if (!(playerInfoRecieved && worldRecieved)) setTimeout(requestInfo,1500);
+    })();
     
-    // Requests the world
-    socket.emit('worldRequest', true);
     // Handles recieving the world
     socket.on('currentWorld', function(world){
         // Converts the world to a worldMap
         worldMap = strToWorldMap(world);
         // Updates the world
-        updateWorld();
-        // Says the world has been recieved
-        worldRecieved = true;
+        updateWorld().then(function() {
+            // Says the world has been recieved
+            worldRecieved = true;
+
+            // If world recieved and playerInfo recieved then starts the game
+            if (worldRecieved && playerInfoRecieved) {
+                startGame();
+            }
+        });;
         
-        // If world recieved and playerInfo recieved then starts the game
-        if (worldRecieved && playerInfoRecieved) {
-            startGame();
-        }
     });
     
-    // Requests the player
-    socket.emit('playerRequest', true);
     // Handles recieving the player
     socket.on('currentPlayer', function(playerInfo){
-        
-        console.log(playerInfo);
         
         // Loads a player using the info requested
         loadPlayer(playerInfo);
@@ -60,7 +58,6 @@ function setupGame() {
     // Handles a block being places
     socket.on('blockPlaced', function(info){
         setBlock(info.blockid,info.pos);
-        console.log("Block Placed");
     });
     
     // Handles a ping return
@@ -95,7 +92,6 @@ function setupGame() {
         // Makes sure the world has been rendered
         if (!initialRender) {
             // Logs that a player left, then removes the player
-            console.log("Player " + id + " left");
             otherPlayers.removePlayer(id);
         }
     });
@@ -103,7 +99,6 @@ function setupGame() {
     // Handles making sure only active players are visible
     socket.on('allActivePlayers', function(ids) {
         if (!initialRender) {
-            console.log("Fixing active players");
             otherPlayers.allActive(ids);
         }
     });
@@ -111,10 +106,54 @@ function setupGame() {
     socket.on('hurtMe', function(damage) {
         player.damage(damage);
     });
+    
+    socket.on('time', function(data) {
+        time = data.time;
+        updateTime();
+    });
+    
+    socket.on('messageRecieve', function(message) {
+        /*
+        <div class="message"><span class="from">${message.from}:</span>&nbsp;<span class="contents">${message.message}</span></div>
+        */
+        if (!chatOpen) {
+                $("#gameOuter").addClass("unreadMessage");
+        }
+        var date = new Date();
+        var dateStr = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        if (message.server) {
+            var messages = $("#messages").html();
+            messages += `<div class="message"><span class='time'>[${dateStr}]</span><span class="server">${message.message}</span></div>`;
+            $("#messages").html(messages);
+        } else {
+            var messages = $("#messages").html();
+            messages += `<div class="message"><span class='time'>[${dateStr}]</span><span class="from">${message.from}:</span>&nbsp;<span class="contents">${message.message}</span></div>`;
+            $("#messages").html(messages);
+        }
+    });
+}
+
+function sendMessage() {
+    var message = $("#messagesInput").val();
+    $("#messagesInput").val("");
+    if (message[0] == "/") {
+        // Is a command
+        var fullCommand = message.substr(1,message.length-1);
+        var commandParts = fullCommand.split(" ");
+        var command = commandParts[0].toLowerCase();
+        var args = commandParts.slice(1,commandParts.length);
+        runCommand(command,args);
+    } else {
+        // Is a message
+        socket.emit("messageSend",message);
+    }
+}
+
+function spawnChanged() {
+    socket.emit("spawnChange",{x:player.spawnx,y:player.spawny});
 }
 
 function hurtPlayer(id,damage) {
-    console.log(id);
     socket.emit("hurtPlayer",{id:id,damage:damage});
 }
 

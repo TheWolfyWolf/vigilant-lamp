@@ -9,9 +9,22 @@
         <script src="scripts/bump.js"></script>
 
         <!-- Game Script Files -->
+        <!-- Classes -->
+        <script src="scripts/classes/blocks.js"></script>
+        <script src="scripts/classes/players.js"></script>
+        <script src="scripts/classes/inventory.js"></script>
+        
+        <!-- Data -->
+        <script src="data"></script>
+        <script src="scripts/globals.js"></script>
+        
+        <!-- Handlers -->
         <script src="scripts/pixi.js"></script>
-        <script src="scripts/WorldGen.js"></script>
+        <script src="scripts/worldHandler.js"></script>
         <script src="scripts/serverConnect.js"></script>
+        <script src="scripts/crafting.js"></script>
+        
+        <!-- Engine -->
         <script src="scripts/engine.js"></script>
         
         <!-- Basic Styling -->
@@ -47,27 +60,89 @@
             </div>
             <!-- Container for game -->
             <div id="gameOuter">
-                <div id="container" class="show"></div>
+                <div id="container" class=""></div>
                 <div id="inventory" class="hide">
                     <center>
-                        <ul class="invSortable">
-                            <li class="invSortableItem">Item 1</li>
-                            <li class="invSortableItem">Item 2</li>
-                            <li class="invSortableItem">Item 3</li>
-                            <li class="invSortableItem">Item 4</li>
-                            <li class="invSortableItem">Item 5</li>
-                            <li class="invSortableItem">Item 6</li>
-                            <li class="invSortableItem">Item 7</li>
-                            <li class="invSortableItem">Item 8</li>
-                            <li class="invSortableItem">Item 9</li>
-                            <li class="invSortableItem">Item 10</li>
-                            <li class="invSortableItem">Item 11</li>
-                            <li class="invSortableItem">Item 12</li>
-                            <li class="invSortableItem">Item 13</li>
-                            <li class="invSortableItem">Item 14</li>
-                            <li class="invSortableItem">Item 15</li>
-                        </ul>
+                        <div class="invRow">
+                            <div id="10" class="invItem"><img /><span>0</span></div>
+                            <div id="11" class="invItem"><img /><span>0</span></div>
+                            <div id="12" class="invItem"><img /><span>0</span></div>
+                            <div id="13" class="invItem"><img /><span>0</span></div>
+                            <div id="14" class="invItem"><img /><span>0</span></div>
+                        </div>
+                        <div class="invRow">
+                            <div id="5" class="invItem"><img /><span>0</span></div>
+                            <div id="6" class="invItem"><img /><span>0</span></div>
+                            <div id="7" class="invItem"><img /><span>0</span></div>
+                            <div id="8" class="invItem"><img /><span>0</span></div>
+                            <div id="9" class="invItem"><img /><span>0</span></div>
+                        </div>
+                        <div class="invRow hotbarRow">
+                            <div id="0" class="invItem"><img /><span>0</span></div>
+                            <div id="1" class="invItem"><img /><span>0</span></div>
+                            <div id="2" class="invItem"><img /><span>0</span></div>
+                            <div id="3" class="invItem"><img /><span>0</span></div>
+                            <div id="4" class="invItem"><img /><span>0</span></div>
+                        </div>
+                        <div class="invRow">
+                            <div id="deleteItem" title="Destroy Item" class="invItem"><img src="images/delete.png" /><span>DELETE</span></div>
+                        </div>
                     </center>
+                </div>
+                <div id="crafting" class="hide">
+                    <div title="Toggle All Recipes" id="allRecipesToggle">
+                        <img src="images/book.png"/>
+                        <span>
+                            All Recipes
+                        </span>
+                    </div>
+                    <center>
+                        <div class="craftRow">
+                            <div class="craftItem"><img /><span>0</span></div>
+                            <div class="craftItem"><img /><span>0</span></div>
+                            <div class="craftItem"><img /><span>0</span></div>
+                            <div class="craftItem"><img /><span>0</span></div>
+                            <div class="craftItem craftReturn"><img /><span>0</span></div>
+                        </div>
+                    </center>
+                </div>
+                <div id="chat" class="hide">
+                    <div id="messages">
+                    </div>
+                    <div id="typeArea">
+                        <form action="#" onsubmit="sendMessage();return false;">
+                            <input id="messagesInput" type="text" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="loadingBox">
+                <div>
+                    <span id="loadingMessage">
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        <span class="loadingIcon">&nbsp;</span>
+                        
+                        <span class="completeIcon completeIcon1">&nbsp;</span>
+                        <span class="completeIcon completeIcon2">&nbsp;</span>
+                        <span class="completeIcon completeIcon3">&nbsp;</span>
+                        <span class="completeIcon completeIcon4">&nbsp;</span>
+                        Loading
+                    </span>
                 </div>
             </div>
         </div>

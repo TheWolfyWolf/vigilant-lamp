@@ -1,41 +1,5 @@
-// Global variables
-var blockSize;
-var app;
-var blocksPerWidth = 20;
-
-// ENUM for tools
-const tools = {
-    pickaxe: 1,
-    axe: 2,
-    shovel: 3
-}
-
-// ENUM for tool levels
-const toolLevels = {
-    none: 0,
-    wood: {durability: 50,damage: 1},
-    stone: {durability: 100,damage: 2},
-    diamond: {durability: 500,damage: 4}
-}
-
-// Dict to handle all block info
-/*
-    Stores:
-        - Image
-        - Hardness
-        - (Ideal) tool
-        - Min Tool
-*/
-const blocks = {
-    1: {image:"stone.jpg",hardness:10, tool:tools.pickaxe, minTool:toolLevels.wood},
-    2: {image:"stoneBackground.jpg", hardness:10, tool:tools.pickaxe, minTool:toolLevels.stone},
-    3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none},
-    4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none},
-    5: {image:"bedrock.png",hardness:-1},
-    6: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none},
-    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none},
-    8: {image:"leaf.png",hardness:1,tool:tools.pickaxe, minTool:toolLevels.wood},
-    9: {image:"wood.png",hardness:1,tool:tools.axe, minTool:toolLevels.none}
+function toolImage(tool) {
+    return `tools/${hoverName(tool).replace(" ","").toLowerCase()}.png`;
 }
 
 // Function to get position of a sprite in blocks not standard x,y
@@ -86,10 +50,29 @@ function createPlayer() {
     
     // Makes the player 1 block wide and 2 tall
     newPlayer.width = blockSize;
-    newPlayer.height = 2* blockSize;
+    newPlayer.height = 2 * blockSize;
+    
+    newPlayer.anchor.x = 0.5;
     
     // Returns the new player
     return newPlayer;
+}
+
+// Creates a player
+function createPlayerHand() {
+    const playerHand = new PIXI.Sprite();
+    
+    playerHand.scale.x = 1;
+    playerHand.scale.y = 1;
+    playerHand.width = blockSize*4;
+    playerHand.height = blockSize*2;
+    playerHand.anchor.x = 0.5;
+    playerHand.anchor.y = 0.5;
+    playerHand.y = 2*blockSize;
+    playerHand.x = 2.25*blockSize;
+    
+    // Returns the players hand
+    return playerHand;
 }
 
 // Build the world
@@ -99,7 +82,6 @@ function buildWorld() {
         var innerMap = worldMap[x];
         // Goes thru every block in the vertical chunk
         for (var y = 0; y < innerMap.length; y++) {
-            //console.log(innerMap[y] + " - " + (innerMap[y] && innerMap[y].blockID != 0 && innerMap[y].sprite == undefined));
             // If the block exists, isn't air, and doesn't have a sprite
             if (innerMap[y] && innerMap[y].blockID != 0 && innerMap[y].sprite == undefined) {
                 // Creates a sprite for the block
@@ -115,7 +97,7 @@ function buildWorld() {
 
 // Update world
 // (destorys and rebuilds)
-function updateWorld() {
+async function updateWorld() {
     // Checks world map exists
     if (worldMap) {
         // Goes thru every vertical chunk
@@ -170,7 +152,6 @@ function setBlock(blockid,pos) {
             socket.emit('blockPlaced', {blockid: blockid,pos:pos});
         } else {
             // a block already exists there
-            //console.log("Block exists");
         }
     }
 }

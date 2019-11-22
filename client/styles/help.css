@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
+
+*, * * {
+    font-family: 'Press Start 2P', cursive;
+    padding: 0;
+    margin: 0;
+}
+
+.content {
+    width: 100vw;
+    height: 100vh;
+    background-color: #555;
+}
+.buttonsContainer {
+    display: block;
+    width: 100%;
+    height: 10%;
+    background-color: red;
+    line-height: 10vh;
+    vertical-align: middle;
+    background-color: rgb(221,145,47);
+}
+.buttonsContainer div.button {
+    display: inline-block;
+    font-size: 6vh;
+    margin-left: 4%;
+    margin-right: 4%;
+    cursor: pointer;
+    transition: transform .2s, color .2s;
+}
+.buttonsContainer div.button:hover {
+    transform: scale(1.4);
+}
+.buttonsContainer div.button.disabled {
+    color: rgb(221,145,47);
+    transform: scale(.6);
+    cursor: default;
+}
+.buttonsContainer span.pageNumber {
+    font-size: 6vh;
+    width: 10%;
+    display: inline-block;
+}
+
+.buttonsContainer .leftButtonContainer, .buttonsContainer .rightButtonContainer {
+    width: 40%;
+    display: inline-block;
+    box-sizing: border-box;
+}
+.buttonsContainer .leftButtonContainer {
+    text-align: right;
+}
+.buttonsContainer .rightButtonContainer {
+    text-align: left;
+}
+
+.pageContainer {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 90%;
+    overflow: hidden;
+}
+
+.pageContainer .page {
+    left: 10%;
+    top: 10%;
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    display: inline-block;
+    padding: 4%;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    transition: transform 1.4s;
+    transform: rotateY(0deg);
+    -webkit-transform: rotateY(0deg);
+    border-radius: 10%;
+    border: .5vw solid black;
+}
+
+#page1 {
+    background-color: blue;
+}
+#page2 {
+    background-color: red;
+    transform: rotateY(180deg);
+    -webkit-transform: rotateY(180deg);
+}
