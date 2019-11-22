@@ -15,7 +15,7 @@ $(document).ready(function() {
         blockSize = parseInt(app.screen.width/blocksPerWidth);
         blockSize -= blockSize % 3;
         setupGame();
-    },300);
+    },0);
     
 });
 
@@ -28,7 +28,7 @@ function loadPlayer(playerInfo) {
     // Checks the player doesn't already exists
     if (!player) {
         // Creates the player
-        player = new Player(playerInfo.lastx,playerInfo.lasty);
+        player = new Player(playerInfo.lastx,playerInfo.lasty,playerInfo.spawnx,playerInfo.spawny);
         player.setSpawn(playerInfo.spawnx,playerInfo.spawny);
         player.health = playerInfo.health;
         player.updateHotBar();
@@ -68,11 +68,15 @@ function showLoading() {
 // Starts the game
 function startGame() {
     
+    app.resize();
+    
     // Creates a new array of other players
     otherPlayers = new Players();
     
     // Hide loading icon
     hideLoading();
+    
+    allowLargeMove = true;
     
     //app.ticker.add(delta => gameLoop(delta)); /* Old Game Ticks */
     // Creates a game tick function calling every 20 milliseconds (1000/50 = 50 times a second)
@@ -155,9 +159,11 @@ function gameTick() {
         var changeX = lastPos.x-currentPos.x;
         var changeY = lastPos.y-currentPos.y;
         var dist = Math.sqrt(changeX**2 + changeY**2);
-        if (dist > 1) {
+        if (dist > 1 && !allowLargeMove) {
+            console.log(`Attempted to move ${dist} in a game tick from (${lastPos.x},${lastPos.y}) to (${currentPos.x},${currentPos.y})`);
             player.teleport(lastPos.x,lastPos.y);
         }
+        allowLargeMove = false;
         player.prevpos = player.pos();
         
         // Sends players location to the server
@@ -411,6 +417,7 @@ function toggleInv() {
         $("#container").removeClass("hide").addClass("show");
         $("#inventory").removeClass("show").addClass("hide");
         $("#crafting").removeClass("show").addClass("hide");
+        $("#chat").removeClass("show").addClass("hide");
     } else  {
         // Opening inv
         craftOpen = false;
@@ -418,6 +425,7 @@ function toggleInv() {
         $("#container").removeClass("show").addClass("hide");
         $("#inventory").removeClass("hide").addClass("show");
         $("#crafting").removeClass("show").addClass("hide");
+        $("#chat").removeClass("show").addClass("hide");
     }
     // Toggles invOpen
     invOpen = !invOpen;

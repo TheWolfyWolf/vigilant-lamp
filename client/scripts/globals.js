@@ -2,13 +2,14 @@
 var blockSize;
 var app;
 var blocksPerWidth = 20;
-var time = 0;
-
 
 /* From Engine.js */
 var player;
 var worldMap = [];
 var visibleMap;
+
+var time = 0;
+var allowLargeMove = true;
 
 var moveSpeed = 1/3;
 

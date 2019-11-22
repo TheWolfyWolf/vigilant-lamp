@@ -50,10 +50,29 @@ function createPlayer() {
     
     // Makes the player 1 block wide and 2 tall
     newPlayer.width = blockSize;
-    newPlayer.height = 2* blockSize;
+    newPlayer.height = 2 * blockSize;
+    
+    newPlayer.anchor.x = 0.5;
     
     // Returns the new player
     return newPlayer;
+}
+
+// Creates a player
+function createPlayerHand() {
+    const playerHand = PIXI.Sprite.from('images/diamond.jpeg');
+    
+    playerHand.scale.x = 1;
+    playerHand.scale.y = 1;
+    playerHand.width = blockSize*4;
+    playerHand.height = blockSize*2;
+    playerHand.anchor.x = 0.5;
+    playerHand.anchor.y = 0.5;
+    playerHand.y = 2*blockSize;
+    playerHand.x = 2.25*blockSize;
+    
+    // Returns the players hand
+    return playerHand;
 }
 
 // Build the world

@@ -29,6 +29,7 @@ html {
     opacity: 0;
     border-bottom: 1vh solid #555;
     box-sizing: border-box;
+    display: contents;
 }
 #gameOuter.show {
     animation: fadeInAni 2s ease-in-out;
@@ -66,6 +67,7 @@ html {
     display: -ms-inline-flexbox;
     display: inline-flex;
     justify-content: space-between;
+    max-height: 15vh;
 }
 
 #heartsContainer {
@@ -96,6 +98,7 @@ html {
     display: inline-block;
     cursor: pointer;
     box-sizing: border-box;
+    height: auto;
 }
 .item.selected {
     background-color: #999;
@@ -109,6 +112,7 @@ html {
 .heart {
     width: 8%;
     display: inline-block;
+    height: auto;
 }
 
 .hidden {
@@ -139,7 +143,7 @@ html {
 #chat {
     box-sizing: border-box;
     height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
     padding: 2%;
 }
 #chat #messages {
@@ -197,7 +201,7 @@ html {
 #crafting {
     box-sizing: border-box;
     height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
     padding-top: 5%;
     padding-bottom: 5%;
 }
@@ -234,6 +238,7 @@ html {
     height: 100%;
     overflow: hidden;
     padding-top: 10%;
+    padding-bottom: 10%;
 }
 
 .craftRow {

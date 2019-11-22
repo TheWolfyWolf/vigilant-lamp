@@ -2,9 +2,15 @@
 function setupGame() {
     // Connects to server
     socket = io();
+
+    // Will attempt to request any unrequested information
+    (function requestInfo() {
+        console.log("Requesting information");
+        if (!worldRecieved) socket.emit('worldRequest', true);
+        if (!playerInfoRecieved) socket.emit('playerRequest', true);
+        if (!(playerInfoRecieved && worldRecieved)) setTimeout(requestInfo,1500);
+    })();
     
-    // Requests the world
-    socket.emit('worldRequest', true);
     // Handles recieving the world
     socket.on('currentWorld', function(world){
         // Converts the world to a worldMap
@@ -22,8 +28,6 @@ function setupGame() {
         
     });
     
-    // Requests the player
-    socket.emit('playerRequest', true);
     // Handles recieving the player
     socket.on('currentPlayer', function(playerInfo){
         

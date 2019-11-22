@@ -1,20 +1,21 @@
 // Player Class
 class Player {
-    constructor(x, y, ident) {
-        this.id = ident;
+    constructor(x, y, spawnx, spawny) {
         this.jumping = 0;
         this.sprite = createPlayer();
-        this.spawn(x,y);
         app.stage.addChild(this.sprite);
+        this.hand = createPlayerHand();
+        this.sprite.addChild(this.hand);
         this.floored = false;
         this.health = 10;
         this.blocksFell = 0;
         this.inventory = new Inventory();
         this.updateHearts();
         this.updateHotBar();
-        this.spawnx = x;
-        this.spawny = y;
+        this.spawnx = spawnx || x;
+        this.spawny = spawny || y;
         this.prevpos = {x:x,y:y}
+        this.spawn(x,y);
     }
     // Changes the players spawn
     setSpawn(x,y) {
@@ -84,7 +85,7 @@ class Player {
                 currentY = y;
             }
             if (currentY > worldMap[parseInt(x)].length) {
-                this.setSpawn(0,worldMap[0].length);
+                //this.setSpawn(0,worldMap[0].length);
                 x = worldMap[0].length;
                 currentY = worldMap[0].length;
                 working = false;
@@ -103,6 +104,13 @@ class Player {
             // Adds/Removes selected tag from each item
             if (i == this.inventory.holding) {
                 $(`.item.item-${i+1}`).addClass("selected");
+                if (hotbar[i] != undefined) {
+                    if (hotbar[i].isTool) {
+                        this.hand.texture = PIXI.Texture.from(`images/${toolImage(hotbar[i])}`);
+                    } else {
+                        this.hand.texture = PIXI.Texture.from(hotbar[i].img);
+                    }
+                }
             } else {
                 $(`.item.item-${i+1}`).removeClass("selected");
             }
@@ -150,12 +158,26 @@ class Player {
     // Move Left
     moveLeft() {
         if (this.sprite.x > 0) {
+            if (this.sprite.scale.x > 0) this.sprite.scale.x *= -1;
             this.sprite.x -= blockSize * moveSpeed;
+            this.hand.y += Math.floor((Math.random()*11)+1)-6;
+            if (this.hand.y > blockSize*2.2) {
+                this.hand.y = blockSize*2.2;
+            } else if (this.hand.y < blockSize*1.8) {
+                this.hand.y = blockSize*1.8;
+            }
         }
     }
     // Move Right
     moveRight() {
+        if (this.sprite.scale.x < 0) this.sprite.scale.x *= -1;
         this.sprite.x += blockSize * moveSpeed;
+        this.hand.y += Math.floor((Math.random()*11)+1)-6;
+        if (this.hand.y > blockSize*2.2) {
+            this.hand.y = blockSize*2.2;
+        } else if (this.hand.y < blockSize*1.8) {
+            this.hand.y = blockSize*1.8;
+        }
     }
     
     // Sends players location to the server
@@ -165,20 +187,23 @@ class Player {
     
     // Teleports the player
     teleport(x,y,relative) {
+        allowLargeMove = true;
         if (relative == true) {
             // Works out the x position relative to the player
-            this.sprite.x = (this.pos().x + x)*blockSize;
+            this.sprite.x = (this.pos().x + x)*(blockSize-0.5);
             this.sprite.y = app.screen.height - ((this.pos().y + y)*blockSize);
         } else {
             // Teleports the player to the location specified
-            this.sprite.x = x*blockSize;
+            this.sprite.x = x*(blockSize-0.5);
             this.sprite.y = app.screen.height - y*blockSize;
         }
     }
     
     // Gets the players position
     pos() {
-        return getPos(this.sprite);
+        var gotPos = getPos(this.sprite);
+        gotPos.x-=.5;
+        return gotPos;
     }
     
     // Damages the player
