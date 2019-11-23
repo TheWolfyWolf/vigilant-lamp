@@ -3,6 +3,17 @@ var blockSize;
 var app;
 var blocksPerWidth = 20;
 
+/* From Players.js */
+var playerImages = {
+    idle: PIXI.Texture.from("images/player/idle.png"),
+    hurt: PIXI.Texture.from("images/player/hurt.png"),
+    walk1: PIXI.Texture.from("images/player/walk1.png"),
+    walk2: PIXI.Texture.from("images/player/walk2.png"),
+    walk3: PIXI.Texture.from("images/player/walk3.png"),
+    walk4: PIXI.Texture.from("images/player/walk4.png"),
+    walk5: PIXI.Texture.from("images/player/walk5.png")
+};
+
 /* From Engine.js */
 var player;
 var worldMap = [];
@@ -30,6 +41,15 @@ var pressedKeys = {
     32: false,
     40: false
 };
+
+var sounds = {
+    hurt: new Audio("sounds/hurt.mp3"),
+    step: new Audio("sounds/step.wav"),
+    die: new Audio("sounds/death.wav"),
+    break: new Audio("sounds/break.wav"),
+    place: new Audio("sounds/place.wav"),
+    fall: new Audio("sounds/fall.wav")
+}
 
 var initialRender = true;
 var renderedMinX = 0;

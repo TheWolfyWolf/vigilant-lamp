@@ -52,7 +52,6 @@ class blockObject {
                 if (1/((dist||1)/4) > daylightPercent) daylightPercent = 1/((dist||1)/4);
             }
             for (var pId in otherPlayers.players) {
-                console.log(`torch: ${otherPlayers.players[pId].hasTorch}`);
                 if (otherPlayers.players[pId].hasTorch) {
                     var playerPos = getPos(otherPlayers.players[pId].sprite);
                     playerPos.x -= 0.5;

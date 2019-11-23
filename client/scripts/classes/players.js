@@ -1,13 +1,3 @@
-var playerImages = {
-    idle: PIXI.Texture.from("images/player/idle.png"),
-    hurt: PIXI.Texture.from("images/player/hurt.png"),
-    walk1: PIXI.Texture.from("images/player/walk1.png"),
-    walk2: PIXI.Texture.from("images/player/walk2.png"),
-    walk3: PIXI.Texture.from("images/player/walk3.png"),
-    walk4: PIXI.Texture.from("images/player/walk4.png"),
-    walk5: PIXI.Texture.from("images/player/walk5.png")
-};
-
 // Player Class
 class Player {
     constructor(x, y, spawnx, spawny) {
@@ -56,6 +46,7 @@ class Player {
                     blocks[this.inventory.inv[this.inventory.holding].id].customPlace();
                 } else {
                     // Places block
+                    sounds.place.play();
                     setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
                 }
                 if (blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace == undefined || blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace) {
@@ -192,6 +183,7 @@ class Player {
             this.walking += 1;
             if (this.walking > 5) this.walking = 1;
             if (this.damaged == 0) this.sprite.texture = playerImages[`walk${this.walking}`];
+            sounds.step.play();
         }
     }
     // Move Right
@@ -207,6 +199,7 @@ class Player {
         this.walking += 1;
         if (this.walking > 5) this.walking = 1;
         if (this.damaged == 0) this.sprite.texture = playerImages[`walk${this.walking}`];
+        sounds.step.play();
     }
     
     // Sends players location to the server
@@ -241,6 +234,7 @@ class Player {
             this.health -= amount;
             this.damaged = 20;
         }
+        sounds.hurt.play();
         this.updateHearts();
     }
     
@@ -266,6 +260,7 @@ class Player {
             this.health = 10;
             this.updateHearts();
             this.spawn(this.spawnx,this.spawny);
+            sounds.die.play();
         }
         saveHearts();
     }
@@ -572,6 +567,7 @@ class Player {
                         player.damage(Math.floor((blocksFell-10)/2));
                     }
                     player.blocksFell = 0;
+                    sounds.fall.play();
                 }
             }
 
@@ -640,12 +636,14 @@ class OtherPlayer {
         this.sprite.addChild(this.hand);
         this.hasTorch = false;
         this.lightPercentage = 0;
+        this.walking = 0;
     }
     // Set Location
     setLoc(pos) {
         this.sprite.x = (pos.x+0.5)*blockSize;
         this.sprite.y = app.screen.height - pos.y*blockSize;
     }
+    
 }
 
 function damagePlayer() {
@@ -664,6 +662,21 @@ class Players {
         // If player already exists then set their location
         // Otherwise create the player
         if (id in this.players) {
+            var lastPos = getPos(this.players[id].sprite);
+            lastPos.x -= 0.5;
+            if (pos.x == lastPos.x) {
+                this.players[id].sprite.texture = playerImages.idle;
+            } else {
+                this.players[id].walking++;
+                if (this.players[id].walking > 5) this.players[id].walking = 1;
+                this.players[id].sprite.texture = playerImages[`walk${this.players[id].walking}`];
+                if (pos.x > lastPos.x) {
+                    if (this.players[id].sprite.scale.x < 0) this.players[id].sprite.scale.x *= -1;
+                } else {
+                    if (this.players[id].sprite.scale.x > 0) this.players[id].sprite.scale.x *= -1;
+                }
+            }
+            
             this.players[id].setLoc(pos);
         } else {
            //console.log("new player " + id);

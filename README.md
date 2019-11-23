@@ -12,16 +12,16 @@ Done:
 - Inventory
 - Proximity Crafting
 - Chat
+- Sprites
 
 WIP:
 - Screen Size Ajustments
 - Tidy Code and Refactoring
+- Commands (Started kill command, only works on self)
 
 Todo:
 - Animations
-- Spites
 - Sound?
-- Commands (Started kill command, only works on self)
 - Settings (change key binds)
 - Help
 - MOBS !

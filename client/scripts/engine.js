@@ -580,6 +580,8 @@ function damageBlock() {
             }
         }
         
+        sounds.break.play();
+        
         // Tell the server to damage a block
         socket.emit('damageBlock', {blockPos: blockPos,playerHand:playerHand});
     }
