@@ -175,10 +175,10 @@ class Player {
             if (this.sprite.scale.x > 0) this.sprite.scale.x *= -1;
             this.sprite.x -= blockSize * moveSpeed;
             this.hand.y += Math.floor((Math.random()*11)+1)-6;
-            if (this.hand.y > blockSize*2.2) {
-                this.hand.y = blockSize*2.2;
-            } else if (this.hand.y < blockSize*1.8) {
-                this.hand.y = blockSize*1.8;
+            if (this.hand.y > blockSize*1.7) {
+                this.hand.y = blockSize*1.7;
+            } else if (this.hand.y < blockSize*1.3) {
+                this.hand.y = blockSize*1.3;
             }
             this.walking += 1;
             if (this.walking > 5) this.walking = 1;
@@ -191,10 +191,10 @@ class Player {
         if (this.sprite.scale.x < 0) this.sprite.scale.x *= -1;
         this.sprite.x += blockSize * moveSpeed;
         this.hand.y += Math.floor((Math.random()*11)+1)-6;
-        if (this.hand.y > blockSize*2.2) {
-            this.hand.y = blockSize*2.2;
-        } else if (this.hand.y < blockSize*1.8) {
-            this.hand.y = blockSize*1.8;
+        if (this.hand.y > blockSize*1.7) {
+            this.hand.y = blockSize*1.7;
+        } else if (this.hand.y < blockSize*1.3) {
+            this.hand.y = blockSize*1.3;
         }
         this.walking += 1;
         if (this.walking > 5) this.walking = 1;
