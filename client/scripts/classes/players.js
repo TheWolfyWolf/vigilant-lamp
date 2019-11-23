@@ -1,3 +1,13 @@
+var playerImages = {
+    idle: PIXI.Texture.from("images/player/idle.png"),
+    hurt: PIXI.Texture.from("images/player/hurt.png"),
+    walk1: PIXI.Texture.from("images/player/walk1.png"),
+    walk2: PIXI.Texture.from("images/player/walk2.png"),
+    walk3: PIXI.Texture.from("images/player/walk3.png"),
+    walk4: PIXI.Texture.from("images/player/walk4.png"),
+    walk5: PIXI.Texture.from("images/player/walk5.png")
+};
+
 // Player Class
 class Player {
     constructor(x, y, spawnx, spawny) {
@@ -16,6 +26,8 @@ class Player {
         this.spawny = spawny || y;
         this.prevpos = {x:x,y:y}
         this.spawn(x,y);
+        this.walking = 1;
+        this.damaged = 0;
     }
     // Changes the players spawn
     setSpawn(x,y) {
@@ -153,6 +165,10 @@ class Player {
         }
     }
     
+    idle() {
+        this.sprite.texture = playerImages.idle;
+    }
+    
     // Jumps
     jump() {
         var jumpHeight = 7;
@@ -173,6 +189,9 @@ class Player {
             } else if (this.hand.y < blockSize*1.8) {
                 this.hand.y = blockSize*1.8;
             }
+            this.walking += 1;
+            if (this.walking > 5) this.walking = 1;
+            if (this.damaged == 0) this.sprite.texture = playerImages[`walk${this.walking}`];
         }
     }
     // Move Right
@@ -185,6 +204,9 @@ class Player {
         } else if (this.hand.y < blockSize*1.8) {
             this.hand.y = blockSize*1.8;
         }
+        this.walking += 1;
+        if (this.walking > 5) this.walking = 1;
+        if (this.damaged == 0) this.sprite.texture = playerImages[`walk${this.walking}`];
     }
     
     // Sends players location to the server
@@ -215,7 +237,10 @@ class Player {
     
     // Damages the player
     damage(amount) {
-        this.health -= amount;
+        if (this.damaged == 0) {
+            this.health -= amount;
+            this.damaged = 20;
+        }
         this.updateHearts();
     }
     

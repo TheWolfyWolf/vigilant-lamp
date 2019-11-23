@@ -46,7 +46,9 @@ function createBlock(x,y,block) {
 // Creates a player
 function createPlayer() {
     // Creates a player using player image
-    const newPlayer = PIXI.Sprite.from('images/stoneBackground.jpg');
+    const newPlayer = new PIXI.Sprite();
+    
+    newPlayer.texture = playerImages.idle;
     
     // Makes the player 1 block wide and 2 tall
     newPlayer.width = blockSize;

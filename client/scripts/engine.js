@@ -82,10 +82,10 @@ function startGame() {
     allowLargeMove = true;
     
     //app.ticker.add(delta => gameLoop(delta)); /* Old Game Ticks */
-    // Creates a game tick function calling every 20 milliseconds (1000/50 = 50 times a second)
+    // Creates a game tick function calling every 50 milliseconds (1000/20 = 20 times a second)
     window.setInterval(function(){
         gameTick();
-    }, 1000/50);
+    }, 1000/20);
     
     $(".invItem").each(function() {
         $(this).on("click",function() {
@@ -186,6 +186,7 @@ function gameTick() {
         }
         
         
+        (player.damaged <= 0) ? player.idle() : (function(){player.sprite.texture = playerImages.hurt;player.damaged--;})();
         
         if (!(invOpen || craftOpen || chatOpen)) {
 
