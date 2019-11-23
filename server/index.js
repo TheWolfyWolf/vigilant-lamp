@@ -75,9 +75,9 @@ function saveWorld() {
         userdb.close();
         
         // Calls the function back after desired amount of time
-        seconds = 1000;
-        minutes = seconds * 60;
-        hours = minutes * 60;
+        var seconds = 1000;
+        var minutes = seconds * 60;
+        var hours = minutes * 60;
         setTimeout(saveWorld, 15 * minutes);
     });
 }
@@ -322,15 +322,16 @@ loadWorld(function() {
     saveWorld();
 });
 
-/* Day Length in Mins */
-var dayLength = 10;
 
+var seconds = 1000;
+var minutes = seconds * 60;
+var hours = minutes * 60;
 // Handle Times
-dayLength *= 60;
+var dayLength = 10 * minutes;
 setInterval(function(){
     world.incTime();
     io.emit("time",{time:world.getTime()});
-}, dayLength);
+}, (dayLength/1000));
 
 // Handle sockets
 io.on('connection', function(socket){
@@ -408,7 +409,7 @@ io.on('connection', function(socket){
     // On client requesting a world
     socket.on('worldRequest', function(msg){
         // Send them back the world converted to a string
-        socket.emit("currentWorld",world.worldMapToStr());
+        socket.emit("currentWorld",{world:world.worldMapToStr(),time:world.getTime()});
     });
     
     // On client requesting their player info
@@ -466,7 +467,8 @@ io.on('connection', function(socket){
     });
     
     socket.on('updateInv', function(inventory){
-        savePlayerInventory(socket.userid,inventory);
+        savePlayerInventory(socket.userid,inventory.inv);
+        socket.broadcast.emit("playerHolding",{id: socket.userid,item:inventory.holding});
     });
     
     socket.on('updateHearts', function(hearts){

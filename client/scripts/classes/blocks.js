@@ -52,12 +52,15 @@ class blockObject {
                 if (1/((dist||1)/4) > daylightPercent) daylightPercent = 1/((dist||1)/4);
             }
             for (var pId in otherPlayers.players) {
-                var playerPos = getPos(otherPlayers.players[pId].sprite);
-                playerPos.x -= 0.5;
-                var changeX = playerPos.x-this.x;
-                var changeY = playerPos.y-this.y;
-                var dist = Math.sqrt(changeX**2 + changeY**2);
-                if (1/((dist||1)/4) > daylightPercent) daylightPercent = 1/((dist||1)/4);
+                console.log(`torch: ${otherPlayers.players[pId].hasTorch}`);
+                if (otherPlayers.players[pId].hasTorch) {
+                    var playerPos = getPos(otherPlayers.players[pId].sprite);
+                    playerPos.x -= 0.5;
+                    var changeX = playerPos.x-this.x;
+                    var changeY = playerPos.y-this.y;
+                    var dist = Math.sqrt(changeX**2 + changeY**2);
+                    if (1/((dist||1)/4) > daylightPercent) daylightPercent = 1/((dist||1)/4);
+                }
             }
             this.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+.3)/2);
         }

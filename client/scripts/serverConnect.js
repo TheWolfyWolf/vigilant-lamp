@@ -12,11 +12,15 @@ function setupGame() {
     })();
     
     // Handles recieving the world
-    socket.on('currentWorld', function(world){
+    socket.on('currentWorld', function(data){
+        
+        var world = data.world;
+        time = data.time;
         // Converts the world to a worldMap
         worldMap = strToWorldMap(world);
         // Updates the world
         updateWorld().then(function() {
+            
             // Says the world has been recieved
             worldRecieved = true;
 

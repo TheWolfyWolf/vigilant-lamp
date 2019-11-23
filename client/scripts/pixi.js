@@ -136,7 +136,7 @@ function setBlock(blockid,pos) {
             worldMap[pos.x] = [];
         }
         // Checks the position isn't already taken
-        if (!worldMap[pos.x][pos.y]) {
+        if (!worldMap[pos.x][pos.y] || worldMap[pos.x][pos.y].blockID == 0) {
             // Creates a new block, in location with the blockID
             worldMap[pos.x][pos.y] = new blockObject(pos.x,pos.y,blockid);
             

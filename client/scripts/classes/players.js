@@ -613,6 +613,8 @@ class OtherPlayer {
         this.sprite.id = id;
         this.hand = createPlayerHand();
         this.sprite.addChild(this.hand);
+        this.hasTorch = false;
+        this.lightPercentage = 0;
     }
     // Set Location
     setLoc(pos) {
@@ -641,6 +643,7 @@ class Players {
         } else {
            //console.log("new player " + id);
             this.players[id] = new OtherPlayer(id,pos);
+            updateInv();
         }
     }
     // Removes a player
@@ -665,9 +668,15 @@ class Players {
     changeHand(id,item) {
         if (id in this.players) {
             if (item == undefined) {
+                this.players[id].hasTorch = false;
                 this.players[id].hand.texture = PIXI.Texture.EMPTY;
             } else {
                 item = JSON.parse(item);
+                if (item.id == 15) {
+                    this.players[id].hasTorch = true;
+                } else {
+                    this.players[id].hasTorch = false;
+                }
                 if (item.isTool) {
                     this.players[id].hand.texture = PIXI.Texture.from(`images/${toolImage(tools[item.id])}`);
                 } else {

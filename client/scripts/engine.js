@@ -20,7 +20,7 @@ $(document).ready(function() {
 });
 
 function resized() {
-    reRender();
+    if (playerInfoRecieved && worldRecieved) reRender();
 }
 
 // Creates a player using the player info
@@ -72,6 +72,9 @@ function startGame() {
     
     // Creates a new array of other players
     otherPlayers = new Players();
+    
+    // Updates the time
+    updateTime();
     
     // Hide loading icon
     hideLoading();
@@ -160,6 +163,7 @@ function gameTick() {
         var lastPos = player.prevpos;
         var currentPos = player.pos();
         
+        // Stops player moving too much per tick
         var changeX = lastPos.x-currentPos.x;
         var changeY = lastPos.y-currentPos.y;
         var dist = Math.sqrt(changeX**2 + changeY**2);
@@ -177,6 +181,8 @@ function gameTick() {
             (player.pos().x % moveSpeed > 0.03 && player.pos().x % moveSpeed < 0.3)) {
             reRender();
             //player.teleport(Math.ceil(player.pos().x),Math.ceil(player.pos().y));
+        } else {
+            localRender();
         }
         
         
@@ -237,6 +243,49 @@ function gameLoop(delta){
     
 }
 
+function localRender() {
+    if (playerInfoRecieved && worldRecieved) {
+        var pPos = player.pos();
+        var pX = pPos.x;
+        var pY = pPos.y;
+        for (var x = parseInt(pX-blocksPerWidth); x <= parseInt(pX+blocksPerWidth); x++) {
+            var verticalChunk = worldMap[x];
+            if (verticalChunk != undefined) {
+                // Goes thru every block in the vertical chunk
+                for (var y = parseInt(pY-blocksPerWidth); y <= parseInt(pY+blocksPerWidth); y++) {
+                    // Makes sure the block exists
+                    if (verticalChunk[y] != undefined) {
+                        verticalChunk[y].load();
+                    }
+                }
+            }
+        }
+        if (player.inventory.inv[player.inventory.holding] && player.inventory.inv[player.inventory.holding].id == 15) {
+            player.sprite.tint = createColor({r:255,g:255,b:255},1);
+        } else {
+            var timeOffMidday = Math.abs(time-500);
+            var daylightPercent = 1-(timeOffMidday)/500;
+            player.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+.8)/2);
+        }
+        for (var pId in otherPlayers.players) {
+            var cPlayer = otherPlayers.players[pId];
+            cPlayer.lightPercentage = 0;
+            if (cPlayer.hasTorch) {
+                cPlayer.lightPercentage = 1;
+            }
+            if (player.inventory.inv[player.inventory.holding] && player.inventory.inv[player.inventory.holding].id == 15) {
+                var cPlayerPos = player.pos();
+                var oPlayerPos = getPos(otherPlayers.players[pId].sprite);
+                oPlayerPos.x -= 0.5;
+                var changeX = oPlayerPos.x-cPlayerPos.x;
+                var changeY = oPlayerPos.y-cPlayerPos.y;
+                var dist = Math.sqrt(changeX**2 + changeY**2);
+                if (1/((dist||1)/4) > cPlayer.lightPercentage) cPlayer.lightPercentage = 1/((dist||1)/4);
+            }
+        }
+    }
+}
+
 function reRender() {
     renderedMinX = -100;
     renderedMaxX = -100;
@@ -249,6 +298,7 @@ function renderWorld(pX) {
     var floorPX = Math.floor(pX);
     // Checks if the X coordinate is outside of the prerendered area (renderedMinX and renderedMaxX)
     if (pX < renderedMinX || pX > renderedMaxX || initialRender) {
+        console.log("Rendering");
         // Load/unload blocks
         // How Many Widths to load
         // More = less often rendered + more demanding render
@@ -635,6 +685,8 @@ function updateTime() {
         } else {
             player.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+.8)/2);
         }
-        reRender();
+        if (player) {
+            localRender();
+        }
     }
 }

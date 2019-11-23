@@ -408,7 +408,7 @@ function setBlock(blockid,pos) {
             worldMap[pos.x] = [];
         }
         // Places a block there if not one already there
-        if (!worldMap[pos.x][pos.y]) {
+        if (!worldMap[pos.x][pos.y] || worldMap[pos.x][pos.y].blockID == 0) {
             worldMap[pos.x][pos.y] = new blockObject(pos.x,pos.y,blockid);
             console.log("Block placed");
         } else {

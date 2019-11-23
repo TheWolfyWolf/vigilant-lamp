@@ -119,17 +119,17 @@ var recipes = {
         - removeOnPlace (optional, bool to remove on place)
 */
 const blocks = {
-    1: {image:"stone.jpg",hardness:10, tool:tools.pickaxe, minTool:toolLevels.wood,name:"Stone"},
+    1: {image:"stone.png",hardness:10, tool:tools.pickaxe, minTool:toolLevels.wood,name:"Stone"}, 
     2: {image:"stoneBackground.jpg", hardness:10, tool:tools.pickaxe, minTool:toolLevels.stone,name:"Stone Background"},
-    3: {image:"dirt.jpg",hardness:4, tool:tools.shovel, minTool:toolLevels.none,name:"Dirt"},
-    4: {image:"grass.jpeg",hardness:5, tool:tools.shovel, minTool: toolLevels.none,name:"Grass"},
-    5: {image:"bedrock.png",hardness:-1,name:"Bedrock"},
-    6: {image:"wood.png",hardness:8,tool:tools.axe, minTool:toolLevels.none,name:"Wood"},
-    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Leaf"},
-    8: {image:"iron.png",hardness:20,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, /* ORE */
-    9: {image:"diamond.jpeg",hardness:30,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, /* ORE */
-    10: {image:"planks.jpg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"},
-    11: {image:"bench.jpeg",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Work Bench"},
+    3: {image:"dirt.png",hardness:4, tool:tools.shovel, minTool:toolLevels.none,name:"Dirt"}, 
+    4: {image:"grass.png",hardness:5, tool:tools.shovel, minTool: toolLevels.none,name:"Grass"}, 
+    5: {image:"bedrock.png",hardness:-1,name:"Bedrock"}, 
+    6: {image:"wood.png",hardness:8,tool:tools.axe, minTool:toolLevels.none,name:"Wood"}, 
+    7: {image:"leaf.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Leaf"}, 
+    8: {image:"iron.png",hardness:20,tool:tools.pickaxe, minTool:toolLevels.stone,name:"Iron"}, 
+    9: {image:"diamond.png",hardness:30,tool:tools.pickaxe, minTool:toolLevels.iron,name:"Diamond"}, 
+    10: {image:"planks.png",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Wood Planks"}, 
+    11: {image:"bench.png",hardness:5,tool:tools.axe, minTool:toolLevels.none,name:"Work Bench"}, 
     12: {image:"spawnChanger.png",hardness:-1,tool:tools.axe, minTool:toolLevels.none,name:"Spawn Changer",customPlace:function() {
             player.setSpawn(player.pos().x,player.pos().y);
             errorMessage(`Your spawn is set to x:${player.spawnx} y:${player.spawny}`);
