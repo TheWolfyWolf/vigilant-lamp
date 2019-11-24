@@ -15,17 +15,17 @@ Done:
 - Sprites
 - Sound
 - Animations
+- Food
 
 WIP:
-- Screen Size Ajustments
-- Tidy Code and Refactoring
+- Screen Size Ajustments (1/2 Done)
+- Tidy Code and Refactoring !!
 - Commands (Started kill command, only works on self)
-- Help
+- Help (Page exists, no contents)
 
 Todo:
-- MOBS !
+- MOBS ! 
 - Chests?
-- Food
 - SERVER
 
 
