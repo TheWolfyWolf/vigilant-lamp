@@ -50,6 +50,7 @@ var sounds = {
     place: new Audio("sounds/place.wav"),
     fall: new Audio("sounds/fall.wav")
 }
+var volume = 1;
 
 var initialRender = true;
 var renderedMinX = 0;
@@ -60,7 +61,7 @@ var freeCam = false;
 var invSelected = false;
 
 // Creates other players array
-var otherPlayers = new Players();
+var otherPlayers;
 
 /* From ServerConnect.js */
 var socket;

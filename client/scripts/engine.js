@@ -69,90 +69,102 @@ function showLoading() {
 function startGame() {
     
     app.resize();
-    
-    // Creates a new array of other players
-    otherPlayers = new Players();
-    
-    // Updates the time
-    updateTime();
-    
-    // Hide loading icon
-    hideLoading();
-    
-    allowLargeMove = true;
-    
-    //app.ticker.add(delta => gameLoop(delta)); /* Old Game Ticks */
-    // Creates a game tick function calling every 50 milliseconds (1000/20 = 20 times a second)
-    window.setInterval(function(){
-        gameTick();
-    }, 1000/20);
-    
-    $(".invItem").each(function() {
-        $(this).on("click",function() {
-            if (invSelected === false) {
-                if ($(this).attr("id") != "deleteItem") {
-                    invSelected = $(this).attr("id");
-                    $(this).addClass("selected");
-                }
-            } else {
-                var currentInvID = $(this).attr("id");
-                if (currentInvID == "deleteItem") {
-                    player.inventory.inv[invSelected] = undefined;
+    console.log(otherPlayers);
+    if (!otherPlayers) {
+        // Creates a new array of other players
+        otherPlayers = new Players();
+
+        // Updates the time
+        updateTime();
+
+        // Hide loading icon
+        hideLoading();
+
+        allowLargeMove = true;
+
+        //app.ticker.add(delta => gameLoop(delta)); /* Old Game Ticks */
+        // Creates a game tick function calling every 50 milliseconds (1000/20 = 20 times a second)
+        window.setInterval(function(){
+            gameTick();
+        }, 1000/20);
+
+        $(".invItem").each(function() {
+            $(this).on("click",function() {
+                if (invSelected === false) {
+                    if ($(this).attr("id") != "deleteItem") {
+                        invSelected = $(this).attr("id");
+                        $(this).addClass("selected");
+                    }
                 } else {
-                    player.inventory.swapItem(parseInt(invSelected),parseInt(currentInvID));
+                    var currentInvID = $(this).attr("id");
+                    if (currentInvID == "deleteItem") {
+                        player.inventory.inv[invSelected] = undefined;
+                    } else {
+                        player.inventory.swapItem(parseInt(invSelected),parseInt(currentInvID));
+                    }
+                    $(".invItem.selected").each(function() {
+                        $(this).removeClass("selected");
+                    })
+                    player.updateHotBar();
+                    invSelected = false;
                 }
-                $(".invItem.selected").each(function() {
-                    $(this).removeClass("selected");
-                })
+            });
+        });
+
+        // Adds event listeners for keyup and keydown
+        document.addEventListener('keydown', onKeyDown);
+        document.addEventListener('keyup', onKeyUp);
+        // Button to open inventory
+        $("#openInv").on("click",toggleInv);
+        $("#allRecipesToggle img").on("click",toggleAllRecipes);
+
+        $("#messagesInput").keydown(function(e) {
+            if (e.which == 27 && chatOpen) toggleChat();
+        });
+
+        $(".item.item-1").on("click",function() {
+            if (worldRecieved && playerInfoRecieved) {
+                player.inventory.holding = 0;
                 player.updateHotBar();
-                invSelected = false;
             }
         });
-    });
-    
-    // Adds event listeners for keyup and keydown
-    document.addEventListener('keydown', onKeyDown);
-    document.addEventListener('keyup', onKeyUp);
-    // Button to open inventory
-    $("#openInv").on("click",toggleInv);
-    $("#allRecipesToggle img").on("click",toggleAllRecipes);
-    
-    $("#messagesInput").keydown(function(e) {
-        if (e.which == 27 && chatOpen) toggleChat();
-    });
-    
-    $(".item.item-1").on("click",function() {
-        if (worldRecieved && playerInfoRecieved) {
-            player.inventory.holding = 0;
-            player.updateHotBar();
-        }
-    });
-    $(".item.item-2").on("click",function() {
-        if (worldRecieved && playerInfoRecieved) {
-            player.inventory.holding = 1;
-            player.updateHotBar();
-        }
-    });
-    $(".item.item-3").on("click",function() {
-        if (worldRecieved && playerInfoRecieved) {
-            player.inventory.holding = 2;
-            player.updateHotBar();
-        }
-    });
-    $(".item.item-4").on("click",function() {
-        if (worldRecieved && playerInfoRecieved) {
-            player.inventory.holding = 3;
-            player.updateHotBar();
-        }
-    });
-    $(".item.item-5").on("click",function() {
-        if (worldRecieved && playerInfoRecieved) {
-            player.inventory.holding = 4;
-            player.updateHotBar();
-        }
-    });
-    
-    
+        $(".item.item-2").on("click",function() {
+            if (worldRecieved && playerInfoRecieved) {
+                player.inventory.holding = 1;
+                player.updateHotBar();
+            }
+        });
+        $(".item.item-3").on("click",function() {
+            if (worldRecieved && playerInfoRecieved) {
+                player.inventory.holding = 2;
+                player.updateHotBar();
+            }
+        });
+        $(".item.item-4").on("click",function() {
+            if (worldRecieved && playerInfoRecieved) {
+                player.inventory.holding = 3;
+                player.updateHotBar();
+            }
+        });
+        $(".item.item-5").on("click",function() {
+            if (worldRecieved && playerInfoRecieved) {
+                player.inventory.holding = 4;
+                player.updateHotBar();
+            }
+        });
+
+        console.log("Here");
+        console.trace();
+        $("#toggleSound").on("click",function() {
+            volume -= 0.25;
+            if (volume < 0) volume = 1;
+            console.log(volume);
+            $(this).attr("src",`images/sound${volume*4}.png`);
+            for (sound in sounds) {
+                sounds[sound].volume = volume;
+            }
+        });
+    }
 }
 
 // Game Tick Function
@@ -186,6 +198,7 @@ function gameTick() {
         }
         
         
+        // Shows either player huty or player idle image
         (player.damaged <= 0) ? player.idle() : (function(){player.sprite.texture = playerImages.hurt;player.damaged--;})();
         
         if (!(invOpen || craftOpen || chatOpen)) {

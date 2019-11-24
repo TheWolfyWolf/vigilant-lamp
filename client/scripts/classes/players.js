@@ -212,11 +212,11 @@ class Player {
         allowLargeMove = true;
         if (relative == true) {
             // Works out the x position relative to the player
-            this.sprite.x = (this.pos().x + x-0.5)*blockSize;
+            this.sprite.x = (this.pos().x + x+0.5)*blockSize;
             this.sprite.y = app.screen.height - ((this.pos().y + y)*blockSize);
         } else {
             // Teleports the player to the location specified
-            this.sprite.x = (x-0.5)*blockSize;
+            this.sprite.x = (x+0.5)*blockSize;
             this.sprite.y = app.screen.height - y*blockSize;
         }
     }
@@ -649,7 +649,11 @@ class OtherPlayer {
 function damagePlayer() {
     // Change for other damage
     var damage = 2;
-    hurtPlayer(this.id,damage);
+    var pos = getPos(this);
+    pos.x -= 0.5;
+    if (player.lineOfSight(pos.x,pos.y)) {
+        hurtPlayer(this.id,damage);
+    }
 }
 
 // Class to store other players

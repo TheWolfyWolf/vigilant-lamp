@@ -8,7 +8,9 @@ function setupGame() {
         console.log("Requesting information");
         if (!worldRecieved) socket.emit('worldRequest', true);
         if (!playerInfoRecieved) socket.emit('playerRequest', true);
-        if (!(playerInfoRecieved && worldRecieved)) setTimeout(requestInfo,5000);
+        setTimeout(function() {
+            if (!(playerInfoRecieved || worldRecieved)) requestInfo();
+        },5000);
     })();
     
     // Handles recieving the world
