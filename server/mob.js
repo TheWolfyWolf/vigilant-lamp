@@ -10,7 +10,7 @@ class Mobs {
         this.hp = health
         this.itemDrops = drops
         
-        window.setInterval(this.bobTick, 1000/50);
+        window.setInterval(this.mobTick, 1000/50);
     }
 
     mobTick(){

@@ -92,7 +92,7 @@ class Player {
                 down = false;
                 currentY = y;
             }
-            if (currentY > worldMap[parseInt(x)].length) {
+            if (worldMap && worldMap[parseInt(x)] && currentY > worldMap[parseInt(x)].length) {
                 //this.setSpawn(0,worldMap[0].length);
                 x = worldMap[0].length;
                 currentY = worldMap[0].length;
