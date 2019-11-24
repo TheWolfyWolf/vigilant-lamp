@@ -241,6 +241,7 @@ class Player {
     // Heals the player
     heal(amount) {
         this.health += amount;
+        if (this.health > 10) this.health = 10;
         this.updateHearts();
     }
     
