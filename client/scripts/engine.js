@@ -279,7 +279,11 @@ function localRender() {
         } else {
             var timeOffMidday = Math.abs(time-500);
             var daylightPercent = 1-(timeOffMidday)/500;
-            player.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+.8)/2);
+            var minLight = .5;
+            if (player.pos().y < 160) {
+                minLight -= (160-player.pos().y)/320;
+            }
+            player.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+minLight)/2);
         }
         for (var pId in otherPlayers.players) {
             var cPlayer = otherPlayers.players[pId];
