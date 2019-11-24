@@ -148,7 +148,7 @@ const blocks = {
     15: {image:"torch.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Torch",customPlace:function() {},removeOnPlace:false},
     16: {image:"apple.png",hardness:-1,tool:tools.axe, minTool:toolLevels.none,name:"Apple",customPlace:function() {
             player.heal(1);
-        },requiresSight:false},
+        },requiresSight:false}
 }
 
 const nonSolidBlocks = [0,2,15];
