@@ -166,6 +166,7 @@ class Player {
         // Checks that the player isn't currently jumping and is on the floor
         if (this.jumping == 0 && this.floored) {
             this.jumping = jumpHeight/moveSpeed;
+            sounds.jump.play();
         }
     }
     
