@@ -34,25 +34,27 @@ class Player {
         blockPos.x = Math.floor(blockPos.x);
         blockPos.y = Math.ceil(blockPos.y);
         
-        // Check the player can see where they want to place
-        var hasLineOfSight = true;
-        if (blocks[this.inventory.inv[this.inventory.holding].id].requiresSight == undefined || blocks[this.inventory.inv[this.inventory.holding].id].requiresSight) {
-            hasLineOfSight = this.lineOfSight(blockPos.x,blockPos.y);
-        }
-        if (hasLineOfSight) {
-            // Check that the player has an item and it isn't a tool
-            if (this.inventory.inv[this.inventory.holding] && !this.inventory.inv[this.inventory.holding].isTool) {
-                if (blocks[this.inventory.inv[this.inventory.holding].id].customPlace) {
-                    blocks[this.inventory.inv[this.inventory.holding].id].customPlace();
-                } else {
-                    // Places block
-                    sounds.place.play();
-                    setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
+        if (this.inventory.inv[this.inventory.holding] != undefined) {
+            // Check the player can see where they want to place
+            var hasLineOfSight = true;
+            if (blocks[this.inventory.inv[this.inventory.holding].id].requiresSight == undefined || blocks[this.inventory.inv[this.inventory.holding].id].requiresSight) {
+                hasLineOfSight = this.lineOfSight(blockPos.x,blockPos.y);
+            }
+            if (hasLineOfSight) {
+                // Check that the player has an item and it isn't a tool
+                if (this.inventory.inv[this.inventory.holding] && !this.inventory.inv[this.inventory.holding].isTool) {
+                    if (blocks[this.inventory.inv[this.inventory.holding].id].customPlace) {
+                        blocks[this.inventory.inv[this.inventory.holding].id].customPlace();
+                    } else {
+                        // Places block
+                        sounds.place.play();
+                        setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
+                    }
+                    if (blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace == undefined || blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace) {
+                        this.inventory.removeOne();
+                    }
+                    this.updateHotBar();
                 }
-                if (blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace == undefined || blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace) {
-                    this.inventory.removeOne();
-                }
-                this.updateHotBar();
             }
         }
     }
@@ -92,7 +94,7 @@ class Player {
                 down = false;
                 currentY = y;
             }
-            if (currentY > worldMap[parseInt(x)].length) {
+            if (worldMap && worldMap[parseInt(x)] && currentY > worldMap[parseInt(x)].length) {
                 //this.setSpawn(0,worldMap[0].length);
                 x = worldMap[0].length;
                 currentY = worldMap[0].length;
@@ -166,6 +168,7 @@ class Player {
         // Checks that the player isn't currently jumping and is on the floor
         if (this.jumping == 0 && this.floored) {
             this.jumping = jumpHeight/moveSpeed;
+            sounds.jump.play();
         }
     }
     
@@ -212,11 +215,11 @@ class Player {
         allowLargeMove = true;
         if (relative == true) {
             // Works out the x position relative to the player
-            this.sprite.x = (this.pos().x + x-0.5)*blockSize;
+            this.sprite.x = (this.pos().x + x+0.5)*blockSize;
             this.sprite.y = app.screen.height - ((this.pos().y + y)*blockSize);
         } else {
             // Teleports the player to the location specified
-            this.sprite.x = (x-0.5)*blockSize;
+            this.sprite.x = (x+0.5)*blockSize;
             this.sprite.y = app.screen.height - y*blockSize;
         }
     }
@@ -241,6 +244,7 @@ class Player {
     // Heals the player
     heal(amount) {
         this.health += amount;
+        if (this.health > 10) this.health = 10;
         this.updateHearts();
     }
     
@@ -649,7 +653,11 @@ class OtherPlayer {
 function damagePlayer() {
     // Change for other damage
     var damage = 2;
-    hurtPlayer(this.id,damage);
+    var pos = getPos(this);
+    pos.x -= 0.5;
+    if (player.lineOfSight(pos.x,pos.y)) {
+        hurtPlayer(this.id,damage);
+    }
 }
 
 // Class to store other players

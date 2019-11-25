@@ -77,13 +77,10 @@
     -webkit-transform: rotateY(0deg);
     border-radius: 10%;
     border: .5vw solid black;
+    background-color: rgb(221,145,47);
 }
 
-#page1 {
-    background-color: blue;
-}
 #page2 {
-    background-color: red;
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);
 }

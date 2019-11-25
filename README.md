@@ -13,19 +13,20 @@ Done:
 - Proximity Crafting
 - Chat
 - Sprites
+- Sound
+- Animations
+- Food
 
 WIP:
-- Screen Size Ajustments
-- Tidy Code and Refactoring
+- Screen Size Ajustments (1/2 Done)
+- Tidy Code and Refactoring !!
 - Commands (Started kill command, only works on self)
+- Help (Page exists, no contents)
 
 Todo:
-- Animations
-- Sound?
-- Settings (change key binds)
-- Help
-- MOBS !
+- MOBS ! 
 - Chests?
+- SERVER
 
 
 Version Goals:

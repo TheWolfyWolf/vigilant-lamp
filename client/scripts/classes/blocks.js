@@ -61,7 +61,11 @@ class blockObject {
                     if (1/((dist||1)/4) > daylightPercent) daylightPercent = 1/((dist||1)/4);
                 }
             }
-            this.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+.3)/2);
+            var minLight = .5;
+            if (player.pos().y < 160) {
+                minLight -= (160-player.pos().y)/320;
+            }
+            this.sprite.tint = createColor({r:255,g:255,b:255},(daylightPercent+minLight)/2);
         }
     }
     

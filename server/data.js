@@ -105,6 +105,11 @@ var recipes = {
         input: [{id:14, count: 2},{id:7,count:1}],
         output: [{isTool:false,id:15,count:1}],
         requiresBench: false
+    },
+    18: {
+        input: [{id:7, count: 4}],
+        output: [{isTool:false,id:16,count:3}],
+        requiresBench: false
     }
 }
 
@@ -140,7 +145,10 @@ const blocks = {
             $("#gameOuter").addClass("unreadMessage");
         },removeOnPlace:false,requiresSight:false},
     14: {image:"stick.png",hardness:-1,tool:tools.axe, minTool:toolLevels.none,name:"Stick",customPlace:function() {},removeOnPlace:false},
-    15: {image:"torch.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Torch",customPlace:function() {},removeOnPlace:false}
+    15: {image:"torch.png",hardness:1,tool:tools.axe, minTool:toolLevels.none,name:"Torch",customPlace:function() {},removeOnPlace:false},
+    16: {image:"apple.png",hardness:-1,tool:tools.axe, minTool:toolLevels.none,name:"Apple",customPlace:function() {
+            player.heal(1);
+        },requiresSight:false}
 }
 
 const nonSolidBlocks = [0,2,15];

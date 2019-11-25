@@ -48,8 +48,10 @@ var sounds = {
     die: new Audio("sounds/death.wav"),
     break: new Audio("sounds/break.wav"),
     place: new Audio("sounds/place.wav"),
-    fall: new Audio("sounds/fall.wav")
+    fall: new Audio("sounds/fall.wav"),
+    jump: new Audio("sounds/jump.wav")
 }
+var volume = 1;
 
 var initialRender = true;
 var renderedMinX = 0;
@@ -60,7 +62,7 @@ var freeCam = false;
 var invSelected = false;
 
 // Creates other players array
-var otherPlayers = new Players();
+var otherPlayers;
 
 /* From ServerConnect.js */
 var socket;
