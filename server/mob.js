@@ -14,8 +14,8 @@ class Mobs {
     }
 
     mobTick(){
-        for (var key in OtherPlayers.players) {
-            var sprite = OtherPlayers.players[key].sprite;
+        for (var key in otherPlayers.players) {
+            var sprite = otherPlayers.players[key].sprite;
             var x = getPos(sprite).x-0.5;
             var y = getPos(sprite).y;
         }
