@@ -11,7 +11,7 @@ function checkLogin(user,pass,callback) {
         callback(false);
     }
     // Connect to the DB
-    var userdb = new sqlite3.Database('dbs/users.db');
+    var userdb = new sqlite3.Database('server/dbs/users.db');
  
     // SQL to get users where email/username is the same as the entered username
     var sql = "SELECT `userid`,`username`,`password`,`salt`,`email` FROM `users` WHERE `username`='" + user + "' OR `email`='" + user + "';";
@@ -49,7 +49,7 @@ function checkLogin(user,pass,callback) {
 // Function to save the world
 function saveWorld() {
     // Connect to the database
-    let userdb = new sqlite3.Database('dbs/users.db');
+    let userdb = new sqlite3.Database('server/dbs/users.db');
  
     // Create SQL statement using the world, once converted to a string
     let sql = "INSERT INTO `saves` (`world`) VALUES ('" + world.worldMapToStr() + "')";
@@ -85,7 +85,7 @@ function saveWorld() {
 // Function to loadworld
 function loadWorld(callback) {
     // Connect to the database
-    let userdb = new sqlite3.Database('dbs/users.db');
+    let userdb = new sqlite3.Database('server/dbs/users.db');
     // SQL to get newest save
     let sql = "SELECT `saveid`,`world` FROM `saves` ORDER BY `saveid` DESC LIMIT 1";
     
@@ -120,35 +120,35 @@ function loadWorld(callback) {
 
 // Function to chagne players spawn
 function changePlayerSpawn(userid,x,y) {
-    let userdb = new sqlite3.Database('dbs/users.db');
+    let userdb = new sqlite3.Database('server/dbs/users.db');
     let sql = "UPDATE `users` SET `spawnx`='" + x + "',`spawny`='" + y + "' WHERE `userid`='" + userid + "';";
     userdb.run(sql)
 }
 
 // Function to save a users position in the database
 function saveUserPosition(userid,x,y) {
-    let userdb = new sqlite3.Database('dbs/users.db');
+    let userdb = new sqlite3.Database('server/dbs/users.db');
     let sql = "UPDATE `users` SET `lastx`='" + x + "',`lasty`='" + y + "' WHERE `userid`='" + userid + "';";
     userdb.run(sql)
 }
 
 // Function to save players inventory
 function savePlayerInventory(userid,inventory) {
-    let userdb = new sqlite3.Database('dbs/users.db');
+    let userdb = new sqlite3.Database('server/dbs/users.db');
     let sql = "UPDATE `users` SET `inventory`='" + inventory + "' WHERE `userid`='" + userid + "';";
     userdb.run(sql)
 }
 
 // Function to save players hearts
 function savePlayerHearts(userid,hearts) {
-    let userdb = new sqlite3.Database('dbs/users.db');
+    let userdb = new sqlite3.Database('server/dbs/users.db');
     let sql = "UPDATE `users` SET `health`='" + hearts + "' WHERE `userid`='" + userid + "';";
     userdb.run(sql)
 }
 
 // Function to get a players info from userid
 function getPlayerInfo(userid,callback) {
-    let userdb = new sqlite3.Database('dbs/users.db');
+    let userdb = new sqlite3.Database('server/dbs/users.db');
     let sql = "SELECT `username`,`inventory`,`spawnx`,`spawny`,`health`,`lastx`,`lasty` FROM `users` WHERE `userid`='" + userid + "';";
     userdb.all(sql, function(err,rows) {
         if (err) {
@@ -190,7 +190,7 @@ function hashStr(str,salt) {
 
 // Function to create a new user
 function createUser(username,password,email) {
-    let userdb = new sqlite3.Database('dbs/users.db');
+    let userdb = new sqlite3.Database('server/dbs/users.db');
     
     var salt = randomStr((Math.random()*50)+10);
     
@@ -205,7 +205,7 @@ function createUser(username,password,email) {
 
 // Function to create the databases
 function createDB() {
-    var userdb = new sqlite3.Database("dbs/users.db",  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,function(err) {/* Error Code */});
+    var userdb = new sqlite3.Database("server/dbs/users.db",  sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,function(err) {/* Error Code */});
     
     var sql = `CREATE TABLE IF NOT EXISTS "users" (
                 "userid"	INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -238,12 +238,12 @@ var io = require('socket.io')(http);
 const sqlite3 = require('sqlite3').verbose();
 
 // Custom Modules
-var world = require('./worldHandler');
-var player = require('./playerHandler');
+var world = require('./server/worldHandler');
+var player = require('./server/playerHandler');
 
 // Gets a root directory, useful for pointing to files/directories
 resolve = require('path').resolve;
-rootDir = resolve('../');
+rootDir = resolve('');
 
 // Use
 app.use('/scripts', express.static(rootDir + '/client/scripts'));
