@@ -34,25 +34,27 @@ class Player {
         blockPos.x = Math.floor(blockPos.x);
         blockPos.y = Math.ceil(blockPos.y);
         
-        // Check the player can see where they want to place
-        var hasLineOfSight = true;
-        if (blocks[this.inventory.inv[this.inventory.holding].id].requiresSight == undefined || blocks[this.inventory.inv[this.inventory.holding].id].requiresSight) {
-            hasLineOfSight = this.lineOfSight(blockPos.x,blockPos.y);
-        }
-        if (hasLineOfSight) {
-            // Check that the player has an item and it isn't a tool
-            if (this.inventory.inv[this.inventory.holding] && !this.inventory.inv[this.inventory.holding].isTool) {
-                if (blocks[this.inventory.inv[this.inventory.holding].id].customPlace) {
-                    blocks[this.inventory.inv[this.inventory.holding].id].customPlace();
-                } else {
-                    // Places block
-                    sounds.place.play();
-                    setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
+        if (this.inventory.inv[this.inventory.holding] != undefined) {
+            // Check the player can see where they want to place
+            var hasLineOfSight = true;
+            if (blocks[this.inventory.inv[this.inventory.holding].id].requiresSight == undefined || blocks[this.inventory.inv[this.inventory.holding].id].requiresSight) {
+                hasLineOfSight = this.lineOfSight(blockPos.x,blockPos.y);
+            }
+            if (hasLineOfSight) {
+                // Check that the player has an item and it isn't a tool
+                if (this.inventory.inv[this.inventory.holding] && !this.inventory.inv[this.inventory.holding].isTool) {
+                    if (blocks[this.inventory.inv[this.inventory.holding].id].customPlace) {
+                        blocks[this.inventory.inv[this.inventory.holding].id].customPlace();
+                    } else {
+                        // Places block
+                        sounds.place.play();
+                        setBlock(this.inventory.inv[this.inventory.holding].id,blockPos);
+                    }
+                    if (blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace == undefined || blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace) {
+                        this.inventory.removeOne();
+                    }
+                    this.updateHotBar();
                 }
-                if (blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace == undefined || blocks[this.inventory.inv[this.inventory.holding].id].removeOnPlace) {
-                    this.inventory.removeOne();
-                }
-                this.updateHotBar();
             }
         }
     }
