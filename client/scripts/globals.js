@@ -48,7 +48,8 @@ var sounds = {
     die: new Audio("sounds/death.wav"),
     break: new Audio("sounds/break.wav"),
     place: new Audio("sounds/place.wav"),
-    fall: new Audio("sounds/fall.wav")
+    fall: new Audio("sounds/fall.wav"),
+    jump: new Audio("sounds/jump.wav")
 }
 var volume = 1;
 
