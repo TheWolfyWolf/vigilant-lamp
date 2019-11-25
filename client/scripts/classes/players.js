@@ -175,7 +175,7 @@ class Player {
     // Move Left
     moveLeft() {
         if (this.sprite.x - blockSize*moveSpeed > 0) {
-            if (this.sprite.scale.x > 0) this.sprite.scale.x *= -1;
+            if (this.sprite.scale.x > 1) this.sprite.scale.x *= -1;
             this.sprite.x -= blockSize * moveSpeed;
             this.hand.y += Math.floor((Math.random()*11)+1)-6;
             if (this.hand.y > blockSize*1.7) {
