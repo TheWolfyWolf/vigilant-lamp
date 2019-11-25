@@ -1,7 +1,9 @@
 
 var currentPage = 0;
 
-var pages = ["Help Page 1", "Help Page 2", "Help Page 3", "Help Page 4"];
+var pages = ["<h1 style='color: white;'>Movement</h1><br /><hr /><br /><ul style='color: white;'><li><h3>W/Spacebar/Up Arrow &mdash; Jump</h3></li><li><h3>A/Left Arrow &mdash; Move Left</h3></li><li><h3>D/Right Arrow &mdash; Move Right</h3></li></ul>",
+             "<h1 style='color: white;'>Actions</h1><br /><hr /><br /><ul style='color: white;'><li><h3>Left Click &mdash; Damage Block</h3></li><li><h3>Q &mdash; Place Block</h3></li><li><h3>Left Click Player &mdash; Hurt Player</h3></li></ul>",
+             "<h1 style='color: white;'>Screens</h1><br /><hr /><br /><ul style='color: white;'><li><h3>C &mdash; Crafting</h3></li><li><h3>E &mdash; Inventory</h3></li><li><h3>T &mdash; Chat &mdash; <i>Type '/help' for commands</h3></li></ul>"];
 
 $(document).ready(function() {
     $("#nextButton").on("click",function() {
