@@ -196,7 +196,7 @@ function createUser(username,password,email) {
     
     var hash = hashStr(password,salt);
  
-    let sql = "INSERT INTO `users` (`username`,`password`,`email`,`salt`) VALUES ('" + username + "','" + hash  + "','" + email + "','" + salt + "')";
+    let sql = "INSERT INTO `users` (`username`,`password`,`email`,`salt`,`lastx`,`lasty`) VALUES ('" + username + "','" + hash  + "','" + email + "','" + salt + "','1','1')";
     console.log(userdb.run(sql));
     // close the database connection
     userdb.close();
